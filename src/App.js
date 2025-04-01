@@ -1,20 +1,22 @@
 import './App.css';
-import Homepage from './components/homepage/Homepage'
-import Footer from './components/footer/Footer';
-import NavigationBar from './components/navigationBar/NavigationBar'
-import { UserProvider } from './context/UserContext';
-import { ThemeProvider } from './context/ThemeContext';
+import Homepage from './Components/Homepage/Homepage'
+import Footer from './Components/Footer/Footer';
+import NavigationBar from './Components/NavigationBar/NavigationBar'
+import { UserProvider } from './Context/UserContext';
+import { ThemeProvider } from './Context/ThemeContext';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import AboutUs from './components/aboutUs/AboutUs';
-import Login from './components/auth/login/Login';
-import Register from './components/auth/register/Register';
+import AboutUs from './Components/AboutUs/AboutUs';
+import Login from './Components/Auth/Login/Login';
+import Register from './Components/Auth/Register/Register';
 
 function App() {
   return (
     <div className="App">
       <UserProvider>
         <ThemeProvider>
+
           <NavigationBar />
+          
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Homepage />} />

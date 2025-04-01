@@ -1,5 +1,5 @@
-// import Logo from '../../assets/stockPhotos'
-// import Logo from '../../assets/stockPhoto/'
+// import Logo from '../../Assets/stockPhotos'
+// import Logo from '../../Assets/stockPhoto/'
 
 function NavigationBar() {
     return (
