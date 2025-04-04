@@ -1,151 +1,0 @@
-
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="منصة لحجز الملاعب والصالات بكل سهولة وأمان">
-  <title> منصة حجز المرافق الرياضية </title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-</head>
-<body>
-  <!-- الرأس: القائمة العليا والشعار -->
-  <header>
-    <nav class="navbar">
-      <div class="logo">
-        <img src="logo.png" alt="شعار الموقع">
-      </div>
-      <ul class="nav-links">
-        <li><a href="#">الرئيسية</a></li>
-        <li><a href="#facilities">المرافق</a></li>
-        <li><a href="#booking-info">حجوزاتك</a></li>
-        <li><a href="#booking-info">الرياضات</a></li>
-        <li><a href="contact.html">تواصل معنا</a></li>
-      </ul>
-      <div class="auth-buttons">
-        <button onclick="location.href='login.html'" aria-label="تسجيل الدخول إلى حسابك">تسجيل الدخول</button>   
-        <button onclick="location.href='signup.html'" aria-label="إنشاء حساب جديد">اشترك</button>
-        </div>
-    </nav>
-  </header>
-
-  <!-- قسم السلايدر للخلفيات -->
-  <section class="hero" id="hero" aria-label="معرض الصور الرئيسي">
-  <div class="slides">
-    <div class="slide active" style="background-image: url('image1.jpg');"></div>
-    <div class="slide" style="background-image: url('image2.jpg');"></div>
-    <div class="slide" style="background-image: url('image3.jpg');"></div>
-    <!-- أضف المزيد من الصور حسب الحاجة -->
-  </div>
-  <div class="overlay">
-    <h1 id="hero-title">ابحث واحجز أفضل المرافق الرياضية</h1>
-    <p id="hero-text">اختَر من بين 100+ مرفق رياضي - حجز فوري مع دفع آمن</p>
-    <!-- يمكنك إضافة عناصر تنقل إضافية (مثل النقاط) هنا إذا رغبت -->
-  </div>
-</section>
-
-
-  <!-- نموذج البحث -->
-  <section class="search">
-    <select aria-label="اختر نوع المرفق الرياضي">
-      <option value="">جميع المرافق</option>
-      <option value="tennis">ملاعب تنس</option>
-      <option value="football">ملاعب كرة قدم</option>
-      <option value="gym">نوادي رياضية</option>
-      <option value="swimming">مسابح أولمبية</option>
-    </select>
-    <select aria-label="اختر المدينة أو الحي">
-      <option value="" disabled selected>المدينة أو الحي</option>
-      <option value="المدينة1">المدينة 1</option>
-      <option value="المدينة2">المدينة 2</option>
-      <option value="المدينة3">المدينة 3</option>
-      
-    </select>
-    <input type="date">
-    <button onclick="location.href='search-results.html'" aria-label="عرض نتائج البحث">
-      ابحث الآن
-      <span aria-hidden="true">🔍</span>
-    </button>
-  </section>
-
-  <!-- قسم عرض المرافق -->
-  <section id="facilities" class="facilities">
-    <h2>استكشف مرافقنا</h2>
-    <div class="gallery">
-      <div class="gallery-item">
-        <a href="tennis-details.html">
-          <img src="tennis.jpg" alt="ملاعب التنس">
-          <div class="caption">
-            <h3>ملاعب التنس</h3>
-            <p class="description">هنا يظهر النص التوضيحي عند تحويم الماوس</p>
-          </div>
-        </a>
-      </div>
-      <div class="gallery-item">
-        <a href="football-details.html">
-          <img src="football.jpg" alt="ملاعب كرة قدم">
-          <div class="caption">
-            <h3>ملاعب كرة القدم</h3>
-            <p class="description">هنا يظهر النص التوضيحي عند تحويم الماوس</p>
-          </div>
-        </a>
-      </div>
-      <div class="gallery-item">
-        <a href="gym-details.html">
-          <img src="gym.jpg" alt="الصالات الرياضية">
-          <div class="caption">
-            <h3>الصالات الرياضية</h3>
-            <p class="description">هنا يظهر النص التوضيحي عند تحويم الماوس</p>
-          </div>
-        </a>
-      </div>
-      <div class="gallery-item">
-        <a href="swimming-details.html">
-          <img src="swimming.jpg" alt="المسابح">
-          <div class="caption">
-            <h3>المسابح</h3>
-            <p class="description">هنا يظهر النص التوضيحي عند تحويم الماوس</p>
-          </div>
-        </a>
-      </div>
-      <div class="gallery-item">
-        <a href="bowling-details.html">
-          <img src="bowling.jpg" alt="ملاعب البولينغ">
-          <div class="caption">
-            <h3>ملاعب البولينغ</h3>
-            <p class="description">هنا يظهر النص التوضيحي عند تحويم الماوس</p>
-          </div>
-        </a>
-      </div>
-      <div class="gallery-item">
-        <a href="basketball-details.html">
-          <img src="basketball.jpg" alt="ملاعب كرة السلة">
-          <div class="caption">
-            <h3>ملاعب كرة السلة</h3>
-            <p class="description">هنا يظهر النص التوضيحي عند تحويم الماوس</p>
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- قسم الدفع والمراسلة -->
-  <section id="booking-info" class="booking-info">
-    <h2>احجز بكل سهولة</h2>
-    <p>ادفع فورًا عبر منصتنا بكل أمان وتواصل مع المنظمين بسهولة.</p>
-  </section>
-
-  <!-- تذييل الصفحة -->
-  <footer>
-    <p>&copy; 2025 جميع الحقوق محفوظة</p>
-    <p>
-      <a href="contact.html">تواصل معنا</a> | 
-      <a href="about.html">عن الموقع</a>
-    </p>
-  </footer>
-
-  <!-- ملف JavaScript -->
-  <script src="script.js"></script>
-</body>
-</html>

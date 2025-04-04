@@ -9,6 +9,8 @@ import AboutUs from './Components/AboutUs/AboutUs';
 import Login from './Components/Auth/Login/Login';
 import Register from './Components/Auth/Register/Register';
 
+import '../src/Components/styles.css';
+
 function App() {
   return (
     <div className="App">
@@ -26,7 +28,7 @@ function App() {
               <Route path="/aboutus" element={<AboutUs />} />
             </Routes>
           </BrowserRouter>
-          <Footer />
+          {/* <Footer /> */}
         </ThemeProvider>
       </UserProvider>
     </div>
