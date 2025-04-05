@@ -9,7 +9,7 @@
     list-style: none;
 }
 
-body {
+.auth-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -243,3 +243,13 @@ form { width: 100%; }
 
     .toggle-panel h1 { font-size: 30px; }
 }
+
+/* ////TODO//// */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.8s ease forwards;
+  }

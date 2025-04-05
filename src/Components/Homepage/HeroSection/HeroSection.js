@@ -1,6 +1,7 @@
 import soccerPlayer from "../../../Assets/StockPhotos/soccer-player.png";
 import CupGold from "../../../Assets/StockPhotos/Fatcow-Farm-Fresh-Cup-gold.32.png";
 import community from "../../../Assets/StockPhotos/4.png";
+import "./HeroSection.css";
 
 function HeroSection() {
     return ( 
