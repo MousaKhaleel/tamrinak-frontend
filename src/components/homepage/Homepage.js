@@ -9,10 +9,15 @@ import ps3 from "../../Assets/StockPhotos/ps3.jpg";
 import gym from "../../Assets/StockPhotos/gym.jpg";
 import Taekwondo from "../../Assets/StockPhotos/Taekwondo.jpg";
 import Footer from "../Footer/Footer";
+import NavigationBar from '../../Components/NavigationBar/NavigationBar'
+
+import './styles.css'
+
 
 function Homepage() {
     return (
         <div>
+            <NavigationBar />
             <HeroSection />
             <div>
             {/* //TODO: devide further */}

@@ -9,7 +9,8 @@ import AboutUs from './Components/AboutUs/AboutUs';
 import Login from './Components/Auth/Login/Login';
 import Register from './Components/Auth/Register/Register';
 
-import '../src/Components/styles.css';
+// import '../src/Components/styles.css';
+// import './Components/mobile.css';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
       <UserProvider>
         <ThemeProvider>
 
-          <NavigationBar />
+
           
           <BrowserRouter>
             <Routes>

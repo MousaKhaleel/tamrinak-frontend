@@ -1,4 +1,4 @@
-body {
+/* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -10,4 +10,74 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+} */
+
+/* إعادة تعيين الأنماط العامة والمتغيرات */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #d5b565;
+  --primary-border-color: #134a56;
+  --bg-overlay: rgba(0, 0, 0, 0.3);
+  --font-family: "Amiri", serif;
+  --transition-speed: 0.3s;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+}
+
+/* الأنماط العامة للعناصر */
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+h1 {
+  font-size: 4.125rem;
+  line-height: 7rem;
+}
+
+h3 {
+  font-size: 1.7rem;
+  color: var(--primary-border-color);
+}
+
+h4 {
+  font-size: 1.7rem;
+  color: #fff;
+}
+
+p {
+  font-size: 16px;
+  color: #465b52;
+  margin: 15px 0 20px;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+    line-height: 3rem;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+  }
+  
+  h4 {
+    font-size: 1.2rem;
+  }
+  
+  p {
+    font-size: 14px;
+    margin: 10px 0 15px;
+  }
 }

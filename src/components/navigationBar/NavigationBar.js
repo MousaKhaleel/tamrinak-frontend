@@ -1,12 +1,18 @@
-// import Logo from '../../Assets/stockPhotos'
 // import Logo from '../../Assets/stockPhoto/'
+import { useContext, useState } from 'react';
+// import { UserContext } from '../../Context/UserContext';
+// import { ThemeContext } from '../../Context/ThemeContext';
+import './NavigationBar.css';
 
 function NavigationBar() {
-    return (
-        <div>
-            <header id="header">
+
+  // const {userName, setUserName, setUserId, setUserEmail, setUserPassword}=useContext();
+  const { userName, setUserName } = useState(true);
+
+  return (
+    <div>
+    <header id="header">
   <div className="nav-container">
-    {/* شعار الموقع */}
     <div className="logo">
       <img src="" alt="Tamrinak logo here" />
     </div>
@@ -23,29 +29,29 @@ function NavigationBar() {
           <a href="/">الرئيسية</a>
         </li>
         <li>
-          <a href="#">حول الموقع</a>
+          <a href="/abousUs">حول الموقع</a>
         </li>
         <li>
-          <a href="#">خدماتنا</a>
+          <a href="/services">خدماتنا</a>
         </li>
         <li>
-          <a href="#">حجوزات</a>
+          <a href="/bookings">حجوزات</a>
         </li>
         <li>
-          <a href="#">تواصل معنا</a>
+          <a href="/contactUs">تواصل معنا</a>
         </li>
       </ul>
     </nav>
     <div className="nav-actions">
       <a
-      href="/login"
+        href="/login"
         id="login-btn"
         aria-label="تسجيل الدخول إلى حسابك"
       >
         تسجيل الدخول
       </a>
       <a
-      href="/register"
+        href="/register"
         id="create-btn"
         aria-label="إنشاء حساب جديد"
       >
@@ -54,9 +60,9 @@ function NavigationBar() {
     </div>
   </div>
 </header>
-
-        </div>
-    );
+    </div>
+  );
 }
 
 export default NavigationBar;
+
