@@ -4,7 +4,7 @@ import './Footer.css';
 function Footer() {
   const handleSubmit = (e) => {
     e.preventDefault();
-    // handle form logic here
+    //TODO handle form logic here
   };
 
   return (
@@ -38,6 +38,7 @@ function Footer() {
           </p>
           <div className="map">
             <iframe
+            style={{ borderRadius: '15px' }}
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3382.636496835853!2d35.716793599999995!3d32.02495890000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151cbd1654d5c8e5%3A0x61f22c89710c16af!2sAlBalqa%20Applied%20University!5e0!3m2!1sen!2sjo!4v1743679901705!5m2!1sen!2sjo"
               title="موقع جامعة البلقاء التطبيقية"
               allowFullScreen

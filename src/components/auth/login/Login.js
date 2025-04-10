@@ -1,21 +1,22 @@
-import '../../Auth/AuthStyle.css';//TODO SPLIT
+import '../../Auth/AuthStyle.css'; // TODO: SPLIT
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Login() {
-
-    const [email, setEmail] = useState('');//TODO: use username instead of email
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     async function handleLogin(e) {
         e.preventDefault();
         setLoading(true);
+        setError(''); // Reset error message
 
         try {
             const res = await fetch(process.env.API_URL + '/Login', {
                 method: 'POST',
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ username, password }),
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
             });
@@ -23,39 +24,55 @@ function Login() {
             if (res.ok) {
                 const data = await res.json();
                 setLoading(false);
-                // setRedirect(true);
+                // Redirect or take other actions on successful login
             } else {
                 const errorMessage = await res.text();
                 throw new Error(errorMessage);
             }
         } catch (error) {
             setLoading(false);
-            alert('Failed to login: ' + error.message);
+            setError('Failed to login: ' + error.message);
         }
     }
 
     return (
         <div className="auth-container">
             <div className="form-box fade-in">
-                <form>
+                <form onSubmit={handleLogin}>
                     <h1>تسجيل الدخول</h1>
+
                     <div className="input-box">
-                        <input type="text" placeholder="اسم المستخدم" required />
+                        <input
+                            type="text"
+                            placeholder="اسم المستخدم"
+                            required
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
                         <i className='bx bxs-user'></i>
                     </div>
+
                     <div className="input-box">
-                        <input type="password" placeholder="كلمة المرور" required />
+                        <input
+                            type="password"
+                            placeholder="كلمة المرور"
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
                         <i className='bx bxs-lock-alt'></i>
                     </div>
+
+                    {error && <div className="error-message">{error}</div>}
+
                     <div className="forgot-link">
                         <a href="#">نسيت كلمة المرور؟</a>
                     </div>
-                    <button type="submit" className="btn">تسجيل الدخول</button>
-                    {/* <p>أو تسجيل الدخول عبر وسائل التواصل</p>
-                    <div className="social-icons">
-                        <a href="#"><i className='bx bxl-google'></i></a>
-                        <a href="#"><i className='bx bxl-facebook'></i></a>
-                    </div> */}
+
+                    <button type="submit" className="btn" disabled={loading}>
+                        {loading ? 'جاري التحميل...' : 'تسجيل الدخول'}
+                    </button>
+
                     <p>ليس لديك حساب؟ <Link to="/register">إنشاء حساب</Link></p>
                 </form>
             </div>
