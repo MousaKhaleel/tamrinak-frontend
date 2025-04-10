@@ -1,245 +1,164 @@
-/* تنسيق الهيدر وقائمة التنقل */
 #header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 90px;
-    background-color: rgba(213, 181, 101, 0.8);
-    z-index: 1000;
-    transition: background-color var(--transition-speed) ease, 
-                height var(--transition-speed) ease, 
-                padding var(--transition-speed) ease, 
-                box-shadow var(--transition-speed) ease;
-  }
-  
-  .menu-toggle{
-    display: none;
-  }
-  /* حاوية التنقل الداخلية */
-  .nav-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    height: 100%;
-    direction: rtl;
-  }
-  
-  /* تنسيق الشعار */
-  .logo a {
-    transition: color var(--transition-speed) ease;
-  }
-  
-  .logo a:hover {
-    color: var(--primary-border-color);
-  }
-  
-  /* تنسيق قائمة التنقل */
-  #navbar {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    list-style: none;
-  }
-  
-  #navbar li {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 90px;
+  background-color: rgba(213, 181, 101, 0.8);
+  z-index: 1000;
+  transition: background-color var(--transition-speed) ease,
+              height var(--transition-speed) ease,
+              padding var(--transition-speed) ease,
+              box-shadow var(--transition-speed) ease;
+}
+
+.menu-toggle {
+  display: none;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 100%;
+  direction: rtl;
+}
+
+.logo a {
+  transition: color var(--transition-speed) ease;
+}
+
+#navbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+#navbar li {
+  position: relative;
+  padding: 10px;
+}
+
+#navbar li a {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  transition: color var(--transition-speed) ease;
+}
+
+#navbar li a:hover,
+#navbar li a.active {
+  color: var(--primary-border-color);
+}
+
+#navbar li a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 20px;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary-border-color);
+  transition: width var(--transition-speed) ease;
+}
+
+#navbar li a:hover::after,
+#navbar li a.active::after {
+  width: 30%;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+#create-btn {
+  background-color: rgba(213, 181, 101, 0.1);
+  border: 2px solid var(--primary-border-color);
+  color: var(--primary-border-color);
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+#create-btn:hover {
+  background-color: var(--primary-border-color);
+  color: #fff;
+}
+
+#login-btn {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-left: 20px;
+  transition: background-color var(--transition-speed) ease;
+}
+
+#login-btn:hover {
+  background-color: var(--primary-border-color);
+}
+
+#header.scrolled {
+  background-color: rgba(213, 181, 101, 1);
+  height: 70px;
+  padding: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  #header {
+    flex-direction: column;
+    padding: 10px;
+    height: auto;
     position: relative;
-    padding: 10px;
   }
-  
-  #navbar li a {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #fff;
-    transition: color var(--transition-speed) ease;
-  }
-  
-  #navbar li a:hover,
-  #navbar li a.active {
-    color: var(--primary-border-color);
-  }
-  
-  #navbar li a::after {
-    content: "";
+
+  #navbar {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    display: none;
+    width: 100%;
+    text-align: center;
+    background: rgba(213, 181, 101, 0.9);
     position: absolute;
-    bottom: -4px;
-    left: 20px;
-    width: 0;
-    height: 2px;
-    background-color: var(--primary-border-color);
-    transition: width var(--transition-speed) ease;
+    top: 100%;
+    left: 0;
   }
-  
-  #navbar li a:hover::after,
-  #navbar li a.active::after {
-    width: 30%;
-  }
-  
-  /* تنسيق أزرار التنقل */
-  .nav-actions {
+
+  #navbar.active {
     display: flex;
-    gap: 1rem;
   }
-  
-  #create-btn {
-    background-color: rgba(213, 181, 101, 0.1);
-    border: 2px solid var(--primary-border-color);
-    color: var(--primary-border-color);
-    padding: 10px 20px;
-    font-size: 16px;
-    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+
+  .menu-toggle {
+    display: block;
   }
-  
-  #create-btn:hover {
+
+  .menu-toggle .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 4px auto;
+    transition: all 0.3s ease;
     background-color: var(--primary-border-color);
-    color: #fff;
   }
-  
+
+  #navbar li {
+    padding: 12px 0;
+  }
+
+  /* Ensure padding for action buttons in smaller viewports */
+  #create-btn,
   #login-btn {
-    background-color: var(--primary-color);
-    border: none;
-    color: #fff;
-    padding: 10px 20px;
-    font-size: 16px;
-    margin-left: 20px;
-    transition: background-color var(--transition-speed) ease;
+    padding: 8px 16px;
+    font-size: 14px;
+    margin: 5px 0;
   }
-  
-  #login-btn:hover {
-    background-color: var(--primary-border-color);
-  }
-  
-  /* تأثير التمرير على الهيدر */
-  #header.scrolled {
-    background-color: rgba(213, 181, 101, 1);
-    height: 70px;
-    padding: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  @media (max-width: 768px) {
-    #header {
-        flex-direction: column;
-        padding: 10px;
-        height: auto;
-        position: relative; /* لتفادي التداخل عند تغيير التخطيط */
-      }
-      
-      #navbar {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        margin-top: 10px;
-      }
-      
-      #navbar li {
-        padding: 5px 0;
-      }
-      
-      /* تعديل أزرار الهيدر */
-      #creat-btn,
-      #login-btn {
-        padding: 8px 16px;
-        font-size: 14px;
-        margin: 5px 0;
-      }
-
-        /* ????????????????????? */
-
-        .menu-toggle {
-            display: none; /* يظهر فقط على الشاشات الصغيرة */
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            margin: 0 20px;
-          }
-          
-          .menu-toggle .bar {
-            display: block;
-            width: 25px;
-            height: 3px;
-            margin: 4px auto;
-            transition: all 0.3s ease;
-            background-color: var(--primary-border-color);
-          }
-          
-          /* قائمة التنقل الافتراضية */
-          #navbar {
-            display: flex;
-            align-items: center;
-          }
-          
-          /* تأثيرات عند التحويم على روابط القائمة */
-          #navbar li a {
-            font-size: 1.5rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            color: #fff;
-          }
-          
-          /* تأثير تفعيل العنصر */
-          #navbar li a:hover,
-          #navbar li a.active {
-            color: var(--primary-border-color);
-          }
-          
-          /* القاعدة العامة لقائمة التنقل */
-          #navbar li {
-            list-style: none;
-            padding: 10px 20px;
-            position: relative;
-          }
-          
-          /* التأثير الخاص بخط التسطير */
-          #navbar li a::after {
-            content: "";
-            width: 0;
-            height: 2px;
-            background-color: var(--primary-border-color);
-            position: absolute;
-            bottom: -4px;
-            left: 20px;
-            transition: width 0.3s ease;
-          }
-          
-          #navbar li a:hover::after,
-          #navbar li a.active::after {
-            width: 30%;
-          }
-          
-          /* تحسينات لقائمة التنقل على الهواتف */
-          @media (max-width: 768px) {
-            .menu-toggle {
-              display: block;
-            }
-          
-            /* إخفاء القائمة افتراضيًا */
-            #navbar {
-              display: none;
-              flex-direction: column;
-              width: 100%;
-              text-align: center;
-              background: rgba(213, 181, 101, 0.9);
-              position: absolute;
-              top: 100%;
-              left: 0;
-            }
-          
-            #navbar.active {
-              display: flex;
-            }
-          
-            /* تعديل تباعد عناصر القائمة */
-            #navbar li {
-              padding: 12px 0;
-            }.check{
-              margin-right: -17px;
-            }
-          }
-  
-          
-  }
+}
