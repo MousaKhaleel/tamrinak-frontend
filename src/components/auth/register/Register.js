@@ -46,11 +46,11 @@ function Register() {
                         <i className='bx bxs-lock-alt'></i>
                     </div>
                     <button type="submit" className="btn">إنشاء حساب</button>
-                    <p>أو التسجيل عبر وسائل التواصل</p>
+                    {/* <p>أو التسجيل عبر وسائل التواصل</p>
                     <div className="social-icons">
                         <a href="#"><i className='bx bxl-google'></i></a>
                         <a href="#"><i className='bx bxl-facebook'></i></a>
-                    </div>
+                    </div> */}
                     <p>هل لديك حساب؟ <Link to="/login">تسجيل الدخول</Link></p>
                 </form>
             </div>

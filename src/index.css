@@ -12,72 +12,109 @@ code {
     monospace;
 } */
 
-/* إعادة تعيين الأنماط العامة والمتغيرات */
-* {
+:root {
+  /* Color Variables */
+  --primary-color: #d5b565;
+  --primary-border-color: #134a56;
+  --bg-overlay: rgba(0, 0, 0, 0.3);
+  --text-color: #465b52;
+  --white: #fff;
+  --black: #000;
+
+  /* Typography */
+  --font-family: "Amiri", serif;
+  --font-size-base: 16px;
+  
+  /* Spacing */
+  --space-unit: 1rem;
+  
+  /* Effects */
+  --transition-speed: 0.3s;
+}
+
+/* Base Reset */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-:root {
-  --primary-color: #d5b565;
-  --primary-border-color: #134a56;
-  --bg-overlay: rgba(0, 0, 0, 0.3);
-  --font-family: "Amiri", serif;
-  --transition-speed: 0.3s;
-}
-
+/* Core HTML Elements */
 html {
   scroll-behavior: smooth;
+  font-size: var(--font-size-base);
 }
 
 body {
   font-family: var(--font-family);
+  line-height: 1.6;
+  color: var(--text-color);
 }
 
-/* الأنماط العامة للعناصر */
-a {
-  text-decoration: none;
-  color: #fff;
-}
-
+/* Typography */
 h1 {
   font-size: 4.125rem;
-  line-height: 7rem;
+  line-height: 1.2;
+  margin-bottom: calc(var(--space-unit) * 1.5);
 }
 
 h3 {
   font-size: 1.7rem;
   color: var(--primary-border-color);
+  margin-bottom: var(--space-unit);
 }
 
 h4 {
   font-size: 1.7rem;
-  color: #fff;
+  color: var(--white);
+  margin-bottom: var(--space-unit);
 }
 
 p {
-  font-size: 16px;
-  color: #465b52;
-  margin: 15px 0 20px;
+  margin: calc(var(--space-unit) * 0.9375) 0 calc(var(--space-unit) * 1.25);
 }
 
+/* Links */
+a {
+  text-decoration: none;
+  color: var(--white);
+  transition: color var(--transition-speed) ease;
+}
+
+a:hover,
+a:focus {
+  color: var(--primary-color);
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
+  :root {
+    --font-size-base: 14px;
+  }
+  
   h1 {
     font-size: 2.5rem;
-    line-height: 3rem;
+    margin-bottom: var(--space-unit);
   }
   
-  h3 {
-    font-size: 1.2rem;
-  }
-  
-  h4 {
+  h3, h4 {
     font-size: 1.2rem;
   }
   
   p {
-    font-size: 14px;
-    margin: 10px 0 15px;
+    margin: calc(var(--space-unit) * 0.714) 0 var(--space-unit);
+  }
+}
+
+/* Print Styles */
+@media print {
+  :root {
+    --text-color: #000;
+  }
+  
+  a {
+    color: var(--text-color);
   }
 }

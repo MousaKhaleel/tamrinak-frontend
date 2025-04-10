@@ -51,11 +51,11 @@ function Login() {
                         <a href="#">نسيت كلمة المرور؟</a>
                     </div>
                     <button type="submit" className="btn">تسجيل الدخول</button>
-                    <p>أو تسجيل الدخول عبر وسائل التواصل</p>
+                    {/* <p>أو تسجيل الدخول عبر وسائل التواصل</p>
                     <div className="social-icons">
                         <a href="#"><i className='bx bxl-google'></i></a>
                         <a href="#"><i className='bx bxl-facebook'></i></a>
-                    </div>
+                    </div> */}
                     <p>ليس لديك حساب؟ <Link to="/register">إنشاء حساب</Link></p>
                 </form>
             </div>
