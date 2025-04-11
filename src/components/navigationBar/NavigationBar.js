@@ -3,6 +3,7 @@ import Logo from '../../Assets/Logo/3Xpnjp-LogoMakr.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './NavigationBar.css'; // Optional: only for custom styles
+import { Link } from 'react-router-dom';
 
 function NavigationBar() {
   return (
@@ -22,7 +23,7 @@ function NavigationBar() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div className="collapse navbar-collapse bg-highlight" id="navbarNavAltMarkup">
           <div className="navbar-nav me-auto mb-2 mb-lg-0">
             <a className="nav-link" href="/">الرئيسية</a>
             <a className="nav-link" href="/abousUs">حول الموقع</a>
@@ -31,8 +32,8 @@ function NavigationBar() {
             <a className="nav-link" href="/contactUs">تواصل معنا</a>
           </div>
           <div className="d-flex gap-2">
-            <a href="/login" className="btn btn-outline-light">تسجيل الدخول</a>
-            <a href="/register" className="btn btn-primary">إنشاء حساب</a>
+            <Link className="btn btn-outline-light" to="/auth?mode=login">تسجيل الدخول</Link>
+            <Link className="btn btn-primary" to="/auth?mode=register">إنشاء حساب</Link>
           </div>
         </div>
       </div>

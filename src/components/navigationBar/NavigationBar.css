@@ -1,10 +1,11 @@
 :root {
   --primary-color: #F5C45E;
-  --secondary-color: #102E50;
+  --secondary-color: #;
   --transition-speed: 0.3s;
 }
 /* Maintain fixed header with semi-transparent background */
 .navbar {
+  padding-inline: 20px;
   position: fixed;
   top: 0;
   width: 100%;
@@ -12,6 +13,12 @@
   z-index: 1000;
   transition: background-color 0.3s ease, height 0.3s ease, box-shadow 0.3s ease;
   background-color: #F5C45E !important; /* Override Bootstrap dark */
+}
+
+.bg-highlight {
+  background-color: #F5C45E;
+  padding: 10px;
+  border-radius: 4px;
 }
 
 /* Scrolled state — optional, if you plan to toggle it via JS */
@@ -67,7 +74,7 @@
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
+  background-color: var(--secondary-color);
   border: none;
   font-weight: 500;
 }
