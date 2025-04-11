@@ -1,22 +1,8 @@
-/* Optimized font import with selected weights */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
-/* Universal reset */
-*,
-*::before,
-*::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-    text-decoration: none;
-    list-style: none;
-}
-
-body {
-    background-color: #f0f4f7; /* Lighter background for a fresher look */
-}
-
+:root {
+    --primary-color: #F5C45E;
+    --secondary-color: #102E50;
+    --transition-speed: 0.3s;
+  }
 /* Auth Container Styles */
 .auth-container {
     display: flex;
@@ -30,6 +16,11 @@ body {
     background-position: center;
     background-attachment: fixed;
     filter: brightness(0.9); /* Subtle darken the background */
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
 }
 
 .container {
@@ -137,14 +128,14 @@ form {
 
 .forgot-link a {
     font-size: 14.5px;
-    color: #d5b565; /* Highlighted link color */
+    color: #F5C45E; /* Highlighted link color */
 }
 
 /* Buttons */
 .btn {
     width: 100%;
     height: 48px;
-    background: #d5b565; /* Subtle gold shade for primary action */
+    background: #F5C45E; /* Subtle gold shade for primary action */
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border: none;
@@ -156,7 +147,7 @@ form {
 }
 
 .btn:hover {
-    background: #a68d44; /* Darken button on hover */
+    background: #f5c55ecb; /* Darken button on hover */
 }
 
 /* Social Icons */
@@ -179,7 +170,7 @@ form {
 
 .social-icons a:hover {
     background-color: #f1f1f1;
-    border-color: #d5b565;
+    border-color: #F5C45E;
 }
 
 /* Toggle Box */
@@ -195,7 +186,7 @@ form {
     left: -250%;
     width: 300%;
     height: 100%;
-    background: #d5b565;
+    background: #F5C45E;
     border-radius: 150px;
     z-index: 2;
     transition: 1.8s ease-in-out;

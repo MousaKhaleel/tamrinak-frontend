@@ -1,3 +1,8 @@
+:root {
+  --primary-color: #F5C45E;
+  --secondary-color: #102E50;
+  --transition-speed: 0.3s;
+}
 /* قسم الهيرو */
 .hero-section {
   height: 120vh;
@@ -73,7 +78,7 @@
 
 .hero-btn.filled:hover {
   background-color: #fff;
-  color: var(--primary-border-color);
+  color: var(--secondary-color);
 }
 
 /* البطاقات */

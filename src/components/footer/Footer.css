@@ -1,170 +1,89 @@
-/* Define CSS Variables for Colors and Transitions */
-:root {
-  --main-color: #03828e;
-  --accent-color: #d4af37;
-  --focus-color: #0ba2b0;
-  --shadow-color: rgba(0, 0, 0, 0.1);
-  --transition-speed: 0.3s;
-  --icon-size: 20px;
+.footer {
+  background-color: #102E50;
+  padding: 50px 20px;
+  direction: rtl;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-footer {
-  background: #0d4c57;
-  color: white;
-}
-
-.contact-container {
+.footer-container {
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  gap: 15px;
-  padding-top: 90px;
+  border-top: 1px solid #ddd;
+  padding-top: 40px;
 }
 
-.form-section,
-.info-section {
-  width: 100%;
-  max-width: 500px;
-  height: 500px;
-  padding: 40px;
-  background: var(--main-color);
-  border-radius: 8px;
-  margin: 10px;
-  box-shadow: 0 4px 10px var(--shadow-color);
-  opacity: 0;
-  transform: translateX(0);
-  transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+.info-section,
+.form-section {
+
+  padding: 15px;
+  border-radius: 15px;
+  flex: 1;
+  min-width: 300px;
+  min-height: 450px;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 24px;
+.footer h2 {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
   color: white;
+}
+
+.footer p {
+  margin: 10px 0;
+  color: white;
+  font-size: 0.95rem;
+}
+
+.footer .icon {
+  margin-left: 6px;
+  color: #F5C45E;
+}
+
+.map iframe {
+  width: 100%;
+  height: 200px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 10px;
 }
 
 .form-section form {
   display: flex;
   flex-direction: column;
+  gap: 15px;
 }
 
 .form-section input,
 .form-section textarea {
-  margin-bottom: 25px;
   padding: 10px;
-  border: none;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 16px;
-  direction: rtl;
-  transition: transform var(--transition-speed) ease, border var(--transition-speed) ease;
-}
-
-.form-section input:focus,
-.form-section textarea:focus {
-  transform: scale(1.05);
-  outline: none;
-  border: 2px solid var(--focus-color);
-  box-shadow: 0 0 8px rgba(7, 203, 221, 0.675);
+  font-size: 0.95rem;
 }
 
 .form-section button {
   padding: 10px;
-  background-color: var(--accent-color);
-  color: white;
+  background-color: #F5C45E;
   border: none;
+  color: #fff;
+  font-weight: bold;
   border-radius: 4px;
-  font-size: 16px;
-  transition: background-color var(--transition-speed) ease;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .form-section button:hover {
-  background-color: #b89430;
+  background-color: #134a56;
 }
 
-.info-section {
-  text-align: center;
-}
-
-.info-section p {
-  margin: 10px 0;
-  color: white;
-}
-
-.info-section .icon {
-  font-size: var(--icon-size);
-  margin-right: 5px;
-}
-
-.map {
-  width: 100%;
-  height: 200px;
-  background: #ddd;
-  border-radius: 4px;
-  margin-top: 15px;
-}
-
-.map iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-/* Animations for sliding in sections */
-@keyframes slideFromLeft {
-  from {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideFromRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-.form-section.active {
-  animation: slideFromLeft 1.5s ease-out forwards;
-}
-
-.info-section.active {
-  animation: slideFromRight 1.5s ease-out forwards;
-}
-
-/* Media Query for responsiveness */
-@media (max-width: 768px) {
-  .contact-container {
-    flex-direction: column;
-    padding: 20px;
-    align-items: center;
-  }
-
-  .form-section,
-  .info-section {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    padding: 20px;
-    margin: 10px 0;
-  }
-
-  .map {
-    height: 150px;
-  }
+.vertical-divider {
+  width: 1px;
+  background-color: #ccc;
+  height: auto;
+  align-self: stretch;
 }

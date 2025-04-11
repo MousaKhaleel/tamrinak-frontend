@@ -1,42 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Logo from '../../Assets/Logo/3Xpnjp-LogoMakr.png';
-import './NavigationBar.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+import './NavigationBar.css'; // Optional: only for custom styles
 
 function NavigationBar() {
-  const [menuActive, setMenuActive] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuActive(!menuActive);
-  };
-
   return (
-    <div>
-      <header id="header">
-        <div className="nav-container">
-          <div className="logo">
-            <img src={Logo} width="50px" alt="Tamrinak logo" />
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark" dir="rtl">
+      <div className="container-fluid">
+        <a className="navbar-brand d-flex align-items-center" href="/">
+          <img src={Logo} width="40" alt="Tamreenak Logo" className="me-2" />
+        </a>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="تبديل القائمة"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div className="navbar-nav me-auto mb-2 mb-lg-0">
+            <a className="nav-link" href="/">الرئيسية</a>
+            <a className="nav-link" href="/abousUs">حول الموقع</a>
+            <a className="nav-link" href="/services">خدماتنا</a>
+            <a className="nav-link" href="/bookings">الحجوزات</a>
+            <a className="nav-link" href="/contactUs">تواصل معنا</a>
           </div>
-          <button className="menu-toggle" aria-label="Toggle Menu" onClick={toggleMenu}>
-            <span className="bar" />
-            <span className="bar" />
-            <span className="bar" />
-          </button>
-          <nav role="navigation">
-            <ul id="navbar" className={menuActive ? 'active' : ''}>
-              <li><a href="/">الرئيسية</a></li>
-              <li><a href="/abousUs">حول الموقع</a></li>
-              <li><a href="/services">خدماتنا</a></li>
-              <li><a href="/bookings">حجوزات</a></li>
-              <li><a href="/contactUs">تواصل معنا</a></li>
-            </ul>
-          </nav>
-          <div className="nav-actions">
-            <a href="/login" id="login-btn" aria-label="تسجيل الدخول إلى حسابك">تسجيل الدخول</a>
-            <a href="/register" id="create-btn" aria-label="إنشاء حساب جديد">إنشاء حساب</a>
+          <div className="d-flex gap-2">
+            <a href="/login" className="btn btn-outline-light">تسجيل الدخول</a>
+            <a href="/register" className="btn btn-primary">إنشاء حساب</a>
           </div>
         </div>
-      </header>
-    </div>
+      </div>
+    </nav>
   );
 }
 

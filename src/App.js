@@ -9,9 +9,9 @@ import AboutUs from './Components/AboutUs/AboutUs';
 import Login from './Components/Auth/Login/Login';
 import Register from './Components/Auth/Register/Register';
 
-// import 'bootstrap/dist/css/bootstrap.min.css'; 
-// import $ from 'jquery'; 
-// import Popper from 'popper.js'; 
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import $ from 'jquery'; 
+import Popper from 'popper.js'; 
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 

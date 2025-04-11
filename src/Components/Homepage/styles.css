@@ -1,12 +1,12 @@
 :root {
-  --primary-color: #134a56;
-  --primary-border-color: #134a56;
+  --primary-color: #F5C45E;
+  --secondary-color: #102E50;
   --transition-speed: 0.3s;
 }
 
 /* :root {
   --primary-color: #e5b80b;
-  --primary-border-color: #cf9f0d;
+  --secondary-color: #cf9f0d;
   --transition-speed: 0.3s;
 } */
 
@@ -74,7 +74,7 @@
 
 .we-info h1 {
   font-size: 2.4rem;
-  color: var(--primary-border-color);
+  color: var(--secondary-color);
 }
 
 .we-info p {
@@ -116,7 +116,7 @@
 #title {
   text-align: center;
   padding: 100px;
-  background: var(--primary-border-color);
+  background: var(--secondary-color);
   color: #fff;
   font-weight: 400;
 }
@@ -150,13 +150,13 @@
   width: 100%;
   height: 450px;
   border-radius: 10px;
-  border: 4px solid var(--primary-border-color);
+  border: 4px solid var(--secondary-color);
   object-fit: cover;
 }
 
 .sports-card h3 {
   font-size: 2.2rem;
-  color: var(--primary-border-color);
+  color: var(--secondary-color);
   margin: 15px;
 }
 
