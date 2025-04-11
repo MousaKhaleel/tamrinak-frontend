@@ -1,164 +1,84 @@
-#header {
+:root {
+  --primary-color: #F5C45E;
+  --secondary-color: #;
+  --transition-speed: 0.3s;
+}
+/* Maintain fixed header with semi-transparent background */
+.navbar {
+  padding-inline: 20px;
   position: fixed;
   top: 0;
-  left: 0;
   width: 100%;
-  height: 90px;
-  background-color: rgba(213, 181, 101, 0.8);
+  height: 80px;
   z-index: 1000;
-  transition: background-color var(--transition-speed) ease,
-              height var(--transition-speed) ease,
-              padding var(--transition-speed) ease,
-              box-shadow var(--transition-speed) ease;
+  transition: background-color 0.3s ease, height 0.3s ease, box-shadow 0.3s ease;
+  background-color: #F5C45E !important; /* Override Bootstrap dark */
 }
 
-.menu-toggle {
-  display: none;
-}
-
-.nav-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  height: 100%;
-  direction: rtl;
-}
-
-.logo a {
-  transition: color var(--transition-speed) ease;
-}
-
-#navbar {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  list-style: none;
-}
-
-#navbar li {
-  position: relative;
+.bg-highlight {
+  background-color: #F5C45E;
   padding: 10px;
+  border-radius: 4px;
 }
 
-#navbar li a {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #fff;
-  transition: color var(--transition-speed) ease;
-}
-
-#navbar li a:hover,
-#navbar li a.active {
-  color: var(--primary-border-color);
-}
-
-#navbar li a::after {
-  content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 20px;
-  width: 0;
-  height: 2px;
-  background-color: var(--primary-border-color);
-  transition: width var(--transition-speed) ease;
-}
-
-#navbar li a:hover::after,
-#navbar li a.active::after {
-  width: 30%;
-}
-
-.nav-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-#create-btn {
-  background-color: rgba(213, 181, 101, 0.1);
-  border: 2px solid var(--primary-border-color);
-  color: var(--primary-border-color);
-  padding: 10px 20px;
-  font-size: 16px;
-  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-}
-
-#create-btn:hover {
-  background-color: var(--primary-border-color);
-  color: #fff;
-}
-
-#login-btn {
-  background-color: var(--primary-color);
-  border: none;
-  color: #fff;
-  padding: 10px 20px;
-  font-size: 16px;
-  margin-left: 20px;
-  transition: background-color var(--transition-speed) ease;
-}
-
-#login-btn:hover {
-  background-color: var(--primary-border-color);
-}
-
-#header.scrolled {
-  background-color: rgba(213, 181, 101, 1);
-  height: 70px;
+/* Scrolled state — optional, if you plan to toggle it via JS */
+.navbar.scrolled {
+  background-color: #f5c55edd !important;
+  height: 60px;
   padding: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-@media (max-width: 768px) {
-  #header {
-    flex-direction: column;
-    padding: 10px;
-    height: auto;
-    position: relative;
-  }
+/* Nav links hover + active underline effect */
+.nav-link {
+  position: relative;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff !important;
+  transition: color 0.3s ease;
+}
 
-  #navbar {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-    display: none;
-    width: 100%;
-    text-align: center;
-    background: rgba(213, 181, 101, 0.9);
-    position: absolute;
-    top: 100%;
-    left: 0;
-  }
+.nav-link:hover,
+.nav-link.active {
+  color: var(--secondary-color) !important;
+}
 
-  #navbar.active {
-    display: flex;
-  }
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  right: 20px;
+  width: 0;
+  height: 2px;
+  background-color: var(--secondary-color);
+  transition: width 0.3s ease;
+}
 
-  .menu-toggle {
-    display: block;
-  }
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 30%;
+}
 
-  .menu-toggle .bar {
-    display: block;
-    width: 25px;
-    height: 3px;
-    margin: 4px auto;
-    transition: all 0.3s ease;
-    background-color: var(--primary-border-color);
-  }
+/* Style login/register buttons */
+.btn-outline-light {
+  border: 2px solid var(--secondary-color);
+  color: var(--secondary-color);
+  background-color: rgba(213, 181, 101, 0.1);
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
-  #navbar li {
-    padding: 12px 0;
-  }
+.btn-outline-light:hover {
+  background-color: var(--secondary-color);
+  color: #fff;
+}
 
-  /* Ensure padding for action buttons in smaller viewports */
-  #create-btn,
-  #login-btn {
-    padding: 8px 16px;
-    font-size: 14px;
-    margin: 5px 0;
-  }
+.btn-primary {
+  background-color: var(--secondary-color);
+  border: none;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-color);
 }

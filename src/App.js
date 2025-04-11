@@ -6,12 +6,12 @@ import { UserProvider } from './Context/UserContext';
 import { ThemeProvider } from './Context/ThemeContext';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AboutUs from './Components/AboutUs/AboutUs';
-import Login from './Components/Auth/Login/Login';
-import Register from './Components/Auth/Register/Register';
 
-// import 'bootstrap/dist/css/bootstrap.min.css'; 
-// import $ from 'jquery'; 
-// import Popper from 'popper.js'; 
+import AuthPage from './Components/Auth/AuthPage';
+
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import $ from 'jquery'; 
+import Popper from 'popper.js'; 
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 
@@ -27,8 +27,9 @@ function App() {
             <Routes>
               <Route path="/" element={<Homepage />} />
               {/* <Route path="/" element={< />} /> */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              {/* <Route path="/login" element={<AuthPage />} />
+              <Route path="/register" element={<AuthPage />} /> */}
+              <Route path="/auth" element={<AuthPage />} />
               <Route path="/aboutUs" element={<AboutUs />} />
             </Routes>
           </BrowserRouter>

@@ -8,8 +8,8 @@ function HeroSection() {
         <h1>إبحث واحجز أفضل المرافق الرياضية</h1>
         <h4>إختر مرفق رياضي - حجز فوري مع دفع آمن</h4>
         <div className="hero-content-btn">
-          <button className="hero-btn outline">تواصل معنا</button>
-          <button className="hero-btn filled">من نحن؟</button>
+          <button className="hero-btn outline">من نحن؟</button>
+          <button className="hero-btn filled">ابدا الحجز</button>
         </div>
       </div>
 

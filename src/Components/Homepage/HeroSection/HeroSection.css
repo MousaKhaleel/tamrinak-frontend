@@ -1,7 +1,12 @@
+:root {
+  --primary-color: #F5C45E;
+  --secondary-color: #102E50;
+  --transition-speed: 0.3s;
+}
 /* قسم الهيرو */
 .hero-section {
-  height: 120vh;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/public/mastercowley.jpg') no-repeat center;
+  height: 110vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/public//HeroSection/pexels-phantomant-1374370.jpg') no-repeat center;
   background-size: cover;
   background-position: 10% -20px;
   position: relative;
@@ -29,7 +34,7 @@
   direction: rtl;
   text-align: right;
   width: 100%;
-  margin: 300px 50px 150px;
+  margin: 250px 70px 150px;
   padding-inline-end: 50px;
 }
 
@@ -42,6 +47,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  margin-right: 4%;
 }
 
 .hero-btn {
@@ -73,7 +79,7 @@
 
 .hero-btn.filled:hover {
   background-color: #fff;
-  color: var(--primary-border-color);
+  color: var(--secondary-color);
 }
 
 /* البطاقات */
@@ -109,7 +115,7 @@
 }
 
 .icon-wrapper {
-  color: #009688; /* or whatever matches your theme */
+  color: #102E50;  ; /* or whatever matches your theme */
   margin-bottom: 10px;
 }
 
