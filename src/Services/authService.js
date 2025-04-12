@@ -1,7 +1,7 @@
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.API_URL;
 
-export const register = async (userData) => {
-  const response = await fetch(`${API_URL}/User/Register`, {
+export const register = async (userData) => {//TODO use
+  const response = await fetch(`https://localhost:7160/api/User/Register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,7 +18,7 @@ export const register = async (userData) => {
 };
 
 export const login = async (credentials) => {
-  const response = await fetch(`${API_URL}/Authentication/Login`, {
+  const response = await fetch(`https://localhost:7160/api/Authentication/Login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

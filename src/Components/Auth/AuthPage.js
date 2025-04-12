@@ -5,15 +5,18 @@ import "./AuthStyle.css";
 import { login, register } from "../../Services/authService";
 import { toast } from "react-toastify";
 
+import { useAuth } from "../../Context/AuthContext";
+
 const AuthPage = () => {
+  const { loginUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const query = new URLSearchParams(location.search);
   const defaultMode = query.get("mode");
 
   const [isRegistering, setIsRegistering] = useState(false);
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const [registerData, setRegisterData] = useState({ name: "", email: "", password: "" });
+  const [loginData, setLoginData] = useState({ Email: "", Password: "" });
+  const [registerData, setRegisterData] = useState({ Name: "", Email: "", Password: "" });
 
   useEffect(() => {
     if (defaultMode === "register") {
@@ -27,9 +30,9 @@ const AuthPage = () => {
     e.preventDefault();
     try {
       const res = await login(loginData);
-      localStorage.setItem("token", res.jwtToken);
+      loginUser(res.jwtToken);
       toast.success("تم تسجيل الدخول بنجاح");
-      navigate("/"); // Redirect to homepage
+      navigate("/");
     } catch (err) {
       toast.error(err.message);
     }
@@ -56,14 +59,14 @@ const AuthPage = () => {
             type="email"
             placeholder="البريد الإلكتروني"
             value={loginData.email}
-            onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-            required
+            onChange={(e) => setLoginData({ ...loginData, Email: e.target.value })}
+            required  
           />
           <input
             type="password"
             placeholder="كلمة المرور"
             value={loginData.password}
-            onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+            onChange={(e) => setLoginData({ ...loginData, Password: e.target.value })}
             required
           />
           <button type="submit" className="w-100">دخول</button>
@@ -81,21 +84,21 @@ const AuthPage = () => {
             type="text"
             placeholder="الاسم الكامل"
             value={registerData.name}
-            onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
+            onChange={(e) => setRegisterData({ ...registerData, Name: e.target.value })}
             required
           />
           <input
             type="email"
             placeholder="البريد الإلكتروني"
             value={registerData.email}
-            onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+            onChange={(e) => setRegisterData({ ...registerData, Email: e.target.value })}
             required
           />
           <input
             type="password"
             placeholder="كلمة المرور"
             value={registerData.password}
-            onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+            onChange={(e) => setRegisterData({ ...registerData, Password: e.target.value })}
             required
           />
           <button type="submit" className="w-100">تسجيل</button>

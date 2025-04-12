@@ -2,7 +2,6 @@ import './App.css';
 import Homepage from './Components/Homepage/Homepage'
 import Footer from './Components/Footer/Footer';
 import NavigationBar from './Components/NavigationBar/NavigationBar'
-import { UserProvider } from './Context/UserContext';
 import { ThemeProvider } from './Context/ThemeContext';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AboutUs from './Components/AboutUs/AboutUs';
@@ -18,12 +17,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 function App() {
   return (
     <div className="App">
-      <UserProvider>
         <ThemeProvider>
-
-
-          
           <BrowserRouter>
+          {/* <NavigationBar /> */}
             <Routes>
               <Route path="/" element={<Homepage />} />
               {/* <Route path="/" element={< />} /> */}
@@ -35,7 +31,6 @@ function App() {
           </BrowserRouter>
           {/* <Footer /> */}
         </ThemeProvider>
-      </UserProvider>
     </div>
   );
 }
