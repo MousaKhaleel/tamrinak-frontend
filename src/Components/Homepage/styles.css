@@ -59,7 +59,7 @@
 /* About Us Section */
 .we-info {
   direction: rtl;
-  background: #fff8e6;
+  background: #fdfaf3;
   display: flex;
   gap: 30px;
   padding: 50px;
@@ -123,7 +123,7 @@
 
 /* Sports Section */
 .sports-container {
-  background: linear-gradient(135deg, #fff8e6, #fff1d0);
+  background: #fdfaf3;
   padding: 40px 20px;
   display: flex;
   flex-wrap: wrap;
@@ -186,6 +186,7 @@
 .sports-card button {
   padding: 10px 20px;
   background: var(--primary-color);
+  /* TODO */
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -195,7 +196,8 @@
 }
 
 .sports-card button:hover {
-  background-color: #b89c4d;
+  background-color: #ffae00;
+  /* TODO */
 }
 
 
