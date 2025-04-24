@@ -1,8 +1,8 @@
 import React from 'react';
-import Logo from '../../Assets/Logo/3Xpnjp-LogoMakr.png';
+import Logo from '../../Assets/Logo/4RrmCG-LogoMakr.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import './NavigationBar.css'; // Optional: only for custom styles
+import './NavigationBar.css';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthContext';
 
@@ -34,7 +34,7 @@ function NavigationBar() {
           <div className="navbar-nav me-auto mb-2 mb-lg-0">
             <a className="nav-link" href="/">الرئيسية</a>
             <a className="nav-link" href="/aboutUs">حول الموقع</a>
-            <a className="nav-link" href="/services">خدماتنا</a>
+            <a className="nav-link" href="/sports">الرياضات</a>
             <a className="nav-link" href="/bookings">الحجوزات</a>
             <a className="nav-link" href="/contactUs">تواصل معنا</a>
           </div>

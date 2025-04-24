@@ -112,7 +112,7 @@
   }
   
   form button:hover {
-    background-color: #13365e;
+    background-color: #19416e;
   }
   
   /* Toggle Text */
@@ -205,7 +205,7 @@
   }
   
   .back-home:hover {
-    color: #102e50e1;
+    color: #19416e;
   }
   
   @media (max-width: 768px) {

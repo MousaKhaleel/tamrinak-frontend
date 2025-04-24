@@ -12,6 +12,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery'; 
 import Popper from 'popper.js'; 
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import SportsPage from './Components/Sport/SportsPage';
+import FacilitiesPage from './Components/Facility/FacilitiesPage';
 
 
 function App() {
@@ -22,10 +24,9 @@ function App() {
           {/* <NavigationBar /> */}
             <Routes>
               <Route path="/" element={<Homepage />} />
-              {/* <Route path="/" element={< />} /> */}
-              {/* <Route path="/login" element={<AuthPage />} />
-              <Route path="/register" element={<AuthPage />} /> */}
               <Route path="/auth" element={<AuthPage />} />
+              <Route path="/sports" element={<SportsPage />} />
+              <Route path="/facilities" element={<FacilitiesPage />} />
               <Route path="/aboutUs" element={<AboutUs />} />
             </Routes>
           </BrowserRouter>

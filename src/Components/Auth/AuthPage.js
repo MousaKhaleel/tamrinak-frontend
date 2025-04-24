@@ -4,7 +4,6 @@ import { GoHome } from "react-icons/go";
 import "./AuthStyle.css";
 import { login, register } from "../../Services/authService";
 import { toast } from "react-toastify";
-
 import { useAuth } from "../../Context/AuthContext";
 
 const AuthPage = () => {
@@ -15,6 +14,7 @@ const AuthPage = () => {
   const defaultMode = query.get("mode");
 
   const [isRegistering, setIsRegistering] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [loginData, setLoginData] = useState({ Email: "", Password: "" });
   const [registerData, setRegisterData] = useState({ Name: "", Email: "", Password: "" });
 
@@ -28,6 +28,7 @@ const AuthPage = () => {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await login(loginData);
       loginUser(res.jwtToken);
@@ -35,17 +36,22 @@ const AuthPage = () => {
       navigate("/");
     } catch (err) {
       toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await register(registerData);
       toast.success("تم إنشاء الحساب بنجاح، قم بتسجيل الدخول");
-      setIsRegistering(false); // Go to login form
+      setIsRegistering(false);
     } catch (err) {
       toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,18 +64,22 @@ const AuthPage = () => {
           <input
             type="email"
             placeholder="البريد الإلكتروني"
-            value={loginData.email}
+            value={loginData.Email}
             onChange={(e) => setLoginData({ ...loginData, Email: e.target.value })}
-            required  
+            required
+            disabled={loading}
           />
           <input
             type="password"
             placeholder="كلمة المرور"
-            value={loginData.password}
+            value={loginData.Password}
             onChange={(e) => setLoginData({ ...loginData, Password: e.target.value })}
             required
+            disabled={loading}
           />
-          <button type="submit" className="w-100">دخول</button>
+          <button type="submit" className="w-100" disabled={loading}>
+            {loading ? "جاري الدخول..." : "دخول"}
+          </button>
           <p className="toggle-text" onClick={togglePanel}>
             ليس لديك حساب؟ <span>إنشاء حساب</span>
           </p>
@@ -83,25 +93,30 @@ const AuthPage = () => {
           <input
             type="text"
             placeholder="الاسم الكامل"
-            value={registerData.name}
+            value={registerData.Name}
             onChange={(e) => setRegisterData({ ...registerData, Name: e.target.value })}
             required
+            disabled={loading}
           />
           <input
             type="email"
             placeholder="البريد الإلكتروني"
-            value={registerData.email}
+            value={registerData.Email}
             onChange={(e) => setRegisterData({ ...registerData, Email: e.target.value })}
             required
+            disabled={loading}
           />
           <input
             type="password"
             placeholder="كلمة المرور"
-            value={registerData.password}
+            value={registerData.Password}
             onChange={(e) => setRegisterData({ ...registerData, Password: e.target.value })}
             required
+            disabled={loading}
           />
-          <button type="submit" className="w-100">تسجيل</button>
+          <button type="submit" className="w-100" disabled={loading}>
+            {loading ? "جاري التسجيل..." : "تسجيل"}
+          </button>
           <p className="toggle-text" onClick={togglePanel}>
             هل لديك حساب؟ <span>تسجيل الدخول</span>
           </p>
