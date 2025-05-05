@@ -28,8 +28,6 @@ function FieldsPage() {
   if (loading) return <div className="text-center">جارٍ تحميل الملاعب...</div>;
 
   return (
-    <>
-    <NavigationBar />
     <div className="container py-4">
       <h1 className="text-center mb-4">الملاعب المرتبطة بالرياضة</h1>
       <div className="row g-4">
@@ -40,8 +38,6 @@ function FieldsPage() {
 )}
       </div>
     </div>
-    <Footer />
-    </>
   );
 }
 

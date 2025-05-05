@@ -35,3 +35,66 @@ export const login = async (credentials) => {
 };
 
 //TODO: logout, confim email, rest password
+export const logout = async () => {
+  const response = await fetch(`${API_URL}/api/Authentication/logout`, {
+    method: "POST",
+    credentials: "include", // optional: include cookies if using them
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Logout failed");
+  }
+};
+
+export const sendConfirmationEmail = async (email) => {
+  const response = await fetch(`${API_URL}/api/Authentication/send-confirmation-email`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Sending confirmation email failed");
+  }
+};
+
+export const confirmEmail = async (token, userId) => {
+  const response = await fetch(`${API_URL}/api/Authentication/confirm-email`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, userId }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Email confirmation failed");
+  }
+};
+
+export const forgotPassword = async (email) => {
+  const response = await fetch(`${API_URL}/api/Authentication/forgot-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Forgot password request failed");
+  }
+};
+
+export const resetPassword = async (data) => {
+  const response = await fetch(`${API_URL}/api/Authentication/reset-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data), // data should include email, token, newPassword, confirmPassword
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Password reset failed");
+  }
+};

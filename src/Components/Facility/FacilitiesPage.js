@@ -24,9 +24,7 @@ const FacilitiesPage = () => {
 
   return ( 
     <div>
-        {/* <NavigationBar /> */}
         <FacilityCard facilities={facilities} />
-        {/* <Footer /> */}
     </div>
  );
 };

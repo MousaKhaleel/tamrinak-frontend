@@ -1,17 +1,21 @@
 import React from 'react';
 import './NavBar.css';
-import logo from '../../../Assets/Logo/4RrmCG-LogoMakr.png'; // Adjust the path as necessary
+import logo from '../../../Assets/Logo/4RrmCG-LogoMakr.png';
 import { Link } from 'react-router-dom';
 
-const Header = () => {
+const NavBar = () => {
+  const handleToggleSidebar = () => {
+    document.body.classList.toggle('sidebar-collapsed');
+  };
+
   return (
     <header id="header" className="header fixed-top d-flex align-items-center" dir="rtl">
       <div className="d-flex align-items-center justify-content-between">
-        <Link to="/AdminDashboard" className="logo d-flex align-items-center">
+        <Link to="/adminDashboard" className="logo d-flex align-items-center">
           <img width={'30px'} src={logo} alt="" />
-          <span className="d-none d-lg-block">Admin</span>
+          <span className="h5 d-none d-lg-block">Admin Dashboard</span>
         </Link>
-        <i className="bi bi-list toggle-sidebar-btn"></i>
+        <i className="bi bi-list toggle-sidebar-btn" onClick={handleToggleSidebar}></i>
       </div>
 
       <div className="search-bar">
@@ -34,4 +38,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default NavBar;

@@ -154,3 +154,17 @@
 .sidebar-nav .nav-content a.active i {
   background-color: #4154f1;
 }
+/* Default sidebar */
+.sidebar {
+  width: 250px;
+  transition: all 0.3s ease;
+}
+
+/* Collapsed state */
+body.sidebar-collapsed .sidebar {
+  margin-right: -250px; /* hide it from right (RTL layout) */
+}
+
+body.sidebar-collapsed .toggle-sidebar-btn {
+  transform: rotate(180deg);
+}

@@ -1,4 +1,7 @@
 import React from 'react';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const BookingCard = () => {
   return (
@@ -27,13 +30,13 @@ const BookingCard = () => {
         </div>
 
         <div className="card-body">
-          <h5 className="card-title">المبيعات <span>| اليوم</span></h5>
+          <h5 className="card-title">الحجوزات <span>| اليوم</span></h5>
           <div className="d-flex align-items-center flex-row-reverse">
             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
               <i className="bi bi-cart"></i>
             </div>
             <div className="pe-3">
-              <h6>145</h6>
+              <h6>14</h6>
               <span className="text-success small pt-1 fw-bold">12%</span>
               <span className="text-muted small pt-2 pe-1">زيادة</span>
             </div>
