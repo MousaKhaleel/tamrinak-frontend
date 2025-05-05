@@ -6,6 +6,8 @@ import './NavigationBar.css';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthContext';
 
+import pic from '../../Assets/profile-42914_1280.png';
+
 function NavigationBar() {
   const { user, logoutUser } = useAuth();
 
@@ -17,7 +19,7 @@ function NavigationBar() {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark" dir="rtl">
       <div className="container-fluid">
         <a className="navbar-brand d-flex align-items-center" href="/">
-          <img src={Logo} width="40" alt="Tamreenak Logo" className="me-2" />
+          <img src={Logo} width="40" alt="Tamrinak Logo" className="me-2" />
         </a>
         <button
           className="navbar-toggler"
@@ -31,28 +33,49 @@ function NavigationBar() {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse bg-highlight" id="navbarNavAltMarkup">
-          <div className="navbar-nav me-auto mb-2 mb-lg-0">
+          <div className="navbar-nav ms-auto me-4 mb-2 mb-lg-0">
             <a className="nav-link" href="/">الرئيسية</a>
-            <a className="nav-link" href="/aboutUs">حول الموقع</a>
             <a className="nav-link" href="/sports">الرياضات</a>
-            <a className="nav-link" href="/bookings">الحجوزات</a>
+            {/* <a className="nav-link" href="/bookings">الحجوزات</a> */}
+            <a className="nav-link" href="/aboutUs">حول الموقع</a>
             <a className="nav-link" href="/contactUs">تواصل معنا</a>
           </div>
+          <Link  to="/adminDashboard">Admin</Link>
 
           {/* Auth Buttons */}
           <div className="d-flex gap-2">
             {user ? (
-              <>
-                <button onClick={handleLogout} className="btn btn-outline-danger">تسجيل الخروج</button>
-                {/* Optional: Show something like the user token or a placeholder name */}
-                <span className="text-light d-flex align-items-center">مرحبا!</span>
-              </>
+              <div className="dropdown">
+                <button
+                  className="btn btn-primary dropdown-toggle d-flex align-items-center"
+                  type="button"
+                  id="userDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <img
+                    src={pic}
+                    alt="Avatar"
+                    className="rounded-circle m-1 ms-2 me-2"
+                    width="30"
+                    height="30"
+                  />
+                  <span className="text-light">مرحبا!</span>
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end text-end" aria-labelledby="userDropdown">
+                  <li><Link className="dropdown-item" to="/profile">الملف الشخصي</Link></li>
+                  <li><Link className="dropdown-item" to="/settings">الإعدادات</Link></li>
+                  <li><hr className="dropdown-divider" /></li>
+                  <li><button className="dropdown-item text-danger" onClick={handleLogout}>تسجيل الخروج</button></li>
+                </ul>
+              </div>
             ) : (
               <>
                 <Link className="btn btn-outline-light" to="/auth?mode=login">تسجيل الدخول</Link>
                 <Link className="btn btn-primary" to="/auth?mode=register">إنشاء حساب</Link>
               </>
             )}
+
           </div>
         </div>
       </div>

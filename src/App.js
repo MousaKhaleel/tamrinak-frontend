@@ -12,8 +12,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery'; 
 import Popper from 'popper.js'; 
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 import SportsPage from './Components/Sport/SportsPage';
 import FacilitiesPage from './Components/Facility/FacilitiesPage';
+import Profile from './Components/User/Profile';
+import AdminDashboard from './Components/Admin/AdminDashboard';
+import FieldsPage from './Components/Field/FieldsPage';
 
 
 function App() {
@@ -26,7 +34,11 @@ function App() {
               <Route path="/" element={<Homepage />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/sports" element={<SportsPage />} />
+              <Route path="/fields" element={<FieldsPage />} />
+              {/* <Route path="/facilities/:sportId" element={<FacilityDETAILS />} /> */}
               <Route path="/facilities" element={<FacilitiesPage />} />
+              <Route path="//profile" element={<Profile />} />
+              <Route path='/adminDashboard' element={<AdminDashboard />} />
               <Route path="/aboutUs" element={<AboutUs />} />
             </Routes>
           </BrowserRouter>

@@ -1,0 +1,180 @@
+:root {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  background: #f6f9ff;
+  color: #444;
+  direction: rtl;
+  text-align: right;
+}
+
+a {
+  color: #4154f1;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #717ff5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Nunito", sans-serif;
+}
+
+/*--------------------------------------------------------------
+# Main 
+--------------------------------------------------------------*/
+#main {
+  margin-top: 60px;
+  padding: 20px 30px;
+  transition: all 0.3s;
+}
+
+@media (max-width: 1199px) {
+  #main {
+    padding: 20px;
+  }
+}
+
+/*--------------------------------------------------------------
+# Dropdown menus 
+--------------------------------------------------------------*/
+.dropdown-menu {
+  border-radius: 4px;
+  padding: 10px 0;
+  border: 0;
+  box-shadow: 0 5px 30px rgba(82, 63, 105, 0.2);
+  text-align: right; /* Align text in RTL */
+}
+
+.dropdown-menu .dropdown-item {
+  font-size: 14px;
+  padding: 10px 15px;
+  transition: 0.3s;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #f6f9ff;
+}
+
+/*--------------------------------------------------------------
+# Card 
+--------------------------------------------------------------*/
+.card {
+  margin-bottom: 30px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+  width: 100%;
+  height: auto;
+}
+
+.card-header, .card-footer {
+  border-color: #ebeef4;
+  background-color: #fff;
+  color: #798eb3;
+  padding: 15px;
+}
+
+.card-title {
+  padding: 20px 0 15px 0;
+  font-size: 18px;
+  color: #012970;
+}
+
+.card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* Align text to the right in RTL */
+  text-align: right;
+}
+
+#reportsChart {
+  width: 100%;
+  height: 350px;
+}
+
+@media (max-width: 1199px) {
+  .card {
+    width: 100%;
+  }
+}
+
+/*--------------------------------------------------------------
+# Alerts 
+--------------------------------------------------------------*/
+.alert-heading {
+  font-weight: 500;
+  font-size: 20px;
+}
+
+/*--------------------------------------------------------------
+# Accordion 
+--------------------------------------------------------------*/
+.accordion-item {
+  border: 1px solid #ebeef4;
+}
+
+.accordion-button:not(.collapsed) {
+  color: #012970;
+  background-color: #f6f9ff;
+}
+
+/*--------------------------------------------------------------
+# Breadcrumbs 
+--------------------------------------------------------------*/
+.breadcrumb {
+  font-size: 14px;
+  color: #899bbd;
+  font-weight: 600;
+  text-align: right;
+}
+
+.breadcrumb a {
+  color: #899bbd;
+}
+
+.breadcrumb a:hover {
+  color: #51678f;
+}
+
+.breadcrumb .active {
+  color: #51678f;
+  font-weight: 600;
+}
+
+/*--------------------------------------------------------------
+# Footer 
+--------------------------------------------------------------*/
+.footer {
+  padding: 20px 0;
+  font-size: 14px;
+  border-top: 1px solid #cddfff;
+}
+
+.footer .copyright {
+  text-align: center;
+  color: #012970;
+}
+
+/*--------------------------------------------------------------
+# RTL Adjustments 
+--------------------------------------------------------------*/
+.card {
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
+
+.sidebar,
+.navbar {
+  direction: rtl;
+}
+
+.dropdown-menu {
+  right: auto !important;
+  left: 0 !important; /* Ensure dropdown appears correctly in RTL */
+}
