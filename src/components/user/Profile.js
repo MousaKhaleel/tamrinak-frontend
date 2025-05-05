@@ -1,21 +1,26 @@
 import { useEffect, useState } from "react";
-import userService from "../../Services/userService";
+import useProfile from "../../Hooks/useProfile";
 
 function Profile() {
   const [profile, setProfile] = useState(null);
+  const [error, setError] = useState(null); // For handling errors
+
+  const getProfile = useProfile();
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const data = await userService.getProfile();
-        setProfile(data);
-      } catch (error) {
-        console.error("Failed to load profile", error);
-      }
-    };
+    getProfile()
+      .then(profileData => {
+        setProfile(profileData); // Set the fetched profile data
+      })
+      .catch(err => {
+        setError(err.message); // Capture and display errors
+        console.error(err);
+      });
+  }, [getProfile]);
 
-    fetchProfile();
-  }, []);
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   if (!profile) {
     return <div>Loading...</div>;
@@ -26,7 +31,7 @@ function Profile() {
       <h2>Profile</h2>
       <p><strong>Name:</strong> {profile.name}</p>
       <p><strong>Email:</strong> {profile.email}</p>
-      <p><strong>Roles:</strong> {profile.roles.join(", ")}</p>
+      <p><strong>Roles:</strong> {profile.roles?.join(", ")}</p>
       {/* Show image if available */}
       {profile.profileImageUrl ? (
         <img src={profile.profileImageUrl} alt="Profile" width="100" />

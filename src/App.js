@@ -23,6 +23,9 @@ import Profile from './Components/User/Profile';
 import AdminDashboard from './Components/Admin/AdminDashboard';
 import FieldsPage from './Components/Field/FieldsPage';
 import FieldDetails from './Components/Field/FieldDetails';
+import AddFieldForm from './Components/Admin/DashboardComponents/AddFieldForm';
+import AddFacilityForm from './Components/Admin/DashboardComponents/AddFacilityForm';
+import AddSportForm from './Components/Admin/DashboardComponents/AddSportForm';
 
 
 function App() {
@@ -40,6 +43,9 @@ function App() {
               <Route path="/sports" element={<SportsPage />} />
               <Route path="/field-details/:fieldId" element={<FieldDetails />} />
               <Route path="/fields" element={<FieldsPage />} />
+              <Route path='/add-field' element={<AddFieldForm />} />
+              <Route path='/add-facility' element={<AddFacilityForm />} />
+              <Route path='/add-sport' element={<AddSportForm />} />
               {/* <Route path="/facilities/:sportId" element={<FacilityDETAILS />} /> */}
               <Route path="/facilities" element={<FacilitiesPage />} />
               <Route path="/profile" element={<Profile />} />
