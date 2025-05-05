@@ -15,7 +15,7 @@ function NavigationBar() {
     logoutUser();
   };
 
-  const isAdmin = user?.profile?.roles?.includes('admin') || user?.profile?.roles?.includes('super admin');
+  const isAdmin = user?.profile?.roles?.includes('Admin') || user?.profile?.roles?.includes('SuperAdmin');
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark" dir="rtl">
@@ -44,7 +44,7 @@ function NavigationBar() {
             <Link className="nav-link" to="/contactUs">تواصل معنا</Link>
 
             {isAdmin && (
-              <Link className="nav-link text-warning" to="/adminDashboard">
+              <Link className="nav-link text-warning" style={{ background: "green", borderRadius: "5px" }} to="/adminDashboard">{/*  //todo */}
                 لوحة التحكم
               </Link>
             )}
