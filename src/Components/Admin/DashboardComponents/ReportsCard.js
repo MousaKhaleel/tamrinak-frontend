@@ -1,6 +1,9 @@
 // components/charts/ReportsChart.js
 import React, { useEffect } from 'react';
 import ApexCharts from 'apexcharts';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const ReportsChart = () => {
   useEffect(() => {

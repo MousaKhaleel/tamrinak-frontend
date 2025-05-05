@@ -3,7 +3,7 @@ import Homepage from './Components/Homepage/Homepage'
 import Footer from './Components/Footer/Footer';
 import NavigationBar from './Components/NavigationBar/NavigationBar'
 import { ThemeProvider } from './Context/ThemeContext';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import AboutUs from './Components/AboutUs/AboutUs';
 
 import AuthPage from './Components/Auth/AuthPage';
@@ -22,27 +22,31 @@ import FacilitiesPage from './Components/Facility/FacilitiesPage';
 import Profile from './Components/User/Profile';
 import AdminDashboard from './Components/Admin/AdminDashboard';
 import FieldsPage from './Components/Field/FieldsPage';
+import FieldDetails from './Components/Field/FieldDetails';
 
 
 function App() {
+
+  const location = useLocation();
+  const hideNavFooter = ["/auth", "/adminDashboard"].includes(location.pathname);
+
   return (
     <div className="App">
         <ThemeProvider>
-          <BrowserRouter>
-          {/* <NavigationBar /> */}
+          {!hideNavFooter && <NavigationBar />}
             <Routes>
               <Route path="/" element={<Homepage />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/sports" element={<SportsPage />} />
+              <Route path="/field-details/:fieldId" element={<FieldDetails />} />
               <Route path="/fields" element={<FieldsPage />} />
               {/* <Route path="/facilities/:sportId" element={<FacilityDETAILS />} /> */}
               <Route path="/facilities" element={<FacilitiesPage />} />
-              <Route path="//profile" element={<Profile />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path='/adminDashboard' element={<AdminDashboard />} />
               <Route path="/aboutUs" element={<AboutUs />} />
             </Routes>
-          </BrowserRouter>
-          {/* <Footer /> */}
+          {!hideNavFooter && <Footer />}
         </ThemeProvider>
     </div>
   );

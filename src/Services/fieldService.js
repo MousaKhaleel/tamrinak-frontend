@@ -1,14 +1,108 @@
+const API_URL = process.env.API_URL || "https://localhost:7160";
+
+// Get all fields
+export const fetchFields = async () => {
+  try {
+    const response = await fetch(`${API_URL}/api/Field/get-fields`);
+    if (!response.ok) throw new Error("Failed to fetch fields");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching fields:", error);
+    return [];
+  }
+};
+
+// Get a specific field by ID
+export const getField = async (fieldId) => {
+  const response = await fetch(`${API_URL}/api/Field/get-field?id=${fieldId}`);
+  if (!response.ok) throw new Error("Failed to fetch field");
+  return await response.json();
+};
+
+// Add a new field
+export const addField = async (fieldData) => {
+  const response = await fetch(`${API_URL}/api/Field/add-field`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(fieldData),
+  });
+  if (!response.ok) throw new Error("Failed to add field");
+  return await response.json();
+};
+
+// Update an existing field
+export const updateField = async (fieldData) => {
+  const response = await fetch(`${API_URL}/api/Field/update-field`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(fieldData),
+  });
+  if (!response.ok) throw new Error("Failed to update field");
+  return await response.json();
+};
+
+// Remove a field
+export const removeField = async (fieldId) => {
+  const response = await fetch(`${API_URL}/api/Field/remove-field?id=${fieldId}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) throw new Error("Failed to remove field");
+};
+
+// Add field image
+export const addFieldImage = async (formData) => {
+  const response = await fetch(`${API_URL}/api/Field/add-field-image`, {
+    method: "POST",
+    body: formData, // multipart/form-data
+  });
+  if (!response.ok) throw new Error("Failed to upload field image");
+  return await response.json();
+};
+
+// Delete field image
+export const deleteFieldImage = async (imageId) => {
+  const response = await fetch(`${API_URL}/api/Field/delete-field-image?id=${imageId}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) throw new Error("Failed to delete field image");
+};
+
+// Get field photo by ID
+export const getFieldPhoto = async (photoId) => {
+  const response = await fetch(`${API_URL}/api/Field/get-field-photo?id=${photoId}`);
+  if (!response.ok) throw new Error("Failed to get field photo");
+  return await response.blob(); // Returns a photo (blob)
+};
+
+// Get renamed field photo
+export const getRenFieldPhoto = async (photoId) => {
+  const response = await fetch(`${API_URL}/api/Field/get-ren-field-photo?id=${photoId}`);
+  if (!response.ok) throw new Error("Failed to get rendered field photo");
+  return await response.blob(); // Returns a photo (blob)
+};
+
+// Get list of field photos
+export const getFieldPhotoList = async (fieldId) => {
+  const response = await fetch(`${API_URL}/api/Field/get-field-photo-list?id=${fieldId}`);
+  if (!response.ok) throw new Error("Failed to get field photo list");
+  return await response.json();
+};
+
+// Get fields by sport ID
 export const fetchFieldsBySportId = async (sportId) => {
-    try {
-      const response = await fetch(`https://localhost:7160/api/Field/by-sport/${sportId}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch fields");
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error(`Error fetching fields for sport ${sportId}:`, error);
-      return [];
-    }
-  };
-  
+  try {
+    const response = await fetch(`${API_URL}/api/Field/by-sport/${sportId}`);
+    if (!response.ok) throw new Error("Failed to fetch fields by sport");
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching fields for sport ${sportId}:`, error);
+    return [];
+  }
+};
+
+// Get sport images by sport ID
+export const getSportImages = async (sportId) => {
+  const response = await fetch(`${API_URL}/api/Field/get-sport-images/${sportId}`);
+  if (!response.ok) throw new Error("Failed to get sport images");
+  return await response.json();
+};

@@ -24,9 +24,7 @@ const SportsPage = () => {
 
   return(
     <div>
-    <NavigationBar />
    <SportCard sports={sports} />
-    <Footer />
 </div>
   )
    ;

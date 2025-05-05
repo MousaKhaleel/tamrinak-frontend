@@ -44,7 +44,6 @@ const sports = [
 function Homepage() {
     return (
         <div>
-            <NavigationBar />
             <HeroSection />
 
             <section className="we-info">
@@ -96,8 +95,6 @@ function Homepage() {
 </div>
 
             </section>
-
-            <Footer />
         </div>
     );
 }
