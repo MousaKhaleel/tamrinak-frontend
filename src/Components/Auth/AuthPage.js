@@ -5,6 +5,8 @@ import "./AuthStyle.css";
 import { login, register } from "../../Services/authService";
 import { toast } from "react-toastify";
 import { useAuth } from "../../Context/AuthContext";
+import useProfile from "../../Hooks/useProfile";
+const API_URL = process.env.API_URL || "https://localhost:7160";
 
 const AuthPage = () => {
   const { loginUser } = useAuth();
@@ -30,12 +32,29 @@ const AuthPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await login(loginData);
-      loginUser(res.jwtToken);
+      const res = await login(loginData); // res.jwtToken
+  
+      // Temporarily store token to fetch profile
+      const token = res.jwtToken;
+  
+      // Fetch profile data manually
+      const profileRes = await fetch(`${API_URL}/api/User/profile`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      const profile = await profileRes.json();
+  
+      // Save both token and profile in context
+      loginUser(token, profile);
+  
       toast.success("تم تسجيل الدخول بنجاح");
       navigate("/");
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.message || "حدث خطأ أثناء تسجيل الدخول");
     } finally {
       setLoading(false);
     }
