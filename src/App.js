@@ -26,6 +26,7 @@ import FieldDetails from './Components/Field/FieldDetails';
 import AddFieldForm from './Components/Admin/DashboardComponents/AddFieldForm';
 import AddFacilityForm from './Components/Admin/DashboardComponents/AddFacilityForm';
 import AddSportForm from './Components/Admin/DashboardComponents/AddSportForm';
+import ConfirmEmail from './Components/Confirm/ConfirmEmail';
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
               <Route path='/add-field' element={<AddFieldForm />} />
               <Route path='/add-facility' element={<AddFacilityForm />} />
               <Route path='/add-sport' element={<AddSportForm />} />
+              <Route path='/confirm-email/:token' element={<ConfirmEmail />} />
               {/* <Route path="/facilities/:sportId" element={<FacilityDETAILS />} /> */}
               <Route path="/facilities" element={<FacilitiesPage />} />
               <Route path="/profile" element={<Profile />} />
