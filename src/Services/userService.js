@@ -1,4 +1,5 @@
-const API_URL = process.env.API_URL;
+import { useAuth } from '../Context/AuthContext';
+const API_URL = process.env.API_URL || "https://localhost:7160"; // Adjust the API URL as needed
 
 //TODO check
 
@@ -68,8 +69,18 @@ const userService = {
       .then(res => res.blob()); // Assuming the image is returned as a blob
   },
 
-  getProfile: async () => {
-    return await fetch(`${API_URL}/api/User/profile`)
-      .then(res => res.json());
-  }
-};
+  getProfile: async (token) => {
+    if (!token) {
+      throw new Error('No token found');
+    }
+  
+    return await fetch(`${API_URL}/api/User/profile`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` // Add Authorization header
+      }
+    })
+    .then(res => res.json());
+  },
+};  

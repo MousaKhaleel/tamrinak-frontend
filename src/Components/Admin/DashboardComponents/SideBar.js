@@ -74,6 +74,24 @@ const Sidebar = () => {
             <i className="bi bi-chevron-down ms-auto"></i>
           </a>
           <ul id="forms-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+              <Link to="/add-field">
+                <i className="bi bi-circle"></i>
+                <span>add field</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/add-facility">
+                <i className="bi bi-circle"></i>
+                <span>add facility</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/add-sport">
+                <i className="bi bi-circle"></i>
+                <span>add sport</span>
+              </Link>
+            </li>
             <li>
               <Link to="/forms-elements">
                 <i className="bi bi-circle"></i>
