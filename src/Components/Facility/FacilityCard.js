@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
-const FacilitiesGrid = ({ facilities }) => {
+const FacilityCard = ({ facilities }) => {
   const navigate = useNavigate();
   const { search } = useLocation();
   const params = new URLSearchParams(search);
@@ -36,8 +37,8 @@ const FacilitiesGrid = ({ facilities }) => {
               )}
               <div className="card-body">
                 <h5 className="card-title text-primary fw-bold">{facility.name}</h5>
-                <p className="card-text text-muted">{facility.description}</p>
-                <p className="card-text small text-secondary">📍 {facility.location}</p>
+                <p className="card-text text-muted">{facility.locationDesc}</p>
+                <p className="card-text small text-secondary"><FaMapMarkerAlt className="icon" /> {facility.pricePerHour}</p>
               </div>
             </div>
           </div>
@@ -47,4 +48,4 @@ const FacilitiesGrid = ({ facilities }) => {
   );
 };
 
-export default FacilitiesGrid;
+export default FacilityCard;

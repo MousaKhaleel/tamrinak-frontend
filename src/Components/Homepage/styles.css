@@ -185,7 +185,7 @@
 
 .sports-card button {
   padding: 10px 20px;
-  background: var(--primary-color);
+  background: var(--secondary-color);
   /* TODO */
   color: #fff;
   border: none;
@@ -196,7 +196,7 @@
 }
 
 .sports-card button:hover {
-  background-color: #ffae00;
+  background-color: #19416e;
   /* TODO */
 }
 

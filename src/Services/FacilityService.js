@@ -2,7 +2,7 @@ const API_URL = process.env.API_URL;
 
 export const fetchFacilities = async () => {
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch("https://localhost:7160/api/Field/get-fields");
     if (!response.ok) {
       throw new Error("Failed to fetch facilities");
     }

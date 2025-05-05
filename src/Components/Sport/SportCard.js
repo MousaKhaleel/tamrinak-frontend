@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const SportsGrid = ({ sports }) => {
+const SportCard = ({ sports }) => {
   const navigate = useNavigate();
 
-  const handleClick = (SportId) => {
-    navigate(`/facilities?sport=${encodeURIComponent(SportId)}`);
+  const handleClick = (sportId) => {
+    navigate(`/fields?sportId=${encodeURIComponent(sportId)}`);
   };
 
   return (
@@ -16,7 +16,7 @@ const SportsGrid = ({ sports }) => {
           <div
             key={index}
             className="col-12 col-sm-6 col-md-4 text-center"
-            onClick={() => handleClick(sport.SportId)}
+            onClick={() => handleClick(sport.id)}
             style={{ cursor: "pointer" }}
           >
             <img
@@ -33,4 +33,4 @@ const SportsGrid = ({ sports }) => {
   );
 };
 
-export default SportsGrid;
+export default SportCard;

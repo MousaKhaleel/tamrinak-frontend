@@ -31,5 +31,7 @@ export const login = async (credentials) => {
     throw new Error(error.message || "Login failed");
   }
 
-  return await response.json(); // Should return { jwtToken, expiration }
+  return await response.json(); // Should return { jwtToken, expiration }, name, role, id (?)
 };
+
+//TODO: logout, confim email, rest password

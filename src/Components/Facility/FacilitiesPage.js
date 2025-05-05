@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { fetchFacilities } from "../../Services/FacilityService";
-import FacilitiesGrid from "../Facility/FacilitiesGrid";
+import { fetchFacilities } from "../../Services/facilityService";
+import FacilityCard from "../Facility/FacilityCard";
+import NavigationBar from "../NavigationBar/NavigationBar";
+import Footer from "../Footer/Footer";
 
 const FacilitiesPage = () => {
   const [facilities, setFacilities] = useState([]);
@@ -20,7 +22,13 @@ const FacilitiesPage = () => {
     return <div className="text-center">جار التحميل...</div>;
   }
 
-  return <FacilitiesGrid facilities={facilities} />;
+  return ( 
+    <div>
+        {/* <NavigationBar /> */}
+        <FacilityCard facilities={facilities} />
+        {/* <Footer /> */}
+    </div>
+ );
 };
 
 export default FacilitiesPage;
