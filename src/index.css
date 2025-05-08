@@ -31,10 +31,10 @@ html {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   background-color: #fff;
   color: #333;
+  padding-top: 80px;
 }
 
 /* Links */
@@ -67,7 +67,7 @@ button {
 
 /* Utility Classes */
 .text-muted {
-  color: #6c757d !important;
+  color: #6c757d;
 }
 
 /* Optional Bootstrap Override Tweaks (if any) */

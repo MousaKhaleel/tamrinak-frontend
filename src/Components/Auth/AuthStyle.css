@@ -207,6 +207,11 @@
   .back-home:hover {
     color: #19416e;
   }
+
+  .icon-wrapper {
+    color: #102E50;  ; /* or whatever matches your theme */
+    /* margin-bottom: 10px; */
+  }
   
   @media (max-width: 768px) {
     .back-home {

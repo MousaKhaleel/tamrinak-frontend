@@ -6,11 +6,11 @@
 /* Maintain fixed header with semi-transparent background */
 .navbar {
   padding-inline: 20px;
-  position: fixed;
+  /* position: fixed; TODO */
   top: 0;
   width: 100%;
   height: 80px;
-  z-index: 1000;
+  z-index: 9999;
   transition: background-color 0.3s ease, height 0.3s ease, box-shadow 0.3s ease;
   background-color: #F5C45E !important; /* Override Bootstrap dark */
 }
@@ -21,9 +21,9 @@
   border-radius: 4px;
 }
 
-/* Scrolled state — optional, if you plan to toggle it via JS */
+/* Scrolled state — optional, if you plan to toggle it via JS TODO */
 .navbar.scrolled {
-  background-color: #f5c55edd !important;
+  background-color: #f5c55edd;
   height: 60px;
   padding: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -34,13 +34,14 @@
   position: relative;
   font-size: 1.2rem;
   font-weight: 600;
-  color: #fff !important;
+  color: #fff;
   transition: color 0.3s ease;
 }
 
+/* TODO */
 .nav-link:hover,
 .nav-link.active {
-  color: var(--secondary-color) !important;
+  color: var(--secondary-color);
 }
 
 .nav-link::after {

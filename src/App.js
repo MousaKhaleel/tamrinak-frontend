@@ -27,12 +27,14 @@ import AddFieldForm from './Components/Admin/DashboardComponents/AddFieldForm';
 import AddFacilityForm from './Components/Admin/DashboardComponents/AddFacilityForm';
 import AddSportForm from './Components/Admin/DashboardComponents/AddSportForm';
 import ConfirmEmail from './Components/Confirm/ConfirmEmail';
+import ForgotPassword from './Components/Auth/ForgotPassword';
+import PageNotFound from './Components/Other/PageNotFound';
 
 
 function App() {
 
   const location = useLocation();
-  const hideNavFooter = ["/auth", "/adminDashboard"].includes(location.pathname);
+  const hideNavFooter = ["/auth", "/admin-dashboard"].includes(location.pathname);
 
   return (
     <div className="App">
@@ -41,6 +43,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Homepage />} />
               <Route path="/auth" element={<AuthPage />} />
+              <Route path='/forgot-password' element={<ForgotPassword />} />
               <Route path="/sports" element={<SportsPage />} />
               <Route path="/field-details/:fieldId" element={<FieldDetails />} />
               <Route path="/fields" element={<FieldsPage />} />
@@ -51,8 +54,9 @@ function App() {
               {/* <Route path="/facilities/:sportId" element={<FacilityDETAILS />} /> */}
               <Route path="/facilities" element={<FacilitiesPage />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path='/adminDashboard' element={<AdminDashboard />} />
+              <Route path='/admin-dashboard' element={<AdminDashboard />} />
               <Route path="/aboutUs" element={<AboutUs />} />
+              <Route path="*" element={<PageNotFound />} />
             </Routes>
           {!hideNavFooter && <Footer />}
         </ThemeProvider>
