@@ -2,9 +2,10 @@ import { useAuth } from "../../Context/AuthContext";
 import { useState } from "react";
 import { FaUser, FaEnvelope, FaUserShield, FaKey, FaPaperPlane } from "react-icons/fa";
 import { sendConfirmationEmail } from "../../Services/authService";
+import { deleteUser } from "../../Services/userService";
 
 function Profile() {
-  const { user } = useAuth();
+  const { user, logoutUser } = useAuth();
   const profile = user?.profile;
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
@@ -51,6 +52,19 @@ function Profile() {
       </div>
     );
   }
+
+  const handleDeleteUser = async () => {
+    if (window.confirm("هل أنت متأكد من أنك تريد حذف الحساب؟ هذا الإجراء لا يمكن التراجع عنه.")) {
+      try {
+        await deleteUser(user.profile.id);
+        alert("تم حذف الحساب بنجاح.");
+        logoutUser();
+        window.location.href = "/"; // or logout function
+      } catch (error) {
+        alert("حدث خطأ أثناء حذف الحساب.");
+      }
+    }
+  };
 
   return (
     <div className="container py-5 d-flex justify-content-center" dir="rtl">
@@ -129,6 +143,13 @@ function Profile() {
               <FaKey className="ms-2" />
               تغيير كلمة المرور
             </button>
+            <button
+  className="btn mt-3"
+  style={{ backgroundColor: "#dc3545", color: "#fff" }}
+  onClick={handleDeleteUser}
+>
+  حذف الحساب
+</button>
           </div>
         </div>
       </div>

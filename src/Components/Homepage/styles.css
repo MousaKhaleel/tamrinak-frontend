@@ -11,16 +11,14 @@
 } */
 
 /* Global Reset */
-* {
-  box-sizing: border-box;
+html, body, h1, h2, p, ul, ol {
   margin: 0;
-  padding: 0;
+  padding: 0; /* TODO */
 }
 
-/* Cards Container */
-.cards-container {
-  position: absolute;
-  bottom: -150px;
+/* home-cards Container */
+.home-cards-container {
+  position: relative;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -31,7 +29,7 @@
   z-index: 4;
 }
 
-.card {
+.home-card {
   direction: rtl;
   background: #fff;
   width: 30%;
@@ -40,16 +38,16 @@
   transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
 
-.card:hover {
+.home-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.card img {
+.home-card img {
   width: 30%;
 }
 
-.card hr {
+.home-card hr {
   width: 150px;
   height: 5px;
   margin: 20px 0;

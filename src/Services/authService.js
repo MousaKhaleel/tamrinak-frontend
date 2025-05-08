@@ -78,16 +78,19 @@ export const confirmEmail = async (token) => {
 
 
 
-export const forgotPassword = async (email) => {
+export const forgotPassword = async (email, token) => {
   const response = await fetch(`${API_URL}/api/Authentication/forgot-password`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
     body: JSON.stringify({ email }),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Forgot password request failed");
+    throw new Error(error.message || "Forgot password request failed");//TODO
   }
 };
 

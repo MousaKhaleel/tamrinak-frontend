@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GoHome } from "react-icons/go";
 import "./AuthStyle.css";
 import { login, register } from "../../Services/authService";
@@ -77,7 +77,7 @@ const AuthPage = () => {
   return (
     <div className={`auth-container ${isRegistering ? "right-panel-active" : ""}`}>
       <div className="form-container sign-in-container">
-        <div className="back-home"><a href="/"><GoHome /></a></div>
+        <div className="back-home icon-wrapper"><a href="/"><GoHome /></a></div>
         <form onSubmit={handleLoginSubmit}>
           <h1>تسجيل الدخول</h1>
           <input
@@ -99,6 +99,9 @@ const AuthPage = () => {
           <button type="submit" className="w-100" disabled={loading}>
             {loading ? "جاري الدخول..." : "دخول"}
           </button>
+          <p className="toggle-text">
+            <Link to="/forgot-password"><span>هل نسيت كلمة المرور؟ </span></Link>
+          </p>
           <p className="toggle-text" onClick={togglePanel}>
             ليس لديك حساب؟ <span>إنشاء حساب</span>
           </p>
@@ -106,7 +109,7 @@ const AuthPage = () => {
       </div>
 
       <div className="form-container sign-up-container">
-        <div className="back-home"><a href="/"><GoHome /></a></div>
+        <div className="back-home icon-wrapper"><a href="/"><GoHome /></a></div>
         <form onSubmit={handleRegisterSubmit}>
           <h1>إنشاء حساب</h1>
           <input

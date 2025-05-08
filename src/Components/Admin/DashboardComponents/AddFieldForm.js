@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { addField } from "../../../Services/fieldService";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 const AddFieldForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -64,101 +67,75 @@ const AddFieldForm = () => {
   };
 
   return (
-    <form dir="rtl" onSubmit={handleSubmit} className="max-w-md mx-auto p-4 bg-white rounded shadow space-y-4">
-      <h2 className="text-xl font-semibold text-right">إضافة ملعب جديد</h2>
+    <div className="container mt-5" dir="rtl">
+      <div className="card shadow">
+        <div className="card-header bg-primary text-white text-end">
+          <h5 className="mb-0">إضافة ملعب جديد</h5>
+        </div>
+        <div className="card-body">
+          <form onSubmit={handleSubmit} className="row g-3">
 
-      <input
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        placeholder="اسم الملعب"
-        required
-        className="w-full border p-2 rounded text-right"
-      />
-      <input
-        name="locationDesc"
-        value={formData.locationDesc}
-        onChange={handleChange}
-        placeholder="وصف الموقع"
-        required
-        className="w-full border p-2 rounded text-right"
-      />
-      <input
-        type="number"
-        name="sportId"
-        value={formData.sportId}
-        onChange={handleChange}
-        placeholder="رقم الرياضة"
-        required
-        className="w-full border p-2 rounded text-right"
-      />
-      <input
-        type="number"
-        name="pricePerHour"
-        value={formData.pricePerHour}
-        onChange={handleChange}
-        placeholder="السعر لكل ساعة"
-        step="0.01"
-        className="w-full border p-2 rounded text-right"
-      />
-      <input
-        type="time"
-        name="openTime"
-        value={formData.openTime}
-        onChange={handleChange}
-        required
-        className="w-full border p-2 rounded text-right"
-      />
-      <input
-        type="time"
-        name="closeTime"
-        value={formData.closeTime}
-        onChange={handleChange}
-        required
-        className="w-full border p-2 rounded text-right"
-      />
-      <input
-        type="tel"
-        name="phoneNumber"
-        value={formData.phoneNumber}
-        onChange={handleChange}
-        placeholder="رقم الهاتف"
-        required
-        className="w-full border p-2 rounded text-right"
-      />
-      <input
-        type="number"
-        name="capacity"
-        value={formData.capacity}
-        onChange={handleChange}
-        placeholder="السعة (اختياري)"
-        className="w-full border p-2 rounded text-right"
-      />
-      <input
-        name="locationMap"
-        value={formData.locationMap}
-        onChange={handleChange}
-        placeholder="رابط الموقع على الخريطة (اختياري)"
-        className="w-full border p-2 rounded text-right"
-      />
+            {[
+              { name: "name", placeholder: "اسم الملعب", required: true },
+              { name: "locationDesc", placeholder: "وصف الموقع", required: true },
+              { name: "sportId", type: "number", placeholder: "رقم الرياضة", required: true },
+              { name: "pricePerHour", type: "number", placeholder: "السعر لكل ساعة", step: "0.01" },
+              { name: "openTime", type: "time", required: true },
+              { name: "closeTime", type: "time", required: true },
+              { name: "phoneNumber", type: "tel", placeholder: "رقم الهاتف", required: true },
+              { name: "capacity", type: "number", placeholder: "السعة (اختياري)" },
+              { name: "locationMap", placeholder: "رابط الموقع على الخريطة (اختياري)" },
+            ].map(({ name, placeholder, type = "text", required = false, step }) => (
+              <div className="col-12" key={name}>
+                <input
+                  type={type}
+                  name={name}
+                  value={formData[name]}
+                  onChange={handleChange}
+                  placeholder={placeholder}
+                  className="form-control text-end"
+                  required={required}
+                  step={step}
+                />
+              </div>
+            ))}
 
-      <label className="flex items-center flex-row-reverse gap-x-2">
-        <input type="checkbox" name="hasLighting" checked={formData.hasLighting} onChange={handleChange} />
-        <span>إنارة</span>
-      </label>
+            <div className="col-12 d-flex justify-content-end gap-3">
+              <div className="form-check form-switch">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  name="hasLighting"
+                  id="hasLighting"
+                  checked={formData.hasLighting}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label me-2" htmlFor="hasLighting">إنارة</label>
+              </div>
 
-      <label className="flex items-center flex-row-reverse gap-x-2">
-        <input type="checkbox" name="isIndoor" checked={formData.isIndoor} onChange={handleChange} />
-        <span>داخلي</span>
-      </label>
+              <div className="form-check form-switch">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  name="isIndoor"
+                  id="isIndoor"
+                  checked={formData.isIndoor}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label me-2" htmlFor="isIndoor">داخلي</label>
+              </div>
+            </div>
 
-      {error && <p className="text-red-600 text-right">{error}</p>}
-      {success && <p className="text-green-600 text-right">{success}</p>}
+            {error && <div className="alert alert-danger text-end">{error}</div>}
+            {success && <div className="alert alert-success text-end">{success}</div>}
 
-      <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
-        إضافة الملعب
-      </button>
-    </form>
+            <div className="col-12">
+              <button type="submit" className="btn btn-primary w-100">إضافة الملعب</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 

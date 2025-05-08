@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { addSport } from '../../../Services/sportService'; // Adjust the import path as needed
+import { addSport } from '../../../Services/sportService';
 
 const AddSportForm = () => {
   const [sportData, setSportData] = useState({
@@ -7,7 +7,7 @@ const AddSportForm = () => {
     Description: '',
   });
   const [errors, setErrors] = useState({});
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSportData((prevData) => ({
@@ -38,6 +38,7 @@ const AddSportForm = () => {
       const response = await addSport(sportData);
       if (response) {
         alert('Sport added successfully!');
+        setSportData({ Name: '', Description: '' }); // Reset form
       } else {
         alert('Failed to add sport');
       }
@@ -45,41 +46,47 @@ const AddSportForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="Name">Name</label>
-        <input
-          type="text"
-          id="Name"
-          name="Name"
-          value={sportData.Name}
-          onChange={handleChange}
-          required
-        />
-        {errors.Name && <span style={{ color: 'red' }}>{errors.Name}</span>}
-      </div>
+    <div className="container mt-4">
+      <div className="card shadow-sm">
+        <div className="card-header bg-primary text-white">
+          <h5 className="mb-0">Add New Sport</h5>
+        </div>
+        <div className="card-body">
+          <form onSubmit={handleSubmit}>
+            {/* Name Input */}
+            <div className="mb-3">
+              <label htmlFor="Name" className="form-label">Name</label>
+              <input
+                type="text"
+                id="Name"
+                name="Name"
+                className={`form-control ${errors.Name ? 'is-invalid' : ''}`}
+                value={sportData.Name}
+                onChange={handleChange}
+                placeholder="Enter sport name"
+              />
+              {errors.Name && <div className="invalid-feedback">{errors.Name}</div>}
+            </div>
 
-      <div>
-        <input
-          name="name"
-          value={sportData.Name}
-          onChange={handleChange}
-          placeholder="اسم اللعبة"
-          required
-          className="w-full border p-2 rounded text-right"
-        />
-        <label htmlFor="Description">Description</label>
-        <textarea
-          id="Description"
-          name="Description"
-          value={sportData.Description}
-          onChange={handleChange}
-        />
-        {errors.Description && <span style={{ color: 'red' }}>{errors.Description}</span>}
-      </div>
+            {/* Description Input */}
+            <div className="mb-3">
+              <label htmlFor="Description" className="form-label">Description</label>
+              <textarea
+                id="Description"
+                name="Description"
+                className={`form-control ${errors.Description ? 'is-invalid' : ''}`}
+                value={sportData.Description}
+                onChange={handleChange}
+                placeholder="Optional description"
+              ></textarea>
+              {errors.Description && <div className="invalid-feedback">{errors.Description}</div>}
+            </div>
 
-      <button type="submit">Add Sport</button>
-    </form>
+            <button type="submit" className="btn btn-success w-100">Add Sport</button>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 

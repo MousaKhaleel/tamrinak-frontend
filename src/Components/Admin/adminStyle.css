@@ -175,6 +175,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .dropdown-menu {
-  right: auto !important;
-  left: 0 !important; /* Ensure dropdown appears correctly in RTL */
+  right: auto;
+  left: 0; /* Ensure dropdown appears correctly in RTL */
 }

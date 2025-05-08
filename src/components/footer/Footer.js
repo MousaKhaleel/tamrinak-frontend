@@ -21,7 +21,7 @@ function Footer() {
             <FaPhoneAlt className="icon" /> الهاتف: 0777309888
           </p>
           <p>
-            <FaEnvelope className="icon" /> tamrinak@email.com
+            <FaEnvelope className="icon" /> tamrinak@gmail.com
           </p>
           <div className="map">
             <iframe

@@ -13,7 +13,7 @@ function HeroSection() {
         </div>
       </div>
 
-      <div className="cards-container">
+      <div className="home-cards-container">
         <Card
           icon={<FaFutbol size={48} />}
           title="الحجز السهل"
@@ -36,7 +36,7 @@ function HeroSection() {
 
 function Card({ icon, title, description }) {
   return (
-    <div className="card">
+    <div className="home-card">
       <div className="icon-wrapper">{icon}</div>
       <h3>{title}</h3>
       <hr />

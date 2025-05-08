@@ -1,4 +1,3 @@
-// AdminDashboard.jsx
 import React from 'react';
 import BookingCard from './DashboardComponents/BookingCard';
 import ReportsChart from './DashboardComponents/ReportsCard';
@@ -22,7 +21,7 @@ const AdminDashboard = () => {
           <nav>
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/AdminDashboard">الرئيسية</Link>
+                <Link to="/admin-dashboard">الرئيسية</Link>
               </li>
               <li className="breadcrumb-item active">لوحة التحكم</li>
             </ol>
