@@ -1,5 +1,13 @@
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
+// Get rendered field photo blob
+export const getFieldPhotoBlob = async (photoId) => {
+  const response = await fetch(`${API_URL}/api/Field/get-ren-field-photo?id=${photoId}`);
+  if (!response.ok) throw new Error("Failed to get rendered field photo");
+  return await response.blob();
+};
+
+
 // Get all fields
 export const fetchFields = async () => {
   try {
@@ -13,6 +21,7 @@ export const fetchFields = async () => {
 };
 
 // Get a specific field by ID
+// Fetch field details
 export const getField = async (fieldId) => {
   const response = await fetch(`${API_URL}/api/Field/get-field?id=${fieldId}`);
   if (!response.ok) throw new Error("Failed to fetch field");
@@ -86,10 +95,12 @@ export const getRenFieldPhoto = async (photoId) => {
 
 // Get list of field photos
 export const getFieldPhotoList = async (fieldId) => {
-  const response = await fetch(`${API_URL}/api/Field/get-field-photo-list?id=${fieldId}`);
+  const response = await fetch(`${API_URL}/api/Field/get-field-photo-list?fieldId=${fieldId}`);
   if (!response.ok) throw new Error("Failed to get field photo list");
+  // returns [{ id, imageData }]
   return await response.json();
 };
+
 
 // Get fields by sport ID
 export const fetchFieldsBySportId = async (sportId) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from '../../Assets/Logo/4RrmCG-LogoMakr.png';
+import Logo from '../../Assets/Logo/1vWOEn-LogoMakr (1).png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './NavigationBar.css';
@@ -21,7 +21,7 @@ function NavigationBar() {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark" dir="rtl">
       <div className="container-fluid">
         <Link className="navbar-brand d-flex align-items-center" to="/">
-          <img src={Logo} width="40" alt="Tamrinak Logo" className="me-2" />
+          <img src={Logo} width="90px" alt="Tamrinak Logo" />
         </Link>
 
         <button

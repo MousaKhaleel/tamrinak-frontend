@@ -1,21 +1,21 @@
 import React from 'react';
 import './NavBar.css';
 import { GoHome } from "react-icons/go";
-import logo from '../../../Assets/Logo/4RrmCG-LogoMakr.png';
+import logo from '../../../Assets/Logo/1vWOEn-LogoMakr (1).png';
 import { Link } from 'react-router-dom';
 
 const NavBar = () => {
 
   const handleToggleSidebar = () => {
     document.body.classList.toggle('sidebar-collapsed');
-  };
+  };//TODO fix toggle responsiveness
 
   return (
     <header id="header" className="header fixed-top d-flex align-items-center" dir="rtl">
       <div className="d-flex align-items-center justify-content-between">
-        <Link to="/admin-dashboard" className="logo d-flex align-items-center">
-          <img width={'30px'} src={logo} alt="" />
-          <span className="h5 d-none d-lg-block">Admin Dashboard</span>
+        <Link to="/" className="logo d-flex align-items-center">
+          <img width={'90px'} src={logo} alt="" />
+          {/* <span className="h5 d-none d-lg-block">Admin Dashboard</span> */}
         </Link>
         <i className="bi bi-list toggle-sidebar-btn"  onClick={handleToggleSidebar}></i>
       </div>
