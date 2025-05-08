@@ -1,4 +1,4 @@
-const API_URL = process.env.API_URL;
+const API_URL = process.env.API_URL || "https://localhost:7160";
 
 export const register = async (userData) => {//TODO use
   const response = await fetch(`https://localhost:7160/api/User/Register`, {
@@ -47,11 +47,13 @@ export const logout = async () => {
   }
 };
 
-export const sendConfirmationEmail = async (email) => {
+export const sendConfirmationEmail = async (token) => {
   const response = await fetch(`${API_URL}/api/Authentication/send-confirmation-email`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   if (!response.ok) {
@@ -60,18 +62,21 @@ export const sendConfirmationEmail = async (email) => {
   }
 };
 
-export const confirmEmail = async (token, userId) => {
-  const response = await fetch(`${API_URL}/api/Authentication/confirm-email`, {
+export const confirmEmail = async (token) => {
+  const response = await fetch(`${API_URL}/api/Authentication/confirm-email?token=${token}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ token, userId }),
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Email confirmation failed");
+    const errorMessage = await response.text(); // Use text() to get plain text
+    throw new Error(errorMessage || "Email confirmation failed");
   }
+
+  return response.text(); // Use text() to get plain text
 };
+
+
 
 export const forgotPassword = async (email) => {
   const response = await fetch(`${API_URL}/api/Authentication/forgot-password`, {

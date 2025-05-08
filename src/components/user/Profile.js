@@ -1,6 +1,7 @@
 import { useAuth } from "../../Context/AuthContext";
 import { useState } from "react";
-import { FaUser, FaEnvelope, FaUserShield, FaKey } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaUserShield, FaKey, FaPaperPlane } from "react-icons/fa";
+import { sendConfirmationEmail } from "../../Services/authService";
 
 function Profile() {
   const { user } = useAuth();
@@ -11,6 +12,9 @@ function Profile() {
     newPassword: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,6 +25,21 @@ function Profile() {
     // TODO: Replace this with real password update logic
     console.log("Changing password...", form);
     setShowModal(false);
+  };
+
+  const handleSendConfirmationEmail = async () => {
+    setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    try {
+      await sendConfirmationEmail(user.token);
+      setSuccessMessage("تم إرسال رسالة التأكيد بنجاح!");
+    } catch (error) {
+      setErrorMessage(error.message || "فشل إرسال رسالة التأكيد.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!profile) {
@@ -87,6 +106,20 @@ function Profile() {
               <strong className="text-dark">الأدوار:</strong>{" "}
               <span className="fs-5">{profile.roles?.join("، ")}</span>
             </div>
+
+            {/* Send Confirmation Email Button */}
+            <button
+              className="btn mt-3 text-white"
+              style={{ backgroundColor: "#F5C45E", color: "#102E50" }}
+              onClick={handleSendConfirmationEmail}
+              disabled={loading}
+            >
+              <FaPaperPlane className="ms-2" />
+              {loading ? "جاري الإرسال..." : "إرسال رسالة تأكيد"}
+            </button>
+
+            {successMessage && <div className="text-success mt-2">{successMessage}</div>}
+            {errorMessage && <div className="text-danger mt-2">{errorMessage}</div>}
 
             <button
               className="btn mt-3 text-white"

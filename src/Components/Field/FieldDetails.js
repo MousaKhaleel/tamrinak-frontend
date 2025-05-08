@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getField } from "../../Services/fieldService"; // Assuming this is where your API functions are
-import { bookField } from "../../Services/bookingService"; // Importing the bookField function
+import { getField } from "../../Services/fieldService";
+import { bookField } from "../../Services/bookingService";
+import './FieldDetails.css';
+import { useAuth } from '../../Context/AuthContext';
+
 
 function FieldDetails() {
-  const { fieldId } = useParams(); // Get the field ID from the URL
+  const { fieldId } = useParams();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [field, setField] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [bookingData, setBookingData] = useState({
-    userId: 1, // Replace with actual logged-in user ID
     fieldId,
     bookingDate: "",
     startTime: "",
@@ -21,14 +24,12 @@ function FieldDetails() {
   const [bookingSuccess, setBookingSuccess] = useState(null);
 
   useEffect(() => {
-    // Fetch the field details from the API
     const fetchFieldDetails = async () => {
       try {
-        const data = await getField(fieldId); // Call the API to get the field data
+        const data = await getField(fieldId);
         setField(data);
       } catch (error) {
-        setError("Failed to fetch field details.");
-        console.error(error);
+        setError("فشل في جلب بيانات الملعب.");
       } finally {
         setLoading(false);
       }
@@ -37,7 +38,7 @@ function FieldDetails() {
     if (fieldId) {
       fetchFieldDetails();
     } else {
-      navigate("/"); // Redirect to home if no fieldId is found
+      navigate("/");
     }
   }, [fieldId, navigate]);
 
@@ -49,110 +50,140 @@ function FieldDetails() {
     }));
   };
 
+  const parseTime = (timeStr) => {
+    const [hour, minute] = timeStr.split(":").map(Number);
+    return { hour, minute };
+  };
+  
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     setBookingError(null);
     setBookingSuccess(null);
-
+  
+    if (bookingData.startTime >= bookingData.endTime) {
+      setBookingError("وقت النهاية يجب أن يكون بعد وقت البداية.");
+      return;
+    }
+  
     try {
-      const result = await bookField(bookingData);
-      setBookingSuccess("Booking successful!");
+      const transformedData = {
+        fieldId: Number(fieldId),
+        bookingDate: bookingData.bookingDate,
+        startTime: bookingData.startTime + ":00",
+        endTime: bookingData.endTime + ":00",
+        numberOfPeople: bookingData.numberOfPeople,
+      };
+      
+      
+      
+  
+      await bookField(transformedData, user.token);
+      setBookingSuccess("تم الحجز بنجاح!");
       setBookingData({
-        ...bookingData,
+        fieldId,
         bookingDate: "",
         startTime: "",
         endTime: "",
         numberOfPeople: 1,
       });
     } catch (error) {
-      setBookingError(error.message || "Booking failed");
+      setBookingError(error.message || "فشل الحجز");
     }
   };
+  
+  
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (!field) {
-    return <div>No field found.</div>;
-  }
+  if (loading) return <div>جاري التحميل...</div>;
+  if (error) return <div>{error}</div>;
+  if (!field) return <div>الملعب غير موجود.</div>;
 
   return (
-    <div>
-      <h1>{field.name}</h1>
-      <img
-        src={field.imageUrl || "/default-field.jpg"}
-        alt={field.name}
-        style={{ width: "100%", height: "auto" }}
-      />
-      <p>{field.locationDesc}</p>
-      <p>{field.pricePerHour || "Call for price"}</p>
-      
-      {/* Booking Form */}
-      <h2>Book this field</h2>
-      {bookingError && <div style={{ color: "red" }}>{bookingError}</div>}
-      {bookingSuccess && <div style={{ color: "green" }}>{bookingSuccess}</div>}
-      <form onSubmit={handleBookingSubmit}>
-        {/* Booking Date */}
-        <div>
-          <label htmlFor="bookingDate">Date:</label>
-          <input
-            type="date"
-            id="bookingDate"
-            name="bookingDate"
-            value={bookingData.bookingDate}
-            onChange={handleBookingChange}
-            required
+    <div dir="rtl" style={{ fontFamily: 'Tajawal, sans-serif', padding: '2rem' }}>
+      <header>
+        <h1>{field.name}</h1>
+      </header>
+
+      <div className="main-container">
+        {/* Image Slider */}
+        <div className="slider-container">
+          <img
+            src={field.imageUrl || "/default-field.jpg"}
+            alt={field.name}
+            className="slider-image"
           />
+          {/* Future enhancement: next/prev buttons */}
         </div>
 
-        {/* Start Time */}
-        <div>
-          <label htmlFor="startTime">Start Time:</label>
-          <input
-            type="time"
-            id="startTime"
-            name="startTime"
-            value={bookingData.startTime}
-            onChange={handleBookingChange}
-            required
-          />
-        </div>
+        {/* Field Details + Booking Form */}
+        <div className="details">
+          <div className="detail-section">
+            <strong>الوصف:</strong>
+            <p>{field.locationDesc}</p>
+          </div>
+          <div className="detail-section">
+            <strong>السعر لكل ساعة:</strong>
+            <p>{field.pricePerHour ? `${field.pricePerHour} د.أ` : "اتصل للاستعلام"}</p>
+          </div>
 
-        {/* End Time */}
-        <div>
-          <label htmlFor="endTime">End Time:</label>
-          <input
-            type="time"
-            id="endTime"
-            name="endTime"
-            value={bookingData.endTime}
-            onChange={handleBookingChange}
-            required
-          />
-        </div>
+          <h3 style={{ marginTop: '2rem' }}>احجز هذا الملعب</h3>
+          {bookingError && <div style={{ color: "red" }}>{bookingError}</div>}
+          {bookingSuccess && <div style={{ color: "green" }}>{bookingSuccess}</div>}
+          
+          <form className="booking-form" onSubmit={handleBookingSubmit}>
+            <div className="form-group">
+              <label htmlFor="bookingDate">التاريخ:</label>
+              <input
+                type="date"
+                id="bookingDate"
+                name="bookingDate"
+                value={bookingData.bookingDate}
+                onChange={handleBookingChange}
+                required
+              />
+            </div>
 
-        {/* Number of People */}
-        <div>
-          <label htmlFor="numberOfPeople">Number of People:</label>
-          <input
-            type="number"
-            id="numberOfPeople"
-            name="numberOfPeople"
-            min="1"
-            max="25"
-            value={bookingData.numberOfPeople}
-            onChange={handleBookingChange}
-            required
-          />
-        </div>
+            <div className="form-group">
+              <label htmlFor="startTime">الوقت من:</label>
+              <input
+                type="time"
+                id="startTime"
+                name="startTime"
+                value={bookingData.startTime}
+                onChange={handleBookingChange}
+                required
+              />
+            </div>
 
-        <button type="submit">Book Now</button>
-      </form>
+            <div className="form-group">
+              <label htmlFor="endTime">إلى:</label>
+              <input
+                type="time"
+                id="endTime"
+                name="endTime"
+                value={bookingData.endTime}
+                onChange={handleBookingChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="numberOfPeople">عدد الأشخاص:</label>
+              <input
+                type="number"
+                id="numberOfPeople"
+                name="numberOfPeople"
+                min="1"
+                max="25"
+                value={bookingData.numberOfPeople}
+                onChange={handleBookingChange}
+                required
+              />
+            </div>
+
+            <button className="reserve-btn" type="submit">احجز الآن</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
