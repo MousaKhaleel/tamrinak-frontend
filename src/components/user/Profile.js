@@ -121,7 +121,6 @@ function Profile() {
               <span className="fs-5">{profile.roles?.join("، ")}</span>
             </div>
 
-            {/* Send Confirmation Email Button */}
             <button
               className="btn mt-3 text-white"
               style={{ backgroundColor: "#F5C45E", color: "#102E50" }}
@@ -154,7 +153,6 @@ function Profile() {
         </div>
       </div>
 
-      {/* Change Password Modal */}
       {showModal && (
         <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
           <div className="modal-dialog modal-dialog-centered" dir="rtl">

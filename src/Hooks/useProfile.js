@@ -1,10 +1,10 @@
-import { useAuth } from '../Context/AuthContext'; // Adjust the path
-const API_URL = process.env.API_URL || "https://localhost:7160"; // Adjust the API URL as needed
+import { useAuth } from '../Context/AuthContext';
+const API_URL = process.env.API_URL || "https://localhost:7160";
 
 
 const useProfile = () => {
-  const { user } = useAuth(); // Access user context
-  const token = user?.token; // Get the token from context
+  const { user } = useAuth();
+  const token = user?.token;
 
   const getProfile = async () => {
     if (!token) {
@@ -15,7 +15,7 @@ const useProfile = () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}` // Add Authorization header
+        'Authorization': `Bearer ${token}`
       }
     })
     .then(res => res.json());

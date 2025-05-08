@@ -16,7 +16,7 @@ html, body, h1, h2, p, ul, ol {
   padding: 0; /* TODO */
 }
 
-/* home-cards Container */
+/* home-cards Container TODO fix responsiveness */
 .home-cards-container {
   position: relative;
   left: 50%;
@@ -57,7 +57,7 @@ html, body, h1, h2, p, ul, ol {
 /* About Us Section */
 .we-info {
   direction: rtl;
-  background: #fdfaf3;
+  /* background: #fdfaf3; TODO */
   display: flex;
   gap: 30px;
   padding: 50px;
@@ -121,7 +121,7 @@ html, body, h1, h2, p, ul, ol {
 
 /* Sports Section */
 .sports-container {
-  background: #fdfaf3;
+  /* background: #fdfaf3; TODO */
   padding: 40px 20px;
   display: flex;
   flex-wrap: wrap;

@@ -34,10 +34,8 @@ const AuthPage = () => {
     try {
       const res = await login(loginData); // res.jwtToken
   
-      // Temporarily store token to fetch profile
       const token = res.jwtToken;
   
-      // Fetch profile data manually
       const profileRes = await fetch(`${API_URL}/api/User/profile`, {
         method: "GET",
         headers: {
@@ -48,7 +46,6 @@ const AuthPage = () => {
   
       const profile = await profileRes.json();
   
-      // Save both token and profile in context
       loginUser(token, profile);
   
       toast.success("تم تسجيل الدخول بنجاح");

@@ -3,7 +3,7 @@ import NavigationBar from "../../Components/NavigationBar/NavigationBar";
 import Footer from "../Footer/Footer";
 import checkIcon from "../../Assets/StockPhotos/check.png";
 
-// Sports Images
+// teemp
 import running from "../../Assets/StockPhotos/New/pexels-runffwpu-2168292.jpg";
 
 import karate from "../../Assets/StockPhotos/Sports/pexels-artempodrez-6253307.jpg";
@@ -13,10 +13,9 @@ import bowling from "../../Assets/StockPhotos/Sports/pexels-pavel-danilyuk-74296
 import ps3 from "../../Assets/StockPhotos/Sports/pexels-kowalievska-1174746.jpg";
 import gym from "../../Assets/StockPhotos/Facilities/pexels-willpicturethis-1954524.jpg";
 
-// Styles
 import "./styles.css";
 
-// Sports Data TODO replace with API data
+// TODO replace with recomendations
 const sports = [
     {
         img: karate,
