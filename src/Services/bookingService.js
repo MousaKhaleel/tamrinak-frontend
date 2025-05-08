@@ -1,22 +1,33 @@
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
 // Book a field
-export const bookField = async (bookingData) => {
+export const bookField = async (bookingData, token) => {
   const response = await fetch(`${API_URL}/api/Booking/book-field`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify(bookingData),
   });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Booking failed");
+  let responseData;
+  const text = await response.text();
+
+  try {
+    responseData = JSON.parse(text);
+  } catch {
+    responseData = { message: text }; // fallback for non-JSON errors
   }
 
-  return await response.json();
+  if (!response.ok) {
+    console.error("Booking error:", responseData);
+    throw new Error(responseData.message || "Booking failed");
+  }
+
+  return responseData;
 };
+
 
 // Get a specific booking by ID
 export const getBooking = async (bookingId) => {
