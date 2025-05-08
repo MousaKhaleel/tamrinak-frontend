@@ -27,7 +27,9 @@ export const addField = async (fieldData) => {
     body: JSON.stringify(fieldData),
   });
   if (!response.ok) throw new Error("Failed to add field");
-  return await response.json();
+
+  // Assuming the backend returns the newly added field (with its id)
+  return await response.json(); // This should return the field object that includes the `id`
 };
 
 // Update an existing field
@@ -49,15 +51,16 @@ export const removeField = async (fieldId) => {
   if (!response.ok) throw new Error("Failed to remove field");
 };
 
-// Add field image
-export const addFieldImage = async (formData) => {
-  const response = await fetch(`${API_URL}/api/Field/add-field-image`, {
-    method: "POST",
-    body: formData, // multipart/form-data
-  });
-  if (!response.ok) throw new Error("Failed to upload field image");
-  return await response.json();
-};
+// Add field image TODO
+// const formDataImages = new FormData();
+// images.forEach((image) => {
+//   formDataImages.append("formFiles", image); // same key name as backend expects
+// });
+
+// await fetch(`${API_URL}/api/Field/add-field-images?fieldId=${field.id}`, {
+//   method: "POST",
+//   body: formDataImages,
+// });
 
 // Delete field image
 export const deleteFieldImage = async (imageId) => {

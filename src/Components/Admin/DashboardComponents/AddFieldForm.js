@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { addField } from "../../../Services/fieldService";
+import { addField } from "../../../Services/fieldService";  // Keep the import consistent
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+const API_URL = process.env.API_URL || "https://localhost:7160"; // Add API_URL for image upload
 
 
 const AddFieldForm = () => {
@@ -21,6 +24,64 @@ const AddFieldForm = () => {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [images, setImages] = useState([]);
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    const processedImages = [];
+  
+    const resizeAndCropImage = (file) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+  
+          // Set target dimensions
+          const targetWidth = 800;
+          const targetHeight = 600;
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+  
+          // Calculate cropping (center crop)
+          const aspectRatio = file.width / file.height;
+          const sourceAspectRatio = img.width / img.height;
+  
+          let sx = 0, sy = 0, sWidth = img.width, sHeight = img.height;
+  
+          if (sourceAspectRatio > targetWidth / targetHeight) {
+            // Wider image
+            sWidth = img.height * (targetWidth / targetHeight);
+            sx = (img.width - sWidth) / 2;
+          } else {
+            // Taller image
+            sHeight = img.width * (targetHeight / targetWidth);
+            sy = (img.height - sHeight) / 2;
+          }
+  
+          ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, targetWidth, targetHeight);
+  
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const croppedFile = new File([blob], file.name, { type: "image/jpeg" });
+              resolve(croppedFile);
+            } else {
+              resolve(null);
+            }
+          }, "image/jpeg");
+        };
+      });
+    };
+  
+    Promise.all(files.map(resizeAndCropImage)).then((resizedFiles) => {
+      const validFiles = resizedFiles.filter(Boolean);
+      setImages(validFiles);
+      setError("");
+    });
+  };
+  
+  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -36,6 +97,7 @@ const AddFieldForm = () => {
     setSuccess("");
 
     try {
+      // Prepare the field data payload
       const payload = {
         ...formData,
         sportId: parseInt(formData.sportId),
@@ -46,7 +108,30 @@ const AddFieldForm = () => {
         hasLighting: formData.hasLighting,
         isIndoor: formData.isIndoor,
       };
-      await addField(payload);
+
+      // Submit the field data
+      const field = await addField(payload);  // Assume this returns the new field with an 'id'
+
+      // Upload images if available
+      if (images.length > 0) {
+        const formDataImages = new FormData();
+        images.forEach((image) => {
+          formDataImages.append("formFiles", image);
+        });
+      
+        const uploadResponse = await fetch(
+          `${API_URL}/api/Field/add-field-images?fieldId=${field.id}`,
+          {
+            method: "POST",
+            body: formDataImages
+          }
+        );
+      
+        if (!uploadResponse.ok) {
+          throw new Error("Image upload failed.");
+        }
+      }
+      // Show success message and reset form
       setSuccess("تمت إضافة الملعب بنجاح!");
       setFormData({
         name: "",
@@ -61,8 +146,9 @@ const AddFieldForm = () => {
         hasLighting: false,
         isIndoor: false,
       });
+      setImages([]);
     } catch (err) {
-      setError("فشل في إضافة الملعب. يرجى التحقق من المدخلات.");
+      setError("فشل في إضافة الملعب أو الصور. يرجى التحقق من المدخلات.");
     }
   };
 
@@ -74,7 +160,6 @@ const AddFieldForm = () => {
         </div>
         <div className="card-body">
           <form onSubmit={handleSubmit} className="row g-3">
-
             {[
               { name: "name", placeholder: "اسم الملعب", required: true },
               { name: "locationDesc", placeholder: "وصف الموقع", required: true },
@@ -99,6 +184,16 @@ const AddFieldForm = () => {
                 />
               </div>
             ))}
+
+            <div className="col-12">
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                className="form-control"
+                onChange={handleImageChange}
+              />
+            </div>
 
             <div className="col-12 d-flex justify-content-end gap-3">
               <div className="form-check form-switch">
