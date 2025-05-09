@@ -2,7 +2,8 @@ import { useAuth } from "../../Context/AuthContext";
 import { useState } from "react";
 import { FaUser, FaEnvelope, FaUserShield, FaKey, FaPaperPlane } from "react-icons/fa";
 import { sendConfirmationEmail } from "../../Services/authService";
-import { deleteUser } from "../../Services/userService";
+import { deleteUser, uploadProfilePicture } from "../../Services/userService";
+import defaultImage from "../../Assets/profile-42914_1280.png";
 
 function Profile() {
   const { user, logoutUser } = useAuth();
@@ -23,8 +24,7 @@ function Profile() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Replace this with real password update logic
-    console.log("Changing password...", form);
+    // TODO: Replace with actual logic
     setShowModal(false);
   };
 
@@ -43,6 +43,19 @@ function Profile() {
     }
   };
 
+  const handleDeleteUser = async () => {
+    if (window.confirm("هل أنت متأكد من أنك تريد حذف الحساب؟")) {
+      try {
+        await deleteUser(user.profile.id);
+        alert("تم حذف الحساب بنجاح.");
+        logoutUser();
+        window.location.href = "/";
+      } catch {
+        alert("حدث خطأ أثناء حذف الحساب.");
+      }
+    }
+  };
+
   if (!profile) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100 bg-light" dir="rtl">
@@ -53,104 +66,99 @@ function Profile() {
     );
   }
 
-  const handleDeleteUser = async () => {
-    if (window.confirm("هل أنت متأكد من أنك تريد حذف الحساب؟ هذا الإجراء لا يمكن التراجع عنه.")) {
-      try {
-        await deleteUser(user.profile.id);
-        alert("تم حذف الحساب بنجاح.");
-        logoutUser();
-        window.location.href = "/"; // or logout function
-      } catch (error) {
-        alert("حدث خطأ أثناء حذف الحساب.");
+  const handleImageUpload = async (file) => {
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    try {
+      const response = await uploadProfilePicture(formData);
+      if (response?.success) {
+        setSuccessMessage("تم تحديث الصورة بنجاح!");
+        window.location.reload(); // or update context state if preferred
+      } else {
+        setErrorMessage("فشل في رفع الصورة.");
       }
+    } catch (error) {
+      setErrorMessage("حدث خطأ أثناء رفع الصورة.");
+    } finally {
+      setLoading(false);
     }
-  };
+  };//TODO test
 
   return (
-    <div className="container py-5 d-flex justify-content-center" dir="rtl">
-      <div
-        className="card shadow-lg border-0 w-100"
-        style={{
-          maxWidth: "1000px",
-          background: "linear-gradient(135deg, #ffffff, #fdf7e7)",
-          borderRadius: "1rem",
-        }}
-      >
-        <div
-          className="card-header text-white text-center py-4"
-          style={{
-            backgroundColor: "#102E50",
-            borderTopLeftRadius: "1rem",
-            borderTopRightRadius: "1rem",
-          }}
-        >
-          <h2 className="fw-bold mb-0">الملف الشخصي</h2>
-        </div>
-
-        <div className="card-body p-5 row align-items-center">
-          <div className="col-md-4 text-center mb-4 mb-md-0">
-            {profile.profileImageUrl ? (
-              <img
-                src={profile.profileImageUrl}
-                alt="الصورة الشخصية"
-                className="img-fluid rounded-circle border border-4"
-                style={{
-                  maxWidth: "220px",
-                  borderColor: "#F5C45E",
-                  boxShadow: "0 0 15px rgba(0, 0, 0, 0.2)",
-                }}
-              />
-            ) : (
-              <div className="text-muted fs-5">لا توجد صورة شخصية</div>
-            )}
-          </div>
-          <div className="col-md-8 text-end">
-            <div className="mb-4">
-              <FaUser className="ms-2 text-warning" />
-              <strong className="text-dark">الاسم:</strong>{" "}
-              <span className="fs-5">{profile.name}</span>
+    <div className="container mt-1" dir="rtl">
+      <div className="card shadow p-4 pt-5 mx-auto" style={{ maxWidth: "600px", borderRadius: "16px" }}>
+        <div className="d-flex align-items-center gap-3 mb-4 flex-wrap">
+          {profile.profileImageUrl ? (
+            <img
+              src={profile.profileImageUrl}
+              alt="الصورة الشخصية"
+              className="rounded-circle border"
+              style={{
+                width: "72px",
+                height: "72px",
+                objectFit: "cover",
+                borderColor: "#F5C45E",
+              }}
+            />
+          ) : (
+            <div>
+            <img src={defaultImage} alt="الصورة الشخصية" className="rounded-circle border" style={{ width: "72px", height: "72px", objectFit: "cover", borderColor: "#F5C45E" }} />
             </div>
-            <div className="mb-4">
-              <FaEnvelope className="ms-2 text-warning" />
-              <strong className="text-dark">البريد الإلكتروني:</strong>{" "}
-              <span className="fs-5">{profile.email}</span>
-            </div>
-            <div className="mb-4">
-              <FaUserShield className="ms-2 text-warning" />
-              <strong className="text-dark">الأدوار:</strong>{" "}
-              <span className="fs-5">{profile.roles?.join("، ")}</span>
-            </div>
+          )}
 
-            <button
-              className="btn mt-3 text-white"
-              style={{ backgroundColor: "#F5C45E", color: "#102E50" }}
-              onClick={handleSendConfirmationEmail}
-              disabled={loading}
-            >
-              <FaPaperPlane className="ms-2" />
-              {loading ? "جاري الإرسال..." : "إرسال رسالة تأكيد"}
-            </button>
 
-            {successMessage && <div className="text-success mt-2">{successMessage}</div>}
-            {errorMessage && <div className="text-danger mt-2">{errorMessage}</div>}
-
-            <button
-              className="btn mt-3 text-white"
-              style={{ backgroundColor: "#F5C45E", color: "#102E50" }}
-              onClick={() => setShowModal(true)}
-            >
-              <FaKey className="ms-2" />
-              تغيير كلمة المرور
-            </button>
-            <button
-  className="btn mt-3"
-  style={{ backgroundColor: "#dc3545", color: "#fff" }}
-  onClick={handleDeleteUser}
->
-  حذف الحساب
-</button>
+          <div className="flex-grow-1">
+            <h5 className="mb-0 fw-bold">{profile.name}</h5>
+            <small className="text-muted">{profile.email}</small>
           </div>
         </div>
+        <div className="mb-3">
+          <label htmlFor="profileImage" className="form-label">تحديث الصورة الشخصية</label>
+          <input
+            type="file"
+            accept="image/*"
+            className="form-control"
+            id="profileImage"
+            onChange={(e) => handleImageUpload(e.target.files[0])}
+          />
+        </div>
+        <div className="mb-3">
+          <FaUserShield className="ms-2 text-warning" />
+          <strong>الأدوار:</strong> <span>{profile.roles?.join("، ")}</span>
+        </div>
+
+        <div className="d-flex flex-column gap-2 mt-4">
+          <button
+            className="btn btn-primary text-white"
+            onClick={handleSendConfirmationEmail}
+            disabled={loading}
+          >
+            <FaPaperPlane className="ms-2" />
+            {loading ? "جاري الإرسال..." : "إرسال رسالة تأكيد"}
+          </button>
+
+          <button
+            className="btn btn-primary text-white"
+            onClick={() => setShowModal(true)}
+          >
+            <FaKey className="ms-2" />
+            تغيير كلمة المرور
+          </button>
+
+          <button className="btn btn-danger" onClick={handleDeleteUser}>
+            حذف الحساب
+          </button>
+        </div>
+
+        {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
+        {errorMessage && <div className="alert alert-danger mt-3">{errorMessage}</div>}
       </div>
 
       {showModal && (
@@ -163,39 +171,23 @@ function Profile() {
               </div>
               <form onSubmit={handleSubmit}>
                 <div className="modal-body">
-                  <div className="mb-3 text-end">
-                    <label className="form-label">كلمة المرور الحالية</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      name="currentPassword"
-                      required
-                      value={form.currentPassword}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="mb-3 text-end">
-                    <label className="form-label">كلمة المرور الجديدة</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      name="newPassword"
-                      required
-                      value={form.newPassword}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="mb-3 text-end">
-                    <label className="form-label">تأكيد كلمة المرور</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      name="confirmPassword"
-                      required
-                      value={form.confirmPassword}
-                      onChange={handleInputChange}
-                    />
-                  </div>
+                  {["currentPassword", "newPassword", "confirmPassword"].map((field, idx) => (
+                    <div className="mb-3 text-end" key={idx}>
+                      <label className="form-label">
+                        {field === "currentPassword" ? "كلمة المرور الحالية" :
+                          field === "newPassword" ? "كلمة المرور الجديدة" :
+                            "تأكيد كلمة المرور"}
+                      </label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        name={field}
+                        value={form[field]}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                  ))}
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>

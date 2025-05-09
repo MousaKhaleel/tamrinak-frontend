@@ -30,11 +30,16 @@ export const getSport = async (id) => {
 // Add a new sport
 export const addSport = async (sportData) => {
   try {
+    const formData = new FormData();
+    formData.append("Name", sportData.Name);
+    formData.append("Description", sportData.Description);
+    formData.append("formFile", sportData.formFile);
+
     const response = await fetch(`${API_URL}/api/Sport/add-sport`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(sportData),
+      body: formData,
     });
+
     if (!response.ok) throw new Error("Failed to add sport");
     return await response.json();
   } catch (error) {
@@ -42,6 +47,8 @@ export const addSport = async (sportData) => {
     return null;
   }
 };
+
+
 
 // Update an existing sport
 export const updateSport = async (sportData) => {

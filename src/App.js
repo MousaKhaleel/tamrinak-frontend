@@ -51,6 +51,7 @@ function App() {
               <Route path='/add-facility' element={<AddFacilityForm />} />
               <Route path='/add-sport' element={<AddSportForm />} />
               <Route path="/confirm-email" element={<ConfirmEmail />} />
+              <Route path='/forgot-password' element={<ForgotPassword />} />
               {/* <Route path="/facilities/:sportId" element={<FacilityDETAILS />} /> */}
               <Route path="/facilities" element={<FacilitiesPage />} />
               <Route path="/profile" element={<Profile />} />

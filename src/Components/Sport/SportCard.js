@@ -20,7 +20,7 @@ const SportCard = ({ sports }) => {
             style={{ cursor: "pointer" }}
           >
             <img
-              src={sport.icon}
+              src={`data:image/png;base64,${sport.iconUrl}`}
               alt={sport.name}
               className="img-fluid mb-2"
               style={{ width: "100px", height: "100px", objectFit: "cover" }}
