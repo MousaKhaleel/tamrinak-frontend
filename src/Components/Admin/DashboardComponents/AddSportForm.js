@@ -6,6 +6,8 @@ const AddSportForm = () => {
     Name: '',
     Description: '',
   });
+
+  const [formFile, setFormFile] = useState(null);
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -14,6 +16,10 @@ const AddSportForm = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const handleFileChange = (e) => {
+    setFormFile(e.target.files[0]);
   };
 
   const validateForm = () => {
@@ -28,6 +34,10 @@ const AddSportForm = () => {
       newErrors.Description = 'Description cannot be longer than 100 characters';
     }
 
+    if (!formFile) {
+      newErrors.formFile = 'Image is required';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -35,10 +45,17 @@ const AddSportForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      const response = await addSport(sportData);
+      const fullData = {
+        ...sportData,
+        formFile: formFile,
+      };
+
+      const response = await addSport(fullData);
       if (response) {
         alert('Sport added successfully!');
-        setSportData({ Name: '', Description: '' }); // Reset form
+        setSportData({ Name: '', Description: '' });
+        setFormFile(null);
+        document.getElementById('formFile').value = null; // Reset file input manually
       } else {
         alert('Failed to add sport');
       }
@@ -80,6 +97,20 @@ const AddSportForm = () => {
                 placeholder="Optional description"
               ></textarea>
               {errors.Description && <div className="invalid-feedback">{errors.Description}</div>}
+            </div>
+
+            {/* Image Input */}
+            <div className="mb-3">
+              <label htmlFor="formFile" className="form-label">Sport Image</label>
+              <input
+                type="file"
+                id="formFile"
+                name="formFile"
+                accept="image/*"
+                className={`form-control ${errors.formFile ? 'is-invalid' : ''}`}
+                onChange={handleFileChange}
+              />
+              {errors.formFile && <div className="invalid-feedback">{errors.formFile}</div>}
             </div>
 
             <button type="submit" className="btn btn-success w-100">Add Sport</button>
