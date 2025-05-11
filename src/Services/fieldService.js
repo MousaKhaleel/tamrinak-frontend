@@ -23,7 +23,7 @@ export const fetchFields = async () => {
 // Get a specific field by ID
 // Fetch field details
 export const getField = async (fieldId) => {
-  const response = await fetch(`${API_URL}/api/Field/field?id=${fieldId}`);
+  const response = await fetch(`${API_URL}/api/Field/field/${fieldId}`);
   if (!response.ok) throw new Error("Failed to fetch field");
   return await response.json();
 };
@@ -95,6 +95,7 @@ export const getRenFieldPhoto = async (photoId) => {
 
 // Get list of field photos
 export const getFieldPhotoList = async (fieldId) => {
+  console.log("Fetching field photo list for field ID:", fieldId);
   const response = await fetch(`${API_URL}/api/Field/field-photo-list?fieldId=${fieldId}`);
   if (!response.ok) throw new Error("Failed to get field photo list");
   // returns [{ id, imageData }]

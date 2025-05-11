@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFieldPhotoList } from "../../Services/fieldService";
 import './FieldCard.css';
+import DefaultImage from "../../Assets/Defaults/default-featured-image.png";
 
 const FieldCard = ({ field }) => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const FieldCard = ({ field }) => {
     <div className="col-12 col-sm-6 col-md-4" onClick={handleCardClick}>
       <div className="card h-100 shadow-sm">
         <img
-          src={thumbUrl || "/default-field.jpg"}
+          src={thumbUrl || DefaultImage}
           className="card-img-top"
           alt={field.name}
           style={{ height: "200px", objectFit: "cover" }}

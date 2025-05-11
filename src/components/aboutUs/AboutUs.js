@@ -6,7 +6,7 @@ import bookingConfirmed from '../../Assets/AboutUs/booking-confirmed-icon.png';
 import gym_7208457 from '../../Assets/AboutUs/gym_7208457.png';
 import enterprise6419109 from '../../Assets/AboutUs/enterprise_6419109.png';
 
-import avatar from '../../Assets/profile-42914_1280.png';
+import avatar from '../../Assets/Defaults/profile-42914_1280.png';
 
 const AboutUs = () => {
   const [rotatingWord, setRotatingWord] = useState("سريعة");

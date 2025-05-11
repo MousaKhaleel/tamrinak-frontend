@@ -14,7 +14,7 @@ export const fetchFacilities = async () => {
 
 // Get one facility by ID (assumed ID is sent via query or body — update if needed)
 export const getFacility = async (facilityId) => {
-  const response = await fetch(`${API_URL}/api/Facility/facility?id=${facilityId}`);
+  const response = await fetch(`${API_URL}/api/Facility/facility/${facilityId}`);
   if (!response.ok) throw new Error("Failed to fetch facility");
   return await response.json();
 };
