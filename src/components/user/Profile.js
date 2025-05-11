@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaUser, FaEnvelope, FaUserShield, FaKey, FaPaperPlane } from "react-icons/fa";
 import { sendConfirmationEmail } from "../../Services/authService";
 import { deleteUser, uploadProfilePicture } from "../../Services/userService";
-import defaultImage from "../../Assets/profile-42914_1280.png";
+import defaultImage from "../../Assets/Defaults/profile-42914_1280.png";
 import { toast } from "react-toastify";
 
 function Profile() {

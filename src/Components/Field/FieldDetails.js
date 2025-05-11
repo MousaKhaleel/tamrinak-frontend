@@ -5,6 +5,10 @@ import { bookField } from "../../Services/bookingService";
 import './FieldDetails.css';
 import { useAuth } from '../../Context/AuthContext';
 
+import DefaultImage from "../../Assets/Defaults/default-featured-image.png";
+
+import Slider from "react-slick";
+
 function FieldDetails() {
   const { fieldId } = useParams();
   const { user } = useAuth();
@@ -32,7 +36,7 @@ function FieldDetails() {
         setField(data);
 
         const photoList = await getFieldPhotoList(fieldId);
-        
+
         const urls = photoList.map(photo => photo.imageData);
         setImages(urls);
       } catch (err) {
@@ -111,82 +115,98 @@ function FieldDetails() {
         <div className="slider-container">
           {images.length > 0 ? (
             images.map((url, idx) => (
-              <img key={idx} src={url} alt={`${field.name} ${idx+1}`} className="slider-image" />
+              <img key={idx} src={url} alt={`${field.name} ${idx + 1}`} className="slider-image" />
             ))
           ) : (
             <img src="/default-field.jpg" alt={field.name} className="slider-image" />
           )}
         </div>
 
-        <div className="details">
-        <div className="detail-section">
-          <strong>الوصف:</strong>
-          <p>{field.locationDesc}</p>
+        {/* <div className="slider-container">
+  <Slider dots={true} infinite={true} speed={500} slidesToShow={1} slidesToScroll={1}>
+    {images.length > 0 ? (
+      images.map((url, idx) => (
+        <div key={idx}>
+          <img src={url} alt={`${field.name} ${idx + 1}`} className="slider-image" />
         </div>
-        <div className="detail-section">
-          <strong>السعر لكل ساعة:</strong>
-          <p>{field.pricePerHour ? `${field.pricePerHour} د.أ` : "اتصل للاستعلام"}</p>
-        </div>
-
-        <h3 style={{ marginTop: '2rem' }}>احجز هذا الملعب</h3>
-        {bookingError && <div style={{ color: "red" }}>{bookingError}</div>}
-        {bookingSuccess && <div style={{ color: "green" }}>{bookingSuccess}</div>}
-
-        <form className="booking-form" onSubmit={handleBookingSubmit}>
-          <div className="form-group">
-            <label htmlFor="bookingDate">التاريخ:</label>
-            <input
-              type="date"
-              id="bookingDate"
-              name="bookingDate"
-              value={bookingData.bookingDate}
-              onChange={handleBookingChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="startTime">الوقت من:</label>
-            <input
-              type="time"
-              id="startTime"
-              name="startTime"
-              value={bookingData.startTime}
-              onChange={handleBookingChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="endTime">إلى:</label>
-            <input
-              type="time"
-              id="endTime"
-              name="endTime"
-              value={bookingData.endTime}
-              onChange={handleBookingChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="numberOfPeople">عدد الأشخاص:</label>
-            <input
-              type="number"
-              id="numberOfPeople"
-              name="numberOfPeople"
-              min="1"
-              max="25"
-              value={bookingData.numberOfPeople}
-              onChange={handleBookingChange}
-              required
-            />
-          </div>
-
-          <button className="reserve-btn" type="submit">احجز الآن</button>
-        </form>
+      ))
+    ) : (
+      <div>
+        <img src={DefaultImage} alt={field.name} className="slider-image" />
       </div>
-    </div>
+    )}
+  </Slider>
+</div> */}
+
+        <div className="details">
+          <div className="detail-section">
+            <strong>الوصف:</strong>
+            <p>{field.locationDesc}</p>
+          </div>
+          <div className="detail-section">
+            <strong>السعر لكل ساعة:</strong>
+            <p>{field.pricePerHour ? `${field.pricePerHour} د.أ` : "اتصل للاستعلام"}</p>
+          </div>
+
+          <h3 style={{ marginTop: '2rem' }}>احجز هذا الملعب</h3>
+          {bookingError && <div style={{ color: "red" }}>{bookingError}</div>}
+          {bookingSuccess && <div style={{ color: "green" }}>{bookingSuccess}</div>}
+
+          <form className="booking-form" onSubmit={handleBookingSubmit}>
+            <div className="form-group">
+              <label htmlFor="bookingDate">التاريخ:</label>
+              <input
+                type="date"
+                id="bookingDate"
+                name="bookingDate"
+                value={bookingData.bookingDate}
+                onChange={handleBookingChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="startTime">الوقت من:</label>
+              <input
+                type="time"
+                id="startTime"
+                name="startTime"
+                value={bookingData.startTime}
+                onChange={handleBookingChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="endTime">إلى:</label>
+              <input
+                type="time"
+                id="endTime"
+                name="endTime"
+                value={bookingData.endTime}
+                onChange={handleBookingChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="numberOfPeople">عدد الأشخاص:</label>
+              <input
+                type="number"
+                id="numberOfPeople"
+                name="numberOfPeople"
+                min="1"
+                max="25"
+                value={bookingData.numberOfPeople}
+                onChange={handleBookingChange}
+                required
+              />
+            </div>
+
+            <button className="reserve-btn" type="submit">احجز الآن</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

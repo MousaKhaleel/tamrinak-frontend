@@ -18,7 +18,7 @@ export const fetchSports = async () => {
 // Get single sport by ID (assuming ID is passed as query param like ?id=123)
 export const getSport = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/api/Sport/sport?id=${id}`);
+    const response = await fetch(`${API_URL}/api/Sport/sport/${id}`);
     if (!response.ok) throw new Error("Failed to fetch sport");
     return await response.json();
   } catch (error) {

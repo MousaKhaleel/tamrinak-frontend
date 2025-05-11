@@ -16,13 +16,12 @@ const API_URL = process.env.API_URL || "https://localhost:7160";
       }).then(res => res.json());
     }
 
-    export const getUserRolesByEmail = async (email) => {
-      return await fetch(`${API_URL}/api/User/UserRolesByEmail`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      }).then(res => res.json());
-    }
+export const getUserRolesByEmail = async (email) => {
+  return await fetch(`${API_URL}/api/User/UserRolesByEmail/${email}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  }).then(res => res.json());
+}
 
     export const getBasicInfoUserList = async () => {
       return await fetch(`${API_URL}/api/User/BasicInfoUserList`)

@@ -6,7 +6,7 @@ import './NavigationBar.css';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthContext';
 
-import pic from '../../Assets/profile-42914_1280.png';
+import pic from '../../Assets/Defaults/profile-42914_1280.png';
 
 function NavigationBar() {
   const { user, logoutUser } = useAuth();

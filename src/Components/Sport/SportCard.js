@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import defaultImage from '../../Assets/Defaults/default-featured-image.png'
 
 const SportCard = ({ sports }) => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const SportCard = ({ sports }) => {
             style={{ cursor: "pointer" }}
           >
             <img
-              src={`data:image/png;base64,${sport.iconUrl}`}
+              src={sport.iconUrl ? `data:image/png;base64,${sport.iconUrl}` : defaultImage}
               alt={sport.name}
               className="img-fluid mb-2"
               style={{ width: "100px", height: "100px", objectFit: "cover" }}
