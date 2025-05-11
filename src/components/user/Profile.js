@@ -4,6 +4,7 @@ import { FaUser, FaEnvelope, FaUserShield, FaKey, FaPaperPlane } from "react-ico
 import { sendConfirmationEmail } from "../../Services/authService";
 import { deleteUser, uploadProfilePicture } from "../../Services/userService";
 import defaultImage from "../../Assets/profile-42914_1280.png";
+import { toast } from "react-toastify";
 
 function Profile() {
   const { user, logoutUser } = useAuth();
@@ -47,11 +48,11 @@ function Profile() {
     if (window.confirm("هل أنت متأكد من أنك تريد حذف الحساب؟")) {
       try {
         await deleteUser(user.profile.id);
-        alert("تم حذف الحساب بنجاح.");
+        toast.success("تم حذف الحساب بنجاح.");
         logoutUser();
         window.location.href = "/";
       } catch {
-        alert("حدث خطأ أثناء حذف الحساب.");
+        toast.error("حدث خطأ أثناء حذف الحساب.");
       }
     }
   };

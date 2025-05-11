@@ -9,7 +9,7 @@ const API_URL = process.env.API_URL || "https://localhost:7160";
     }
 
     export const getUserRoles = async (userId) => {
-      return await fetch(`${API_URL}/api/User/GetUserRoles`, {
+      return await fetch(`${API_URL}/api/User/UserRoles`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId })
@@ -17,7 +17,7 @@ const API_URL = process.env.API_URL || "https://localhost:7160";
     }
 
     export const getUserRolesByEmail = async (email) => {
-      return await fetch(`${API_URL}/api/User/GetUserRolesEmail`, {
+      return await fetch(`${API_URL}/api/User/UserRolesByEmail`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })

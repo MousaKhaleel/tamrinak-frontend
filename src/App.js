@@ -30,6 +30,9 @@ import ConfirmEmail from './Components/Confirm/ConfirmEmail';
 import ForgotPassword from './Components/Auth/ForgotPassword';
 import PageNotFound from './Components/Other/PageNotFound';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
 
@@ -61,6 +64,17 @@ function App() {
             </Routes>
           {!hideNavFooter && <Footer />}
         </ThemeProvider>
+          <ToastContainer 
+    position="top-right"
+    autoClose={5000}
+    hideProgressBar={false}
+    newestOnTop={false}
+    closeOnClick
+    rtl={true}
+    pauseOnFocusLoss
+    draggable
+    pauseOnHover
+  />
     </div>
   );
 }

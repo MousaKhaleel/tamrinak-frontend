@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { addSport } from '../../../Services/sportService';
+import { toast } from "react-toastify";
 
 const AddSportForm = () => {
   const [sportData, setSportData] = useState({
@@ -52,12 +53,12 @@ const AddSportForm = () => {
 
       const response = await addSport(fullData);
       if (response) {
-        alert('Sport added successfully!');
+        toast.success('Sport added successfully!');
         setSportData({ Name: '', Description: '' });
         setFormFile(null);
         document.getElementById('formFile').value = null; // Reset file input manually
       } else {
-        alert('Failed to add sport');
+        toast.error('Failed to add sport');
       }
     }
   };

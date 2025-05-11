@@ -2,7 +2,7 @@ const API_URL = process.env.API_URL || "https://localhost:7160";
 
 export const fetchSports = async () => {
   try {
-    const response = await fetch(`${API_URL}/api/Sport/get-all-sports`);
+    const response = await fetch(`${API_URL}/api/Sport/all-sports`);
     if (!response.ok) {
       throw new Error("Failed to fetch sports");
     }
@@ -18,7 +18,7 @@ export const fetchSports = async () => {
 // Get single sport by ID (assuming ID is passed as query param like ?id=123)
 export const getSport = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/api/Sport/get-sport?id=${id}`);
+    const response = await fetch(`${API_URL}/api/Sport/sport?id=${id}`);
     if (!response.ok) throw new Error("Failed to fetch sport");
     return await response.json();
   } catch (error) {
@@ -35,7 +35,7 @@ export const addSport = async (sportData) => {
     formData.append("Description", sportData.Description);
     formData.append("formFile", sportData.formFile);
 
-    const response = await fetch(`${API_URL}/api/Sport/add-sport`, {
+    const response = await fetch(`${API_URL}/api/Sport/sport`, {
       method: "POST",
       body: formData,
     });
@@ -53,7 +53,7 @@ export const addSport = async (sportData) => {
 // Update an existing sport
 export const updateSport = async (sportData) => {
   try {
-    const response = await fetch(`${API_URL}/api/Sport/update-sport`, {
+    const response = await fetch(`${API_URL}/api/Sport/sport`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(sportData),
@@ -69,7 +69,7 @@ export const updateSport = async (sportData) => {
 // Delete a sport by ID (assuming ID is passed as query param like ?id=123)
 export const deleteSport = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/api/Sport/remove-sport?id=${id}`, {
+    const response = await fetch(`${API_URL}/api/Sport/sport?id=${id}`, {
       method: "DELETE",
     });
     if (!response.ok) throw new Error("Failed to delete sport");
@@ -83,7 +83,7 @@ export const deleteSport = async (id) => {
 // Update sport image (FormData, typically includes image file)
 export const updateSportImage = async (id, formData) => {
   try {
-    const response = await fetch(`${API_URL}/api/Sport/update-sport-image/${id}`, {
+    const response = await fetch(`${API_URL}/api/Sport/sport-image/${id}`, {
       method: "POST",
       body: formData,
     });
