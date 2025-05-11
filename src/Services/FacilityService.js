@@ -3,7 +3,7 @@ const API_URL = process.env.API_URL || "https://localhost:7160";
 // Get all facilities
 export const fetchFacilities = async () => {
   try {
-    const response = await fetch(`${API_URL}/api/Facility/get-facilities`);
+    const response = await fetch(`${API_URL}/api/Facility/facilities`);
     if (!response.ok) throw new Error("Failed to fetch facilities");
     return await response.json();
   } catch (error) {
@@ -14,14 +14,14 @@ export const fetchFacilities = async () => {
 
 // Get one facility by ID (assumed ID is sent via query or body — update if needed)
 export const getFacility = async (facilityId) => {
-  const response = await fetch(`${API_URL}/api/Facility/get-facility?id=${facilityId}`);
+  const response = await fetch(`${API_URL}/api/Facility/facility?id=${facilityId}`);
   if (!response.ok) throw new Error("Failed to fetch facility");
   return await response.json();
 };
 
 // Add a new facility
 export const addFacility = async (facilityData) => {
-  const response = await fetch(`${API_URL}/api/Facility/add-facility`, {
+  const response = await fetch(`${API_URL}/api/Facility/facility`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(facilityData),
@@ -32,7 +32,7 @@ export const addFacility = async (facilityData) => {
 
 // Update an existing facility
 export const updateFacility = async (facilityData) => {
-  const response = await fetch(`${API_URL}/api/Facility/update-facility`, {
+  const response = await fetch(`${API_URL}/api/Facility/facility`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(facilityData),
@@ -43,7 +43,7 @@ export const updateFacility = async (facilityData) => {
 
 // Remove a facility
 export const removeFacility = async (facilityId) => {
-  const response = await fetch(`${API_URL}/api/Facility/remove-facility?id=${facilityId}`, {
+  const response = await fetch(`${API_URL}/api/Facility/facility?id=${facilityId}`, {
     method: "DELETE",
   });
   if (!response.ok) throw new Error("Failed to remove facility");
@@ -51,7 +51,7 @@ export const removeFacility = async (facilityId) => {
 
 // Add facility image
 export const addFacilityImage = async (formData) => {
-  const response = await fetch(`${API_URL}/api/Facility/add-facility-image`, {
+  const response = await fetch(`${API_URL}/api/Facility/facility-image`, {
     method: "POST",
     body: formData, // multipart/form-data
   });
@@ -61,7 +61,7 @@ export const addFacilityImage = async (formData) => {
 
 // Delete facility image
 export const deleteFacilityImage = async (imageId) => {
-  const response = await fetch(`${API_URL}/api/Facility/delete-facility-image?id=${imageId}`, {
+  const response = await fetch(`${API_URL}/api/Facility/facility-image?id=${imageId}`, {
     method: "DELETE",
   });
   if (!response.ok) throw new Error("Failed to delete image");
@@ -69,21 +69,21 @@ export const deleteFacilityImage = async (imageId) => {
 
 // Get a facility photo
 export const getFacilityPhoto = async (photoId) => {
-  const response = await fetch(`${API_URL}/api/Facility/get-facility-photo?id=${photoId}`);
+  const response = await fetch(`${API_URL}/api/Facility/facility-photo?id=${photoId}`);
   if (!response.ok) throw new Error("Failed to get facility photo");
   return await response.blob(); // Use blob() if you're loading an image
 };
 
 // Get a "renamed" (or rendered?) facility photo
 export const getRenFacilityPhoto = async (photoId) => {
-  const response = await fetch(`${API_URL}/api/Facility/get-ren-facility-photo?id=${photoId}`);
+  const response = await fetch(`${API_URL}/api/Facility/ren-facility-photo?id=${photoId}`);
   if (!response.ok) throw new Error("Failed to get rendered facility photo");
   return await response.blob();
 };
 
 // Get list of all facility photos
 export const getFacilityPhotoList = async (facilityId) => {
-  const response = await fetch(`${API_URL}/api/Facility/get-facility-photo-list?id=${facilityId}`);
+  const response = await fetch(`${API_URL}/api/Facility/facility-photo-list?id=${facilityId}`);
   if (!response.ok) throw new Error("Failed to get photo list");
   return await response.json();
 };

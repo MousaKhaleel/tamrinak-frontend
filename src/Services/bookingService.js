@@ -31,7 +31,7 @@ export const bookField = async (bookingData, token) => {
 
 // Get a specific booking by ID
 export const getBooking = async (bookingId) => {
-  const response = await fetch(`${API_URL}/api/Booking/get-booking/${bookingId}`);
+  const response = await fetch(`${API_URL}/api/Booking/booking/${bookingId}`);
 
   if (!response.ok) {
     const error = await response.json();
@@ -55,7 +55,7 @@ export const getUserBookings = async (userId) => {
 
 // Delete a booking
 export const deleteBooking = async (bookingId) => {
-  const response = await fetch(`${API_URL}/api/Booking/delete-booking/${bookingId}`, {
+  const response = await fetch(`${API_URL}/api/Booking/booking/${bookingId}`, {
     method: "DELETE",
   });
 
@@ -91,7 +91,7 @@ export const payForBooking = async (bookingId) => {
 
 // Change (update) booking info
 export const changeBooking = async (bookingId, updatedData) => {
-  const response = await fetch(`${API_URL}/api/Booking/change-booking/${bookingId}`, {
+  const response = await fetch(`${API_URL}/api/Booking/booking/${bookingId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
