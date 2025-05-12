@@ -5,7 +5,6 @@ import "./AuthStyle.css";
 import { login, register } from "../../Services/authService";
 import { toast } from "react-toastify";
 import { useAuth } from "../../Context/AuthContext";
-import useProfile from "../../Hooks/useProfile";
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
 const AuthPage = () => {

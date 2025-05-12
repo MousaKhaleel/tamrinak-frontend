@@ -85,24 +85,37 @@ export const forgotPassword = async (email, token) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify(email), // Send just the string
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Forgot password request failed");//TODO
+    throw new Error(error.message || "Forgot password request failed");
   }
 };
 
-export const resetPassword = async (data) => {
+export const resetPassword = async (token, newPassword) => {
   const response = await fetch(`${API_URL}/api/Authentication/reset-password`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data), // data should include email, token, newPassword, confirmPassword
+    body: JSON.stringify({ 
+      Token: token,
+      NewPassword: newPassword 
+    }),
   });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Password reset failed");
+  const responseText = await response.text();
+  
+  try {
+    const data = JSON.parse(responseText);
+    if (!response.ok) {
+      throw new Error(data.message || "Password reset failed");
+    }
+    return data;
+  } catch {
+    if (!response.ok) {
+      throw new Error(responseText || "Password reset failed");
+    }
+    return { message: responseText };
   }
 };
