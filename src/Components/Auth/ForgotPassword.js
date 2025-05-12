@@ -9,7 +9,6 @@ function ForgotPassword() {
     const [loading, setLoading] = useState(false);
     const { user } = useAuth();
     const token = user?.token;
-    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,26 +27,45 @@ function ForgotPassword() {
     };
 
     return (
-        <div className="forgot-password-container">
-            <h2>نسيت كلمة المرور</h2>
-            <p>يرجى إدخال بريدك الإلكتروني لإعادة تعيين كلمة المرور الخاصة بك.</p>
-            <form className="forgot-password-form" onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    placeholder="البريد الإلكتروني"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <button type="submit" disabled={loading}>
-                    {loading ? 'جاري الإرسال...' : 'إرسال رابط إعادة تعيين كلمة المرور'}
-                </button>
-            </form>
-            {message && <p className="success-message">{message}</p>}
-            {error && <p className="error-message">{error}</p>}
-            <p className="back-to-login">
-                <a href="/auth?mode=login">عودة إلى تسجيل الدخول</a>
-            </p>
+        <div className="container d-flex justify-content-center align-items-center min-vh-100">
+            <div className="card shadow p-4 w-100" style={{ maxWidth: '500px' }}>
+                <h3 className="mb-3 text-center">نسيت كلمة المرور</h3>
+                <p className="text-center text-muted">
+                    يرجى إدخال بريدك الإلكتروني لإعادة تعيين كلمة المرور الخاصة بك.
+                </p>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label htmlFor="email" className="form-label">البريد الإلكتروني</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control"
+                            placeholder="example@email.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                        {loading ? 'جاري الإرسال...' : 'إرسال رابط إعادة التعيين'}
+                    </button>
+                </form>
+
+                {message && (
+                    <div className="alert alert-success mt-3 text-center" role="alert">
+                        {message}
+                    </div>
+                )}
+                {error && (
+                    <div className="alert alert-danger mt-3 text-center" role="alert">
+                        {error}
+                    </div>
+                )}
+
+                <div className="text-center mt-4">
+                    <a href="/auth?mode=login" className="text-decoration-none">عودة إلى تسجيل الدخول</a>
+                </div>
+            </div>
         </div>
     );
 }
