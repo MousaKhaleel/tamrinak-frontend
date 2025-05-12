@@ -5,6 +5,7 @@ import "./AuthStyle.css";
 import { login, register } from "../../Services/authService";
 import { toast } from "react-toastify";
 import { useAuth } from "../../Context/AuthContext";
+import { getProfilePicture } from "../../Services/userService";
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
 const AuthPage = () => {
@@ -27,34 +28,36 @@ const AuthPage = () => {
 
   const togglePanel = () => setIsRegistering((prev) => !prev);
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await login(loginData); // res.jwtToken
-  
-      const token = res.jwtToken;
-  
-      const profileRes = await fetch(`${API_URL}/api/User/profile`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
-      const profile = await profileRes.json();
-  
-      loginUser(token, profile);
-  
-      toast.success("تم تسجيل الدخول بنجاح");
-      navigate("/");
-    } catch (err) {
-      toast.error(err.message || "حدث خطأ أثناء تسجيل الدخول");
-    } finally {
-      setLoading(false);
-    }
-  };
+const handleLoginSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  try {
+    const res = await login(loginData);
+    const token = res.jwtToken;
+
+    const profileRes = await fetch(`${API_URL}/api/User/profile`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const profile = await profileRes.json();
+    
+    // Fetch profile picture
+    const profileImage = await getProfilePicture(profile.id); // Adjust to match your profile object
+
+    loginUser(token, profile, profileImage);
+
+    toast.success("تم تسجيل الدخول بنجاح");
+    navigate("/");
+  } catch (err) {
+    toast.error(err.message || "حدث خطأ أثناء تسجيل الدخول");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();

@@ -46,11 +46,34 @@ export const deleteUser = async (id) => {
   return await response.json();
 };
 
-export const uploadProfilePicture = async (formData, userId) => {
-  return await fetch(`${API_URL}/api/User/upload-profile-picture?userId=${userId}`, {
-    method: 'PATCH',
-    body: formData,
-  }).then(res => res.json());
+export const uploadProfilePicture = async (file, userId) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await fetch(`${API_URL}/api/User/profile-picture?userId=${userId}`, {
+      method: 'PATCH',
+      body: formData,
+      // Add authorization header if needed
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+
+    const text = await response.text();
+    try {
+      const data = text ? JSON.parse(text) : {};
+      if (!response.ok) {
+        throw new Error(data.message || 'Upload failed');
+      }
+      return data;
+    } catch (e) {
+      throw new Error(text || 'Upload failed');
+    }
+  } catch (error) {
+    console.error('Upload error:', error);
+    throw new Error(error.message || 'Failed to upload image');
+  }
 };
 
 
@@ -60,22 +83,19 @@ export const deleteProfilePicture = async () => {
   }).then(res => res.json());
 };
 
-export const changeProfilePicture = async (formData) => {
-  return await fetch(`${API_URL}/api/User/change-profile-picture`, {
-    method: 'PATCH',
-    body: formData
-  }).then(res => res.json());
-};
-
 export const getProfilePicture = async (userId) => {
-  return await fetch(`${API_URL}/api/User/profile-picture?userId=${userId}`)
-    .then(async (res) => {
-      if (!res.ok) {
-        throw new Error('Failed to fetch profile picture');
-      }
-      const data = await res.json();
-      return data.Base64Image; // Returns the data URI string
-    });
+  try {
+    const res = await fetch(`${API_URL}/api/User/profile-picture?userId=${userId}`);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || 'فشل تحميل صورة الملف الشخصي');
+    }
+    const data = await res.json();
+    return data?.Base64Image || null;
+  } catch (error) {
+    console.error('Error fetching profile picture:', error);
+    throw error;
+  }
 };
 
 export const getProfile = async (token) => {
