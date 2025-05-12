@@ -6,8 +6,11 @@ import { deleteUser, uploadProfilePicture } from "../../Services/userService";
 import defaultImage from "../../Assets/Defaults/profile-42914_1280.png";
 import { toast } from "react-toastify";
 
+import CropModal from "./CropModal"; // adjust path
+
+
 function Profile() {
-  const { user, logoutUser } = useAuth();
+const { user, logoutUser, updateProfileImage } = useAuth();
   const profile = user?.profile;
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
@@ -18,6 +21,10 @@ function Profile() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  const [cropSrc, setCropSrc] = useState(null); // base64 image
+const [selectedFile, setSelectedFile] = useState(null);
+
 
   const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -67,52 +74,83 @@ function Profile() {
     );
   }
 
-const handleImageUpload = async (file) => {
+const handleImageUpload = (file) => {
   if (!file) return;
 
-  const formData = new FormData();
-  formData.append("file", file);
+  const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  const maxSize = 200 * 1024 * 1024;
 
-  setLoading(true);
-  setErrorMessage("");
-  setSuccessMessage("");
+  if (!validTypes.includes(file.type)) {
+    setErrorMessage("نوع الملف غير مدعوم. يرجى تحميل صورة (JPEG, PNG, GIF)");
+    return;
+  }
 
+  if (file.size > maxSize) {
+    setErrorMessage("حجم الصورة كبير جدًا. الحد الأقصى 200MB");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    setCropSrc(reader.result); // open modal with base64
+    setSelectedFile(file); // keep the file in case needed
+  };
+  reader.readAsDataURL(file);
+};
+
+const handleCroppedImage = async (croppedFile) => {
   try {
-    const response = await uploadProfilePicture(formData, user.profile.id);
-    if (response?.imageBase64 || response?.success) {
+    setLoading(true);
+    setCropSrc(null);
+    const response = await uploadProfilePicture(croppedFile, user.profile.id);
+    
+    if (response?.imageUrl || response?.success) {
+      const newImageUrl = response.imageUrl || response.profileImageUrl;
+      updateProfileImage(newImageUrl); // ✅ Update context directly
       setSuccessMessage("تم تحديث الصورة بنجاح!");
-      window.location.reload(); // or update context state if preferred
     } else {
-      setErrorMessage("فشل في رفع الصورة.");
+      setErrorMessage(response?.message || "فشل في رفع الصورة.");
     }
-  } catch (error) {
-    setErrorMessage("حدث خطأ أثناء رفع الصورة.");
+  } catch (err) {
+    setErrorMessage(err.message || "حدث خطأ أثناء رفع الصورة.");
   } finally {
     setLoading(false);
   }
 };
 
+
+
   return (
     <div className="container mt-1" dir="rtl">
       <div className="card shadow p-4 pt-5 mx-auto" style={{ maxWidth: "600px", borderRadius: "16px" }}>
         <div className="d-flex align-items-center gap-3 mb-4 flex-wrap">
-          {profile.profileImageUrl ? (
-            <img
-              src={profile.profileImageUrl}
-              alt="الصورة الشخصية"
-              className="rounded-circle border"
-              style={{
-                width: "72px",
-                height: "72px",
-                objectFit: "cover",
-                borderColor: "#F5C45E",
-              }}
-            />
-          ) : (
-            <div>
-            <img src={defaultImage} alt="الصورة الشخصية" className="rounded-circle border" style={{ width: "72px", height: "72px", objectFit: "cover", borderColor: "#F5C45E" }} />
-            </div>
-          )}
+{profile.profileImageUrl ? (
+  <img
+    src={`data:image/jpeg;base64,${profile.profileImageUrl}`}
+    alt="الصورة الشخصية"
+    className="rounded-circle border"
+    style={{
+      width: "72px",
+      height: "72px",
+      objectFit: "cover",
+      borderColor: "#F5C45E",
+    }}
+  />
+) : (
+  <div>
+    <img 
+      src={defaultImage} 
+      alt="الصورة الشخصية" 
+      className="rounded-circle border" 
+      style={{ 
+        width: "72px", 
+        height: "72px", 
+        objectFit: "cover", 
+        borderColor: "#F5C45E" 
+      }} 
+    />
+  </div>
+)}
 
 
           <div className="flex-grow-1">
@@ -128,7 +166,12 @@ const handleImageUpload = async (file) => {
             className="form-control"
             id="profileImage"
             onChange={(e) => handleImageUpload(e.target.files[0])}
+            disabled={loading}
           />
+
+          {loading && (
+            <div className="mt-2 text-primary">جاري رفع الصورة...</div>
+          )}
         </div>
         <div className="mb-3">
           <FaUserShield className="ms-2 text-warning" />
@@ -203,6 +246,14 @@ const handleImageUpload = async (file) => {
           </div>
         </div>
       )}
+      {cropSrc && (
+  <CropModal
+    image={cropSrc}
+    onCancel={() => setCropSrc(null)}
+    onCropComplete={handleCroppedImage}
+  />
+)}
+
     </div>
   );
 }

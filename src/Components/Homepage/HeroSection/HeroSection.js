@@ -1,5 +1,6 @@
 import { FaFutbol, FaTrophy, FaUsers } from "react-icons/fa";
 import "./HeroSection.css";
+import { Link } from "react-router-dom";
 
 function HeroSection() {
   return (
@@ -8,8 +9,8 @@ function HeroSection() {
         <h1>إبحث واحجز أفضل المرافق الرياضية</h1>
         <h4>إختر مرفق رياضي - حجز فوري مع دفع آمن</h4>
         <div className="hero-content-btn">
-          <button className="hero-btn outline">من نحن؟</button>
-          <button className="hero-btn filled">ابدا الحجز</button>
+          <Link to="/aboutUs" className="hero-btn outline">من نحن؟</Link>
+          <Link to="/booking" className="hero-btn filled">ابدا الحجز</Link>
         </div>
       </div>
 

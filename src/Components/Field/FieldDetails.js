@@ -70,10 +70,13 @@ function FieldDetails() {
     setBookingError(null);
     setBookingSuccess(null);
 
-    if (bookingData.startTime >= bookingData.endTime) {
-      setBookingError("وقت النهاية يجب أن يكون بعد وقت البداية.");
-      return;
-    }
+const start = 2;
+const end = 3;
+
+if (start >= end) {
+  setBookingError("وقت النهاية يجب أن يكون بعد وقت البداية.");
+  return;
+}
 
     try {
       const transformedData = {
