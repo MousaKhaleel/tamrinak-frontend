@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchFieldsBySportId } from "../../Services/fieldService";
 import FieldCard from "./FieldCard";
-import NavigationBar from "../NavigationBar/NavigationBar";
-import Footer from "../Footer/Footer";
 
 function FieldsPage() {
   const [searchParams] = useSearchParams();

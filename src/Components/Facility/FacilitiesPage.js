@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchFacilities } from "../../Services/facilityService";
 import FacilityCard from "../Facility/FacilityCard";
-import NavigationBar from "../NavigationBar/NavigationBar";
-import Footer from "../Footer/Footer";
 
 const FacilitiesPage = () => {
   const [facilities, setFacilities] = useState([]);

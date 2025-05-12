@@ -46,12 +46,13 @@ export const deleteUser = async (id) => {
   return await response.json();
 };
 
-export const uploadProfilePicture = async (formData) => {
-  return await fetch(`${API_URL}/api/User/upload-profile-picture`, {
+export const uploadProfilePicture = async (formData, userId) => {
+  return await fetch(`${API_URL}/api/User/upload-profile-picture?userId=${userId}`, {
     method: 'PATCH',
-    body: formData
+    body: formData,
   }).then(res => res.json());
 };
+
 
 export const deleteProfilePicture = async () => {
   return await fetch(`${API_URL}/api/User/delete-profile-picture`, {
@@ -66,9 +67,15 @@ export const changeProfilePicture = async (formData) => {
   }).then(res => res.json());
 };
 
-export const getProfilePicture = async () => {
-  return await fetch(`${API_URL}/api/User/profile-picture`)
-    .then(res => res.blob());
+export const getProfilePicture = async (userId) => {
+  return await fetch(`${API_URL}/api/User/profile-picture?userId=${userId}`)
+    .then(async (res) => {
+      if (!res.ok) {
+        throw new Error('Failed to fetch profile picture');
+      }
+      const data = await res.json();
+      return data.Base64Image; // Returns the data URI string
+    });
 };
 
 export const getProfile = async (token) => {

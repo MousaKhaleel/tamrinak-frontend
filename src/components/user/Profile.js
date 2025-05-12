@@ -67,30 +67,30 @@ function Profile() {
     );
   }
 
-  const handleImageUpload = async (file) => {
-    if (!file) return;
+const handleImageUpload = async (file) => {
+  if (!file) return;
 
-    const formData = new FormData();
-    formData.append("file", file);
+  const formData = new FormData();
+  formData.append("file", file);
 
-    setLoading(true);
-    setErrorMessage("");
-    setSuccessMessage("");
+  setLoading(true);
+  setErrorMessage("");
+  setSuccessMessage("");
 
-    try {
-      const response = await uploadProfilePicture(formData);
-      if (response?.success) {
-        setSuccessMessage("تم تحديث الصورة بنجاح!");
-        window.location.reload(); // or update context state if preferred
-      } else {
-        setErrorMessage("فشل في رفع الصورة.");
-      }
-    } catch (error) {
-      setErrorMessage("حدث خطأ أثناء رفع الصورة.");
-    } finally {
-      setLoading(false);
+  try {
+    const response = await uploadProfilePicture(formData, user.profile.id);
+    if (response?.imageBase64 || response?.success) {
+      setSuccessMessage("تم تحديث الصورة بنجاح!");
+      window.location.reload(); // or update context state if preferred
+    } else {
+      setErrorMessage("فشل في رفع الصورة.");
     }
-  };//TODO test
+  } catch (error) {
+    setErrorMessage("حدث خطأ أثناء رفع الصورة.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="container mt-1" dir="rtl">

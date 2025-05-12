@@ -118,7 +118,7 @@ function FieldDetails() {
               <img key={idx} src={url} alt={`${field.name} ${idx + 1}`} className="slider-image" />
             ))
           ) : (
-            <img src="/default-field.jpg" alt={field.name} className="slider-image" />
+            <img src={DefaultImage} alt={field.name} className="slider-image" />
           )}
         </div>
 
