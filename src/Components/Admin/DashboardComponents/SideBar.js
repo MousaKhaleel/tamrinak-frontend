@@ -23,7 +23,7 @@ const Sidebar = () => {
             aria-controls="components-nav"
           >
             <i className="bi bi-menu-button-wide"></i>
-            <span>Components</span>
+            <span>Moderation</span>
             <i className="bi bi-chevron-down me-auto"></i> {/* Change ms-auto to me-auto */}
           </a>
           <ul
@@ -32,33 +32,27 @@ const Sidebar = () => {
             data-bs-parent="#sidebar-nav"
           >
             <li>
-              <Link to="/components-alerts">
+              <Link to="/sport-list">
                 <i className="bi bi-circle"></i>
-                <span>Alerts</span>
+                <span>Sports</span>
               </Link>
             </li>
-            <li>
-              <Link to="/components-accordion">
+                        <li>
+              <Link to="/user-list">
                 <i className="bi bi-circle"></i>
-                <span>Accordion</span>
+                <span>Users</span>
               </Link>
             </li>
-            <li>
-              <Link to="/components-badges">
+                        <li>
+              <Link to="/facility-list">
                 <i className="bi bi-circle"></i>
-                <span>Badges</span>
+                <span>Facilities</span>
               </Link>
             </li>
-            <li>
-              <Link to="/components-breadcrumbs">
+                        <li>
+              <Link to="/field-list">
                 <i className="bi bi-circle"></i>
-                <span>Breadcrumbs</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/components-buttons">
-                <i className="bi bi-circle"></i>
-                <span>Buttons</span>
+                <span>Fields</span>
               </Link>
             </li>
           </ul>

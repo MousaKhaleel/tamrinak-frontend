@@ -17,20 +17,20 @@ useEffect(() => {
 const loginUser = (token, profile, profileImage) => {
   localStorage.setItem("token", token);
   localStorage.setItem("profile", JSON.stringify(profile));
-  localStorage.setItem("profileImage", profileImage); // optional for persistence
+  localStorage.setItem("profileImage", profileImage);
   setUser({ token, profile, profileImage });
 };
 
-const updateProfileImage = (newImageUrl) => {
+const updateProfileImage = (newImage) => {
   const updatedUser = {
     ...user,
-    profileImage: newImageUrl,
+    profileImage: newImage,
     profile: {
       ...user.profile,
-      profileImage: newImageUrl, // assuming your backend returns this key
+      profileImage: newImage,
     },
   };
-  localStorage.setItem("profileImage", newImageUrl);
+  localStorage.setItem("profileImage", newImage);
   localStorage.setItem("profile", JSON.stringify(updatedUser.profile));
   setUser(updatedUser);
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { addSport } from '../../../Services/sportService';
+import { addSport } from '../../../../Services/sportService';
 import { toast } from "react-toastify";
 
 const AddSportForm = () => {
