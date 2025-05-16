@@ -36,6 +36,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import ResetPassword from './Components/Auth/ResetPassword';
+import FacilityDetails from './Components/Facility/FacilityDetails';
+import History from './Components/User/History';
 
 
 function App() {
@@ -62,7 +64,9 @@ function App() {
               <Route path='/reset-password' element={<ResetPassword />} />
               {/* <Route path="/facilities/:sportId" element={<FacilityDETAILS />} /> */}
               <Route path="/facilities" element={<FacilitiesPage />} />
+              <Route path="/facility-details/:facilityId" element={<FacilityDetails />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path='/history' element={<History />} />
               <Route path='/admin-dashboard' element={<AdminDashboard />} />
               <Route path="/aboutUs" element={<AboutUs />} />
               <Route path="*" element={<PageNotFound />} />

@@ -43,14 +43,24 @@ export const getBooking = async (bookingId) => {
 
 // Get all bookings for a user
 export const getUserBookings = async (userId) => {
-  const response = await fetch(`${API_URL}/api/Booking/user-bookings/${userId}`);
+  try {
+    const response = await fetch(`${API_URL}/api/Booking/user-bookings/${userId}`, {
+      method: 'GET',
+      headers: {
+        "Accept": "application/json",
+      },
+    });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Fetching user bookings failed");
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Failed to fetch user bookings");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching user bookings:', error);
+    throw error; // Re-throw to allow calling code to handle it
   }
-
-  return await response.json();
 };
 
 // Delete a booking

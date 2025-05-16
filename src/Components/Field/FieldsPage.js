@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchFieldsBySportId } from "../../Services/fieldService";
+import { getFieldsBySport } from "../../Services/fieldService";
 import FieldCard from "./FieldCard";
 
-function FieldsPage() {
+const FieldsPage = () => {
   const [searchParams] = useSearchParams();
   const sportId = searchParams.get("sportId");
   const [fields, setFields] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getFields = async () => {
-      const data = await fetchFieldsBySportId(sportId);
-      setFields(data);
-      setLoading(false);
+    const fetchFields = async () => {
+      if (sportId) {
+        const data = await getFieldsBySport(sportId);
+        setFields(data);
+        setLoading(false);
+      }
     };
 
-    if (sportId) {
-      getFields();
-    } else {
-      setLoading(false);
-    }
+    fetchFields();
   }, [sportId]);
 
-  if (loading) return <div className="text-center">جارٍ تحميل الملاعب...</div>;
+  if (loading) {
+    return <div className="text-center">جار التحميل...</div>;
+  }
 
   return (
     <div className="container py-4">

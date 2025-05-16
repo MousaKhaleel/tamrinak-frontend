@@ -3,8 +3,17 @@ const API_URL = process.env.API_URL || "https://localhost:7160";
 // Get all facilities
 export const fetchFacilities = async () => {
   try {
-    const response = await fetch(`${API_URL}/api/Facility/facilities`);
-    if (!response.ok) throw new Error("Failed to fetch facilities");
+    const response = await fetch(`${API_URL}/api/Facility/facilities`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch facilities: ${response.status} ${response.statusText}`);
+    }
+
     return await response.json();
   } catch (error) {
     console.error("Error fetching facilities:", error);
@@ -90,7 +99,12 @@ export const getFacilityPhotoList = async (facilityId) => {
 
 // Get facilities by sport ID
 export const getFacilitiesBySport = async (sportId) => {
+    try {
   const response = await fetch(`${API_URL}/api/Facility/by-sport/${sportId}`);
   if (!response.ok) throw new Error("Failed to fetch by sport");
   return await response.json();
+  } catch (error) {
+    console.error(`Error fetching facilities for sport ${sportId}:`, error);
+    return []; // Returning empty array as per your original implementation
+  }
 };

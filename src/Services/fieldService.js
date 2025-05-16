@@ -104,7 +104,7 @@ export const getFieldPhotoList = async (fieldId) => {
 
 
 // Get fields by sport ID
-export const fetchFieldsBySportId = async (sportId) => {
+export const getFieldsBySport = async (sportId) => {
   try {
     const response = await fetch(`${API_URL}/api/Field/by-sport/${sportId}`);
     if (!response.ok) throw new Error("Failed to fetch fields by sport");
