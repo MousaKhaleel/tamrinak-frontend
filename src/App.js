@@ -23,9 +23,9 @@ import Profile from './Components/User/Profile';
 import AdminDashboard from './Components/Admin/AdminDashboard';
 import FieldsPage from './Components/Field/FieldsPage';
 import FieldDetails from './Components/Field/FieldDetails';
-import AddFieldForm from './Components/Admin/DashboardComponents/AddFieldForm';
-import AddFacilityForm from './Components/Admin/DashboardComponents/AddFacilityForm';
-import AddSportForm from './Components/Admin/DashboardComponents/AddSportForm';
+import AddFieldForm from './Components/Admin/DashboardComponents/Forms/AddFieldForm';
+import AddFacilityForm from './Components/Admin/DashboardComponents/Forms/AddFacilityForm';
+import AddSportForm from './Components/Admin/DashboardComponents/Forms/AddSportForm';
 import ConfirmEmail from './Components/Confirm/ConfirmEmail';
 import ForgotPassword from './Components/Auth/ForgotPassword';
 import PageNotFound from './Components/Other/PageNotFound';
@@ -38,6 +38,10 @@ import "slick-carousel/slick/slick-theme.css";
 import ResetPassword from './Components/Auth/ResetPassword';
 import FacilityDetails from './Components/Facility/FacilityDetails';
 import History from './Components/User/History';
+import SportList from './Components/Admin/DashboardComponents/Lists/SportList';
+import UserList from './Components/Admin/DashboardComponents/Lists/UserList';
+import FacilityList from './Components/Admin/DashboardComponents/Lists/FacilityList';
+import FieldList from './Components/Admin/DashboardComponents/Lists/FieldList';
 
 
 function App() {
@@ -68,6 +72,10 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path='/history' element={<History />} />
               <Route path='/admin-dashboard' element={<AdminDashboard />} />
+              <Route path="/sport-list" element={<SportList />} />
+              <Route path="/user-list" element={<UserList />} />
+              <Route path="/facility-list" element={<FacilityList />} />
+              <Route path="/field-list" element={<FieldList />} />
               <Route path="/aboutUs" element={<AboutUs />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>

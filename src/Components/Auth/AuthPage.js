@@ -45,8 +45,7 @@ const handleLoginSubmit = async (e) => {
 
     const profile = await profileRes.json();
     
-    // Fetch profile picture
-    const profileImage = await getProfilePicture(profile.id); // Adjust to match your profile object
+    const profileImage = await getProfilePicture(profile.id);
 
     loginUser(token, profile, profileImage);
 

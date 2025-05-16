@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFieldPhotoList } from "../../Services/fieldService";
-import './FieldCard.css';
 import DefaultImage from "../../Assets/Defaults/default-featured-image.png";
 
 const FieldCard = ({ field }) => {
