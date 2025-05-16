@@ -1,5 +1,30 @@
-import React, { useState } from "react";
-import { addFacility } from "../../../Services/facilityService"; // adjust path as needed
+import React, { useState, useEffect } from "react";
+import { addFacility } from "../../../Services/facilityService";
+const API_URL = process.env.API_URL || "https://localhost:7160";
+
+const fetchSports = async () => {
+  try {
+    const response = await fetch(`${API_URL}/api/Sport/all-sports`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch sports");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching sports:", error);
+    return [];
+  }
+};
+
+const facilityTypes = [
+  { value: 0, label: "Football Club" },
+  { value: 1, label: "Gym" },
+  { value: 2, label: "Basketball Club" },
+  { value: 3, label: "Tennis Club" },
+  { value: 4, label: "Swimming Club" },
+  { value: 5, label: "Martial Arts" },
+  { value: 6, label: "Other" },
+];
 
 const initialFormState = {
   name: "",
@@ -12,8 +37,6 @@ const initialFormState = {
   phoneNumber: "",
   description: "",
   pricePerMonth: "",
-  offerDurationInMonths: "",
-  offerPrice: "",
   isAvailable: true,
 };
 
@@ -22,6 +45,24 @@ const AddFacilityForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [sports, setSports] = useState([]);
+  const [loadingSports, setLoadingSports] = useState(true);
+
+  useEffect(() => {
+    const loadSports = async () => {
+      try {
+        const sportsData = await fetchSports();
+        setSports(sportsData);
+      } catch (err) {
+        console.error("Failed to load sports:", err);
+        setError("Failed to load sports list");
+      } finally {
+        setLoadingSports(false);
+      }
+    };
+    
+    loadSports();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -79,20 +120,35 @@ const AddFacilityForm = () => {
               <input type="text" name="locationDesc" className="form-control" required value={form.locationDesc} onChange={handleChange} />
             </div>
 
-            <div className="mb-3">
-              <label className="form-label">Facility Type</label>
-              <select name="type" className="form-select" value={form.type} onChange={handleChange}>
-                <option value="0">Type 0</option>
-                <option value="1">Type 1</option>
-              </select>
-            </div>
-
+<div className="mb-3">
+  <label className="form-label">Facility Type</label>
+  <select name="type" className="form-select" value={form.type} onChange={handleChange}>
+    {facilityTypes.map((type) => (
+      <option key={type.value} value={type.value}>
+        {type.label}
+      </option>
+    ))}
+  </select>
+</div>
             <div className="mb-3">
               <label className="form-label">Sports (hold Ctrl to select multiple)</label>
-              <select multiple className="form-select" value={form.sportIds} onChange={handleSportIdsChange}>
-                <option value="1">Football</option>
-                <option value="2">Basketball</option>
-              </select>
+              {loadingSports ? (
+                <div className="text-muted">Loading sports...</div>
+              ) : (
+                <select 
+                  multiple 
+                  className="form-select" 
+                  value={form.sportIds} 
+                  onChange={handleSportIdsChange}
+                  disabled={loadingSports}
+                >
+                  {sports.map((sport) => (
+                    <option key={sport.id} value={sport.id}>
+                      {sport.name}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
 
             <div className="row mb-3">
@@ -128,11 +184,11 @@ const AddFacilityForm = () => {
               </div>
               <div className="col">
                 <label className="form-label">Offer Duration (months)</label>
-                <input type="number" name="offerDurationInMonths" className="form-control" value={form.offerDurationInMonths} onChange={handleChange} />
+                <input type="number" name="offerDurationInMonths" className="form-control"/>
               </div>
               <div className="col">
                 <label className="form-label">Offer Price</label>
-                <input type="number" name="offerPrice" className="form-control" value={form.offerPrice} onChange={handleChange} />
+                <input type="number" name="offerPrice" className="form-control"/>
               </div>
             </div>
 

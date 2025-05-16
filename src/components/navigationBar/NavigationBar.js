@@ -40,7 +40,7 @@ function NavigationBar() {
           <div className="navbar-nav ms-auto me-4 mb-2 mb-lg-0">
             <Link className="nav-link" to="/">الرئيسية</Link>
             <Link className="nav-link" to="/sports">الرياضات</Link>
-            <Link className="nav-link" to="/sports">الاندية</Link>
+            <Link className="nav-link" to="/facilities">الاندية</Link>
             <Link className="nav-link" to="/aboutUs">حول الموقع</Link>
             {/* <Link className="nav-link" to="/contactUs">تواصل معنا</Link> TODO */}
 
