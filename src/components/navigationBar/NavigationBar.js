@@ -39,8 +39,7 @@ function NavigationBar() {
         <div className="collapse navbar-collapse bg-highlight" id="navbarNavAltMarkup">
           <div className="navbar-nav ms-auto me-4 mb-2 mb-lg-0">
             <Link className="nav-link" to="/">الرئيسية</Link>
-            <Link className="nav-link" to="/sports">الرياضات</Link>
-            <Link className="nav-link" to="/facilities">الاندية</Link>
+            <Link className="nav-link" to="/sports">الرياضات</Link>   
             <Link className="nav-link" to="/aboutUs">حول الموقع</Link>
             {/* <Link className="nav-link" to="/contactUs">تواصل معنا</Link> TODO */}
 
@@ -82,7 +81,7 @@ function NavigationBar() {
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end text-end" aria-labelledby="userDropdown">
                   <li><Link className="dropdown-item" to="/profile">الملف الشخصي</Link></li>
-                  <li><Link className="dropdown-item" to="/settings">تاريخ الحجوزات</Link></li>
+                  <li><Link className="dropdown-item" to="/history">تاريخ الحجوزات</Link></li>
                   <li><hr className="dropdown-divider" /></li>
                   <li><button className="dropdown-item text-danger" onClick={handleLogout}>تسجيل الخروج</button></li>
                 </ul>
