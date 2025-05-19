@@ -1,11 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './SideBar.css';
 
 const Sidebar = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1200);
+      // On mobile, we want the sidebar to be closed by default
+      if (window.innerWidth < 1200) {
+        document.body.classList.add('sidebar-collapsed');
+      } else {
+        document.body.classList.remove('sidebar-collapsed');
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    // Initialize on first render
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+    document.body.classList.toggle('sidebar-collapsed');
+  };
+
   return (
-    <aside dir="rtl" id="sidebar" className="sidebar">
-      <ul className="sidebar-nav" id="sidebar-nav">
+    <>
+      <aside dir="rtl" id="sidebar" className="sidebar">
+        <ul className="sidebar-nav" id="sidebar-nav">
         <li className="nav-item">
           <Link className="nav-link" to="/admin-dashboard">
             <i className="bi bi-grid"></i>
@@ -193,8 +220,9 @@ const Sidebar = () => {
             <span>Blank</span>
           </Link>
         </li>
-      </ul>
-    </aside>
+        </ul>
+      </aside>
+    </>
   );
 };
 
