@@ -1,11 +1,11 @@
 .sidebar {
   position: fixed;
   top: 60px;
-  right: 0; /* Changed from left to right for RTL layout */
+  right: 0;
   bottom: 0;
   width: 300px;
   z-index: 996;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
   padding: 20px;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -14,12 +14,36 @@
   background-color: #fff;
 }
 
+/* Mobile view - sidebar hidden by default */
 @media (max-width: 1199px) {
   .sidebar {
-    right: -300px; /* Adjust the position for RTL */
+    right: -300px;
+  }
+  
+  body:not(.sidebar-collapsed) .sidebar {
+    right: 0;
   }
 }
 
+/* Desktop view - sidebar visible by default */
+@media (min-width: 1200px) {
+  #main,
+  #footer {
+    margin-right: 300px;
+    transition: all 0.3s ease;
+  }
+
+  body.sidebar-collapsed .sidebar {
+    right: -300px;
+  }
+
+  body.sidebar-collapsed #main,
+  body.sidebar-collapsed #footer {
+    margin-right: 0;
+  }
+}
+
+/* Rest of your existing sidebar styles... */
 .sidebar::-webkit-scrollbar {
   width: 5px;
   height: 8px;
@@ -28,30 +52,6 @@
 
 .sidebar::-webkit-scrollbar-thumb {
   background-color: #aab7cf;
-}
-
-@media (min-width: 1200px) {
-  #main,
-  #footer {
-    margin-right: 300px; /* Adjust for RTL */
-  }
-}
-
-@media (max-width: 1199px) {
-  .toggle-sidebar .sidebar {
-    right: 0;
-  }
-}
-
-@media (min-width: 1200px) {
-  .toggle-sidebar #main,
-  .toggle-sidebar #footer {
-    margin-right: 0;
-  }
-
-  .toggle-sidebar .sidebar {
-    right: -300px;
-  }
 }
 
 .sidebar-nav {
@@ -92,7 +92,7 @@
 
 .sidebar-nav .nav-link i {
   font-size: 16px;
-  margin-left: 10px; /* Adjusted from margin-right to margin-left */
+  margin-left: 10px;
   color: #4154f1;
 }
 
@@ -115,7 +115,7 @@
 }
 
 .sidebar-nav .nav-link .bi-chevron-down {
-  margin-right: auto; /* Adjusted from margin-left to margin-right */
+  margin-right: auto;
   transition: transform 0.2s ease-in-out;
 }
 
@@ -141,7 +141,7 @@
 
 .sidebar-nav .nav-content a i {
   font-size: 6px;
-  margin-left: 8px; /* Adjusted from margin-right to margin-left */
+  margin-left: 8px;
   line-height: 0;
   border-radius: 50%;
 }
@@ -153,19 +153,4 @@
 
 .sidebar-nav .nav-content a.active i {
   background-color: #4154f1;
-}
-
-/* Default sidebar */
-.sidebar {
-  width: 250px;
-  transition: all 0.3s ease;
-}
-
-/* Collapsed state */
-body.sidebar-collapsed .sidebar {
-  margin-right: -250px; /* hide it from right (RTL layout) */
-}
-
-body.sidebar-collapsed .toggle-sidebar-btn {
-  transform: rotate(180deg);
 }
