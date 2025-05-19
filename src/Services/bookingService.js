@@ -31,7 +31,12 @@ export const bookField = async (bookingData, token) => {
 
 // Get a specific booking by ID
 export const getBooking = async (bookingId) => {
-  const response = await fetch(`${API_URL}/api/Booking/booking/${bookingId}`);
+  const response = await fetch(`${API_URL}/api/Booking/booking/${bookingId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+     },
+  });
 
   if (!response.ok) {
     const error = await response.json();
@@ -48,6 +53,7 @@ export const getUserBookings = async (userId) => {
       method: 'GET',
       headers: {
         "Accept": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
       },
     });
 
@@ -67,6 +73,9 @@ export const getUserBookings = async (userId) => {
 export const deleteBooking = async (bookingId) => {
   const response = await fetch(`${API_URL}/api/Booking/booking/${bookingId}`, {
     method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    }
   });
 
   if (!response.ok) {
@@ -79,6 +88,9 @@ export const deleteBooking = async (bookingId) => {
 export const cancelBooking = async (bookingId) => {
   const response = await fetch(`${API_URL}/api/Booking/cancel-booking/${bookingId}`, {
     method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    }
   });
 
   if (!response.ok) {
@@ -91,6 +103,9 @@ export const cancelBooking = async (bookingId) => {
 export const payForBooking = async (bookingId) => {
   const response = await fetch(`${API_URL}/api/Booking/${bookingId}/pay`, {
     method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    }
   });
 
   if (!response.ok) {
@@ -105,6 +120,7 @@ export const changeBooking = async (bookingId, updatedData) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
     },
     body: JSON.stringify(updatedData),
   });
@@ -119,7 +135,12 @@ export const changeBooking = async (bookingId, updatedData) => {
 
 // Check availability
 export const getAvailability = async (queryParams = "") => {
-  const response = await fetch(`${API_URL}/api/Booking/availability${queryParams}`);
+  const response = await fetch(`${API_URL}/api/Booking/availability${queryParams}`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    }
+  });
 
   if (!response.ok) {
     const error = await response.json();

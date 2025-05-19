@@ -3,7 +3,10 @@ const API_URL = process.env.API_URL || "https://localhost:7160"; // Adjust the A
 export const addRole = async (userId, role) => {
   return await fetch(`${API_URL}/api/User/AddRole`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
     body: JSON.stringify({ userId, role })
   }).then(res => res.json());
 };
@@ -11,7 +14,10 @@ export const addRole = async (userId, role) => {
 export const getUserRoles = async (userId) => {
   return await fetch(`${API_URL}/api/User/UserRoles`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
     body: JSON.stringify({ userId })
   }).then(res => res.json());
 };
@@ -19,23 +25,38 @@ export const getUserRoles = async (userId) => {
 export const getUserRolesByEmail = async (email) => {
   return await fetch(`${API_URL}/api/User/UserRolesByEmail/${email}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    }
   }).then(res => res.json());
 }
 
 export const getBasicInfoUserList = async () => {
-  return await fetch(`${API_URL}/api/User/BasicInfoUserList`)
-    .then(res => res.json());
+  return await fetch(`${API_URL}/api/User/BasicInfoUserList`, {
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    }
+  }).then(res => res.json());
 };
 
 export const getUserById = async (id) => {
-  return await fetch(`${API_URL}/api/User/${id}`)
-    .then(res => res.json());
+  return await fetch(`${API_URL}/api/User/${id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    }
+  }).then(res => res.json());
 };
 
 export const deleteUser = async (id) => {
   const response = await fetch(`${API_URL}/api/User/${id}`, {
     method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    }
   });
 
   if (!response.ok) {
@@ -76,16 +97,22 @@ export const uploadProfilePicture = async (file, userId) => {
   }
 };
 
-
 export const deleteProfilePicture = async () => {
   return await fetch(`${API_URL}/api/User/delete-profile-picture`, {
-    method: 'DELETE'
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem("token")}`
+    }
   }).then(res => res.json());
 };
 
 export const getProfilePicture = async (userId) => {
   try {
-    const res = await fetch(`${API_URL}/api/User/profile-picture?userId=${userId}`);
+    const res = await fetch(`${API_URL}/api/User/profile-picture?userId=${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }
+    });
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(errorData.message || 'فشل تحميل صورة الملف الشخصي');

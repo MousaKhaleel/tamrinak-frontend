@@ -2,7 +2,12 @@ const API_URL = process.env.API_URL || "https://localhost:7160";
 
 export const fetchSports = async () => {
   try {
-    const response = await fetch(`${API_URL}/api/Sport/all-sports`);
+    const response = await fetch(`${API_URL}/api/Sport/all-sports`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch sports");
     }
@@ -18,7 +23,11 @@ export const fetchSports = async () => {
 // Get single sport by ID (assuming ID is passed as query param like ?id=123)
 export const getSport = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/api/Sport/sport/${id}`);
+    const response = await fetch(`${API_URL}/api/Sport/sport/${id}`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
     if (!response.ok) throw new Error("Failed to fetch sport");
     return await response.json();
   } catch (error) {
@@ -38,6 +47,9 @@ export const addSport = async (sportData) => {
     const response = await fetch(`${API_URL}/api/Sport/sport`, {
       method: "POST",
       body: formData,
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
     });
 
     if (!response.ok) throw new Error("Failed to add sport");
@@ -55,7 +67,9 @@ export const updateSport = async (sportData) => {
   try {
     const response = await fetch(`${API_URL}/api/Sport/sport`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+     },
       body: JSON.stringify(sportData),
     });
     if (!response.ok) throw new Error("Failed to update sport");
@@ -71,6 +85,9 @@ export const deleteSport = async (id) => {
   try {
     const response = await fetch(`${API_URL}/api/Sport/sport?id=${id}`, {
       method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
     });
     if (!response.ok) throw new Error("Failed to delete sport");
     return true;
@@ -86,6 +103,9 @@ export const updateSportImage = async (id, formData) => {
     const response = await fetch(`${API_URL}/api/Sport/sport-image/${id}`, {
       method: "POST",
       body: formData,
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
     });
     if (!response.ok) throw new Error("Failed to update sport image");
     return await response.json();

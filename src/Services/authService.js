@@ -1,11 +1,10 @@
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
 export const register = async (userData) => {//TODO use
-  const response = await fetch(`https://localhost:7160/api/User/Register`, {
+  const response = await fetch(`${API_URL}/api/User/Register`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json",
+     },
     body: JSON.stringify(userData),
   });
 
@@ -18,11 +17,10 @@ export const register = async (userData) => {//TODO use
 };
 
 export const login = async (credentials) => {
-  const response = await fetch(`https://localhost:7160/api/Authentication/Login`, {
+  const response = await fetch(`${API_URL}/api/Authentication/Login`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json",
+     },
     body: JSON.stringify(credentials),
   });
 
@@ -38,6 +36,8 @@ export const login = async (credentials) => {
 export const logout = async () => {
   const response = await fetch(`${API_URL}/api/Authentication/logout`, {
     method: "POST",
+        headers: { "Content-Type": "application/json",
+     },
     credentials: "include", // optional: include cookies if using them
   });
 
@@ -65,7 +65,9 @@ export const sendConfirmationEmail = async (token) => {
 export const confirmEmail = async (token) => {
   const response = await fetch(`${API_URL}/api/Authentication/confirm-email?token=${token}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+     },
   });
 
   if (!response.ok) {

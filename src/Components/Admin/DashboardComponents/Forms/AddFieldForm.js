@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import { addField } from "../../../../Services/fieldService";  // Keep the import consistent
-
+import React, { useState, useEffect } from "react";
+import { addField } from "../../../../Services/fieldService";
+import { fetchSports } from "../../../../Services/sportService";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-const API_URL = process.env.API_URL || "https://localhost:7160"; // Add API_URL for image upload
-
+const API_URL = process.env.API_URL || "https://localhost:7160";
 
 const AddFieldForm = () => {
   const [formData, setFormData] = useState({
@@ -22,9 +20,25 @@ const AddFieldForm = () => {
     isIndoor: false,
   });
 
+  const [sports, setSports] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [images, setImages] = useState([]);
+  const [loadingSports, setLoadingSports] = useState(true);
+
+  useEffect(() => {
+    const loadSports = async () => {
+      try {
+        const sportsData = await fetchSports();
+        setSports(sportsData);
+        setLoadingSports(false);
+      } catch (err) {
+        setError("Failed to load sports. Please try again later.");
+        setLoadingSports(false);
+      }
+    };
+    loadSports();
+  }, []);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -80,8 +94,6 @@ const AddFieldForm = () => {
       setError("");
     });
   };
-  
-  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -163,8 +175,12 @@ const AddFieldForm = () => {
             {[
               { name: "name", placeholder: "اسم الملعب", required: true },
               { name: "locationDesc", placeholder: "وصف الموقع", required: true },
-              { name: "sportId", type: "number", placeholder: "رقم الرياضة", required: true },
-              { name: "pricePerHour", type: "number", placeholder: "السعر لكل ساعة", step: "0.01" },
+              { 
+                name: "pricePerHour", 
+                type: "number", 
+                placeholder: "السعر لكل ساعة", 
+                step: "0.01" 
+              },
               { name: "openTime", type: "time", required: true },
               { name: "closeTime", type: "time", required: true },
               { name: "phoneNumber", type: "tel", placeholder: "رقم الهاتف", required: true },
@@ -184,6 +200,26 @@ const AddFieldForm = () => {
                 />
               </div>
             ))}
+
+            {/* Sport Selection Dropdown */}
+            <div className="col-12">
+              <select
+                name="sportId"
+                value={formData.sportId}
+                onChange={handleChange}
+                className="form-select text-end"
+                required
+                disabled={loadingSports}
+              >
+                <option value="">اختر الرياضة</option>
+                {sports.map((sport) => (
+                  <option key={sport.id} value={sport.id}>
+                    {sport.name}
+                  </option>
+                ))}
+              </select>
+              {loadingSports && <div className="text-muted text-end mt-1">جاري تحميل الرياضات...</div>}
+            </div>
 
             <div className="col-12">
               <input
