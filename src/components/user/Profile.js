@@ -7,6 +7,8 @@ import defaultImage from "../../Assets/Defaults/profile-42914_1280.png";
 import { toast } from "react-toastify";
 
 import CropModal from "./CropModal"; // adjust path
+import { deleteProfilePicture, requestVenueOwnership } from "../../Services/userService";
+
 
 
 function Profile() {
@@ -119,6 +121,43 @@ const handleCroppedImage = async (croppedFile) => {
 };
 
 
+const handleDeleteProfilePicture = async () => {
+  if (!profile.profileImageUrl) {
+    toast.info("لا توجد صورة لحذفها.");
+    return;
+  }
+
+  if (window.confirm("هل أنت متأكد من حذف الصورة الشخصية؟")) {
+    try {
+      setLoading(true);
+      const res = await deleteProfilePicture();
+      if (res.success) {
+        updateProfileImage(null); // Update context
+        toast.success("تم حذف الصورة الشخصية بنجاح.");
+      } else {
+        throw new Error(res.message || "فشل حذف الصورة.");
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+};
+
+const handleVenueOwnerRequest = async () => {
+  try {
+    setLoading(true);
+    const res = await requestVenueOwnership();
+    toast.success(res.message || "تم إرسال طلبك بنجاح.");
+  } catch (err) {
+    toast.error(err.message || "فشل إرسال الطلب.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   return (
     <div className="container mt-1" dir="rtl">
@@ -172,6 +211,14 @@ const handleCroppedImage = async (croppedFile) => {
           {loading && (
             <div className="mt-2 text-primary">جاري رفع الصورة...</div>
           )}
+          <button
+  className="btn btn-outline-danger mt-2"
+  onClick={handleDeleteProfilePicture}
+  disabled={loading}
+>
+  حذف الصورة الشخصية
+</button>
+
         </div>
         <div className="mb-3">
           <FaUserShield className="ms-2 text-warning" />
@@ -187,6 +234,15 @@ const handleCroppedImage = async (croppedFile) => {
             <FaPaperPlane className="ms-2" />
             {loading ? "جاري الإرسال..." : "إرسال رسالة تأكيد"}
           </button>
+
+<button
+  className="btn btn-warning text-white"
+  onClick={handleVenueOwnerRequest}
+  disabled={loading}
+>
+  <FaUserShield className="ms-2" />
+  طلب أن تصبح مالك منشأة
+</button>
 
           <button
             className="btn btn-primary text-white"
