@@ -1,5 +1,6 @@
 const API_URL = process.env.API_URL || "https://localhost:7160"; // Adjust the API URL as needed
 
+// Add Role to User
 export const addRole = async (userId, role) => {
   return await fetch(`${API_URL}/api/User/AddRole`, {
     method: 'PATCH',
@@ -11,17 +12,18 @@ export const addRole = async (userId, role) => {
   }).then(res => res.json());
 };
 
+// Get User Roles by ID
 export const getUserRoles = async (userId) => {
-  return await fetch(`${API_URL}/api/User/UserRoles`, {
-    method: 'POST',
+  return await fetch(`${API_URL}/api/User/UserRoles/${userId}`, {
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       "Authorization": `Bearer ${localStorage.getItem("token")}`
-    },
-    body: JSON.stringify({ userId })
+    }
   }).then(res => res.json());
 };
 
+// Get User Roles by Email
 export const getUserRolesByEmail = async (email) => {
   return await fetch(`${API_URL}/api/User/UserRolesByEmail/${email}`, {
     method: 'GET',
@@ -30,8 +32,9 @@ export const getUserRolesByEmail = async (email) => {
       "Authorization": `Bearer ${localStorage.getItem("token")}`
     }
   }).then(res => res.json());
-}
+};
 
+// Get Basic User Info List
 export const getBasicInfoUserList = async () => {
   return await fetch(`${API_URL}/api/User/BasicInfoUserList`, {
     headers: {
@@ -41,6 +44,7 @@ export const getBasicInfoUserList = async () => {
   }).then(res => res.json());
 };
 
+// Get User by ID
 export const getUserById = async (id) => {
   return await fetch(`${API_URL}/api/User/${id}`, {
     headers: {
@@ -50,6 +54,7 @@ export const getUserById = async (id) => {
   }).then(res => res.json());
 };
 
+// Delete User
 export const deleteUser = async (id) => {
   const response = await fetch(`${API_URL}/api/User/${id}`, {
     method: 'DELETE',
@@ -67,6 +72,17 @@ export const deleteUser = async (id) => {
   return await response.json();
 };
 
+// Delete Profile Picture
+export const deleteProfilePicture = async () => {
+  return await fetch(`${API_URL}/api/User/delete-profile-picture`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem("token")}`
+    }
+  }).then(res => res.json());
+};
+
+// Upload Profile Picture
 export const uploadProfilePicture = async (file, userId) => {
   const formData = new FormData();
   formData.append('file', file);
@@ -75,7 +91,6 @@ export const uploadProfilePicture = async (file, userId) => {
     const response = await fetch(`${API_URL}/api/User/profile-picture?userId=${userId}`, {
       method: 'PATCH',
       body: formData,
-      // Add authorization header if needed
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       }
@@ -97,15 +112,7 @@ export const uploadProfilePicture = async (file, userId) => {
   }
 };
 
-export const deleteProfilePicture = async () => {
-  return await fetch(`${API_URL}/api/User/delete-profile-picture`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem("token")}`
-    }
-  }).then(res => res.json());
-};
-
+// Get Profile Picture
 export const getProfilePicture = async (userId) => {
   try {
     const res = await fetch(`${API_URL}/api/User/profile-picture?userId=${userId}`, {
@@ -115,7 +122,7 @@ export const getProfilePicture = async (userId) => {
     });
     if (!res.ok) {
       const errorData = await res.json();
-      throw new Error(errorData.message || 'فشل تحميل صورة الملف الشخصي');
+      throw new Error(errorData.message || 'Failed to load profile picture');
     }
     const data = await res.json();
     return data?.Base64Image || null;
@@ -125,6 +132,7 @@ export const getProfilePicture = async (userId) => {
   }
 };
 
+// Get User Profile
 export const getProfile = async (token) => {
   if (!token) {
     throw new Error('No token found');
@@ -137,4 +145,21 @@ export const getProfile = async (token) => {
       'Authorization': `Bearer ${token}`
     }
   }).then(res => res.json());
+};
+
+// Request Venue Ownership
+export const requestVenueOwnership = async () => {
+  const res = await fetch(`${API_URL}/api/User/request-venue-ownership`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem("token")}`
+    }
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'فشل في إرسال الطلب.');
+  }
+
+  return res.json();
 };
