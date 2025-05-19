@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addFacility } from "../../../../Services/facilityService";
+import { addFacility, addFacilityImages  } from "../../../../Services/facilityService";
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
 const fetchSports = async () => {
@@ -47,6 +47,7 @@ const AddFacilityForm = () => {
   const [success, setSuccess] = useState(false);
   const [sports, setSports] = useState([]);
   const [loadingSports, setLoadingSports] = useState(true);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     const loadSports = async () => {
@@ -77,30 +78,45 @@ const AddFacilityForm = () => {
     setForm(prev => ({ ...prev, sportIds: values }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setError("");
-    setSuccess(false);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitting(true);
+  setError("");
+  setSuccess(false);
 
-    try {
-      const facilityData = {
-        ...form,
-        type: parseInt(form.type),
-        pricePerMonth: form.pricePerMonth ? parseFloat(form.pricePerMonth) : null,
-        offerPrice: form.offerPrice ? parseFloat(form.offerPrice) : null,
-        offerDurationInMonths: form.offerDurationInMonths ? parseInt(form.offerDurationInMonths) : null,
-      };
+  try {
+    const facilityData = {
+      ...form,
+      type: parseInt(form.type),
+      pricePerMonth: form.pricePerMonth ? parseFloat(form.pricePerMonth) : null,
+      offerPrice: form.offerPrice ? parseFloat(form.offerPrice) : null,
+      offerDurationInMonths: form.offerDurationInMonths ? parseInt(form.offerDurationInMonths) : null,
+    };
 
-      await addFacility(facilityData);
-      setSuccess(true);
-      setForm(initialFormState);
-    } catch (err) {
-      setError("Failed to add facility: " + err.message);
-    } finally {
-      setSubmitting(false);
+    const createdFacility = await addFacility(facilityData);
+
+    // Upload images if any
+    if (createdFacility?.id && images.length > 0) {
+      const formData = new FormData();
+      formData.append("facilityId", createdFacility.id); // Backend expects 'facilityId'
+
+      images.forEach((file) => {
+        formData.append("formFiles", file); // must match backend field name
+      });
+
+      await addFacilityImages(formData);
     }
-  };
+
+    setSuccess(true);
+    setForm(initialFormState);
+    setImages([]); // clear images
+  } catch (err) {
+    setError("Failed to add facility: " + err.message);
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   return (
     <div className="container mt-4">
@@ -176,6 +192,17 @@ const AddFacilityForm = () => {
               <label className="form-label">Description</label>
               <textarea name="description" className="form-control" rows="3" value={form.description} onChange={handleChange}></textarea>
             </div>
+
+<div className="mb-3">
+  <label className="form-label">Upload Facility Images</label>
+  <input
+    type="file"
+    className="form-control"
+    accept="image/*"
+    multiple
+    onChange={(e) => setImages(Array.from(e.target.files))}
+  />
+</div>
 
             <div className="row mb-3">
               <div className="col">
