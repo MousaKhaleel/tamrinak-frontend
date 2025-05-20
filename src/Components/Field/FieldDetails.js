@@ -19,6 +19,7 @@ import Slider from "react-slick";
 import StarRating from "../Review/StarRating";
 import ReviewList from "../Review/ReviewList";
 import ReviewForm from "../Review/ReviewForm";
+import { FaClock } from 'react-icons/fa';
 
 function FieldDetails() {
   const { fieldId } = useParams();
@@ -136,6 +137,7 @@ const loadReviews = async () => {
 const handleSubmitReview = async (reviewData) => {
   try {
     await createReview({
+      facilityId: null,
       fieldId: Number(fieldId),
       rating: reviewData.rating,
       comment: reviewData.comment
@@ -210,6 +212,11 @@ const handleViewReplies = async (reviewId) => {
             <strong>السعر لكل ساعة:</strong>
             <p>{field.pricePerHour ? `${field.pricePerHour} د.أ` : "اتصل للاستعلام"}</p>
           </div>
+
+                    <div className="detail-section">
+                      <strong><FaClock /> أوقات العمل:</strong>
+                      <p>{field.openTime} - {field.closeTime}</p>
+                    </div>
           
 <div className="rating-summary">
   <StarRating rating={averageRating} />

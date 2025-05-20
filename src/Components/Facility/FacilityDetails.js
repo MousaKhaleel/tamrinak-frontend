@@ -113,6 +113,7 @@ function FacilityDetails() {
     try {
       await createReview({
         facilityId: Number(facilityId),
+        fieldId: null,
         rating: reviewData.rating,
         comment: reviewData.comment
       }, user.token);
