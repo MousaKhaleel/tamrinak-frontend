@@ -16,6 +16,7 @@ function NavigationBar() {
   };
 
   const isAdmin = user?.profile?.roles?.includes('Admin') || user?.profile?.roles?.includes('SuperAdmin');
+  const isManager = user?.profile?.roles?.includes('VenueManager');
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark" dir="rtl">
@@ -39,13 +40,18 @@ function NavigationBar() {
         <div className="collapse navbar-collapse bg-highlight" id="navbarNavAltMarkup">
           <div className="navbar-nav ms-auto me-4 mb-2 mb-lg-0">
             <Link className="nav-link" to="/">الرئيسية</Link>
-            <Link className="nav-link" to="/sports">الرياضات</Link>   
+            <Link className="nav-link" to="/sports">الرياضات</Link>
             <Link className="nav-link" to="/aboutUs">حول الموقع</Link>
             {/* <Link className="nav-link" to="/contactUs">تواصل معنا</Link> TODO */}
 
             {isAdmin && (
               <Link className="nav-link text-warning" style={{ background: "green", borderRadius: "5px" }} to="/admin-dashboard">{/*  //todo */}
                 لوحة التحكم
+              </Link>
+            )}
+            {isManager && (
+              <Link className="nav-link text-warning" style={{ background: "black", borderRadius: "5px" }} to="/add-facility">
+                اضف منشأتك
               </Link>
             )}
           </div>
@@ -69,13 +75,13 @@ function NavigationBar() {
                       height="30"
                     />
                   ) : (
-                      <img 
-                        src={pic} 
-                    alt="Avatar"
-                    className="rounded-circle m-1 ms-2 me-2"
-                    width="30"
-                    height="30"
-                      />
+                    <img
+                      src={pic}
+                      alt="Avatar"
+                      className="rounded-circle m-1 ms-2 me-2"
+                      width="30"
+                      height="30"
+                    />
                   )}
                   <span className="text-light">مرحبا {user?.profile?.name}!</span>
                 </button>
