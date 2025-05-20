@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getField, getFieldPhotoList } from "../../Services/fieldService";
+import { 
+  getField, 
+  getFieldPhotoList, 
+} from "../../Services/fieldService";
+import {
+  getFieldReviews,
+  createReview,
+  likeReview,
+  createReviewReply,
+  getReviewReplies
+} from "../../Services/reviewService";
 import { bookField } from "../../Services/bookingService";
 import './FieldDetails.css';
 import { useAuth } from '../../Context/AuthContext';
-
 import DefaultImage from "../../Assets/Defaults/default-featured-image.png";
-
 import Slider from "react-slick";
+import StarRating from "../Review/StarRating";
+import ReviewList from "../Review/ReviewList";
+import ReviewForm from "../Review/ReviewForm";
 
 function FieldDetails() {
   const { fieldId } = useParams();
@@ -26,8 +37,16 @@ function FieldDetails() {
   });
   const [bookingError, setBookingError] = useState(null);
   const [bookingSuccess, setBookingSuccess] = useState(null);
-  const [fieldImages, setFieldImages] = useState([]);
-
+  
+  // Review states
+const [reviews, setReviews] = useState([]);
+const [averageRating, setAverageRating] = useState(0);
+const [reviewCount, setReviewCount] = useState(0);
+const [reviewLoading, setReviewLoading] = useState(false);
+const [reviewError, setReviewError] = useState(null);
+const [showReviewForm, setShowReviewForm] = useState(false);
+const [replyingTo, setReplyingTo] = useState(null);
+const [viewingReplies, setViewingReplies] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,9 +55,11 @@ function FieldDetails() {
         setField(data);
 
         const photoList = await getFieldPhotoList(fieldId);
-
         const urls = photoList.map(photo => photo.imageData);
         setImages(urls);
+
+        // Load reviews
+        await loadReviews();
       } catch (err) {
         console.error(err);
         setError("فشل في جلب بيانات الملعب أو الصور.");
@@ -51,6 +72,21 @@ function FieldDetails() {
     else navigate("/");
   }, [fieldId, navigate]);
 
+const loadReviews = async () => {
+  setReviewLoading(true);
+  setReviewError(null);
+  try {
+    const { reviews, averageRating, reviewCount } = await getFieldReviews(fieldId);
+    setReviews(reviews);
+    setAverageRating(averageRating || 0); // Ensure it's never undefined
+    setReviewCount(reviewCount || 0);
+  } catch (err) {
+    console.error(err);
+    setReviewError("فشل في تحميل التقييمات");
+  } finally {
+    setReviewLoading(false);
+  }
+};
 
   const handleBookingChange = (e) => {
     const { name, value } = e.target;
@@ -60,23 +96,18 @@ function FieldDetails() {
     }));
   };
 
-  const parseTime = (timeStr) => {
-    const [hour, minute] = timeStr.split(":").map(Number);
-    return { hour, minute };
-  };
-
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     setBookingError(null);
     setBookingSuccess(null);
 
-const start = 2;
-const end = 3;
+    const start = 2;
+    const end = 3;
 
-if (start >= end) {
-  setBookingError("وقت النهاية يجب أن يكون بعد وقت البداية.");
-  return;
-}
+    if (start >= end) {
+      setBookingError("وقت النهاية يجب أن يكون بعد وقت البداية.");
+      return;
+    }
 
     try {
       const transformedData = {
@@ -86,9 +117,6 @@ if (start >= end) {
         endTime: bookingData.endTime + ":00",
         numberOfPeople: bookingData.numberOfPeople,
       };
-
-
-
 
       await bookField(transformedData, user.token);
       setBookingSuccess("تم الحجز بنجاح!");
@@ -104,7 +132,55 @@ if (start >= end) {
     }
   };
 
+  // Review handlers
+const handleSubmitReview = async (reviewData) => {
+  try {
+    await createReview({
+      fieldId: Number(fieldId),
+      rating: reviewData.rating,
+      comment: reviewData.comment
+    }, user.token);
+    await loadReviews();
+    setShowReviewForm(false);
+  } catch (error) {
+    setReviewError(error.message || "فشل في إضافة التقييم");
+  }
+};
 
+const handleLikeReview = async (reviewId) => {
+  try {
+    await likeReview(reviewId, user.token);
+    await loadReviews();
+  } catch (error) {
+    setReviewError(error.message || "فشل في تسجيل الإعجاب");
+  }
+};
+
+const handleSubmitReply = async (reviewId, replyText) => {
+  try {
+    await createReviewReply(reviewId, replyText, user.token);
+    await loadReviews();
+    setReplyingTo(null);
+  } catch (error) {
+    setReviewError(error.message || "فشل في إضافة الرد");
+  }
+};
+
+const handleViewReplies = async (reviewId) => {
+  if (viewingReplies === reviewId) {
+    setViewingReplies(null);
+  } else {
+    try {
+      const replies = await getReviewReplies(reviewId);
+      setReviews(reviews.map(review => 
+        review.id === reviewId ? { ...review, replies } : review
+      ));
+      setViewingReplies(reviewId);
+    } catch (error) {
+      setReviewError(error.message || "فشل في تحميل الردود");
+    }
+  }
+};
 
   if (loading) return <div>جاري التحميل...</div>;
   if (error) return <div>{error}</div>;
@@ -125,22 +201,6 @@ if (start >= end) {
           )}
         </div>
 
-        {/* <div className="slider-container">
-  <Slider dots={true} infinite={true} speed={500} slidesToShow={1} slidesToScroll={1}>
-    {images.length > 0 ? (
-      images.map((url, idx) => (
-        <div key={idx}>
-          <img src={url} alt={`${field.name} ${idx + 1}`} className="slider-image" />
-        </div>
-      ))
-    ) : (
-      <div>
-        <img src={DefaultImage} alt={field.name} className="slider-image" />
-      </div>
-    )}
-  </Slider>
-</div> */}
-
         <div className="details">
           <div className="detail-section">
             <strong>الوصف:</strong>
@@ -150,6 +210,15 @@ if (start >= end) {
             <strong>السعر لكل ساعة:</strong>
             <p>{field.pricePerHour ? `${field.pricePerHour} د.أ` : "اتصل للاستعلام"}</p>
           </div>
+          
+<div className="rating-summary">
+  <StarRating rating={averageRating} />
+  <span>
+    {reviewCount > 0 
+      ? `${averageRating.toFixed(1)} من 5 (${reviewCount} تقييمات)`
+      : "لا توجد تقييمات بعد"}
+  </span>
+</div>
 
           <h3 style={{ marginTop: '2rem' }}>احجز هذا الملعب</h3>
           {bookingError && <div style={{ color: "red" }}>{bookingError}</div>}
@@ -210,6 +279,45 @@ if (start >= end) {
           </form>
         </div>
       </div>
+
+      {/* Reviews Section */}
+      <section className="reviews-section" style={{ marginTop: '3rem' }}>
+        <div className="reviews-header">
+          <h2>تقييمات الملعب</h2>
+          {user && (
+            <button 
+              onClick={() => setShowReviewForm(!showReviewForm)}
+              className="btn btn-primary"
+            >
+              {showReviewForm ? 'إلغاء' : 'أضف تقييمك'}
+            </button>
+          )}
+        </div>
+
+        {reviewError && <div className="alert alert-danger">{reviewError}</div>}
+
+        {showReviewForm && (
+          <ReviewForm 
+            onSubmit={handleSubmitReview}
+            onCancel={() => setShowReviewForm(false)}
+          />
+        )}
+
+        {reviewLoading ? (
+          <div>جاري تحميل التقييمات...</div>
+        ) : (
+          <ReviewList
+            reviews={reviews}
+            onLike={handleLikeReview}
+            onReply={handleSubmitReply}
+            onViewReplies={handleViewReplies}
+            viewingReplies={viewingReplies}
+            currentUserId={user?.id}
+            replyingTo={replyingTo}
+            setReplyingTo={setReplyingTo}
+          />
+        )}
+      </section>
     </div>
   );
 }
