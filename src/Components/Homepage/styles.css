@@ -259,3 +259,10 @@ html, body, h1, h2, p, ul, ol {
     justify-content: center;
   }
 }
+.sports-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+}

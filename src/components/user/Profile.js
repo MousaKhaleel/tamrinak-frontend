@@ -7,7 +7,7 @@ import defaultImage from "../../Assets/Defaults/profile-42914_1280.png";
 import { toast } from "react-toastify";
 
 import CropModal from "./CropModal"; // adjust path
-import { deleteProfilePicture, requestVenueOwnership } from "../../Services/userService";
+import { deleteProfilePicture, requestVenueManager } from "../../Services/userService";
 
 
 
@@ -145,10 +145,10 @@ const handleDeleteProfilePicture = async () => {
   }
 };
 
-const handleVenueOwnerRequest = async () => {
+const handleVenueManagerRequest = async () => {
   try {
     setLoading(true);
-    const res = await requestVenueOwnership();
+    const res = await requestVenueManager();
     toast.success(res.message || "تم إرسال طلبك بنجاح.");
   } catch (err) {
     toast.error(err.message || "فشل إرسال الطلب.");
@@ -237,7 +237,7 @@ const handleVenueOwnerRequest = async () => {
 
 <button
   className="btn btn-warning text-white"
-  onClick={handleVenueOwnerRequest}
+  onClick={handleVenueManagerRequest}
   disabled={loading}
 >
   <FaUserShield className="ms-2" />

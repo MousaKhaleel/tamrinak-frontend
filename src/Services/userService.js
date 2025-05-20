@@ -163,3 +163,34 @@ export const requestVenueOwnership = async () => {
 
   return res.json();
 };
+
+export const requestVenueManager = async () => {
+  const res = await fetch(`${API_URL}/api/User/request-venue-manager`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem("token")}`
+    }
+  });
+
+  if (!res.ok) {
+    let errorMessage = 'فشل في إرسال الطلب.';
+    
+    try {
+      // First try to parse as JSON
+      const errorData = await res.json();
+      errorMessage = errorData.message || errorMessage;
+    } catch (e) {
+      // If JSON parsing fails, try to get the response as text
+      try {
+        const text = await res.text();
+        errorMessage = text || errorMessage;
+      } catch (e) {
+        // If all fails, use the default message
+      }
+    }
+    
+    throw new Error(errorMessage);
+  }
+
+  return res.json();
+};

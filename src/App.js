@@ -33,6 +33,7 @@ import SportList from './Components/Admin/DashboardComponents/Lists/SportList';
 import UserList from './Components/Admin/DashboardComponents/Lists/UserList';
 import FacilityList from './Components/Admin/DashboardComponents/Lists/FacilityList';
 import FieldList from './Components/Admin/DashboardComponents/Lists/FieldList';
+import PendingRequestsList from './Components/Admin/DashboardComponents/Lists/PendingRequestsList';
 
 function App() {
   const location = useLocation();
@@ -81,6 +82,7 @@ function App() {
           <Route path="/user-list" element={<UserList />} />
           <Route path="/facility-list" element={<FacilityList />} />
           <Route path="/field-list" element={<FieldList />} />
+          <Route path="/pending-requests" element={<PendingRequestsList />} />
           <Route path="/aboutUs" element={<AboutUs />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>

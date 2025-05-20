@@ -58,6 +58,12 @@ const Sidebar = () => {
             className="nav-content collapse"
             data-bs-parent="#sidebar-nav"
           >
+                      <li>
+              <Link to="/pending-requests">
+                <i className="bi bi-circle"></i>
+                <span>Pending Requests</span>
+              </Link>
+            </li>
             <li>
               <Link to="/sport-list">
                 <i className="bi bi-circle"></i>
