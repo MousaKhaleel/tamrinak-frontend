@@ -9,11 +9,10 @@ import running from "../../Assets/StockPhotos/New/pexels-runffwpu-2168292.jpg";
 import karate from "../../Assets/StockPhotos/Sports/pexels-artempodrez-6253307.jpg";
 import swim from "../../Assets/StockPhotos/Sports/pexels-jim-de-ramos-395808-1263349.jpg";
 import football2 from "../../Assets/StockPhotos/Sports/pexels-markusspiske-114296.jpg";
-import bowling from "../../Assets/StockPhotos/Sports/pexels-pavel-danilyuk-7429604.jpg";
-import ps3 from "../../Assets/StockPhotos/Sports/pexels-kowalievska-1174746.jpg";
-import gym from "../../Assets/StockPhotos/Facilities/pexels-willpicturethis-1954524.jpg";
+import { FiPlusCircle } from "react-icons/fi";
 
 import "./styles.css";
+import { Link } from "react-router-dom";
 
 // TODO replace with recomendations
 const sports = [
@@ -37,6 +36,15 @@ const sports = [
         title: "Football-كرة القدم",
         description: "انضم إلى مباريات كرة القدم وطور مهاراتك في هذه الرياضة الجماعية الممتعة.",
         button: "عرض الملاعب"
+    },
+    ,
+    {
+        icon: <FiPlusCircle size={64} color="#333" />,
+        alt: "المزيد من الرياضات",
+        title: "More-المزيد",
+        description: "اكتشف المزيد من الرياضات والمرافق الرياضية المتاحة لدينا.",
+        button: "عرض الكل",
+        link: "/sports" // Adding a link property
     }
 ];
 
@@ -82,12 +90,20 @@ function Homepage() {
   {sports.map((sport, index) => (
     <div className="sports-card" key={index}>
       <div className="sports-image-wrapper">
-        <img src={sport.img} alt={sport.alt} loading="lazy" />
+        {sport.img ? (
+          <img src={sport.img} alt={sport.alt} loading="lazy" />
+        ) : (
+          <div className="sports-icon-wrapper">
+            {sport.icon}
+          </div>
+        )}
       </div>
       <div className="sports-content">
         <h3>{sport.title}</h3>
         <p>{sport.description}</p>
-        <button>{sport.button}</button>
+        <button onClick={() => window.location.href = sport.link || "/sports"} className="sports-button">
+          {sport.button}
+        </button>
       </div>
     </div>
   ))}
