@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getFacility, getFacilityPhotoList } from "../../Services/facilityService";
-import { createMembership } from "../../Services/membershipService"; // Changed from bookFacility
+import { createMembership } from "../../Services/membershipService";
+import {
+  getFacilityReviews,
+  createReview,
+  likeReview,
+  createReviewReply,
+  getReviewReplies
+} from "../../Services/reviewService";
 import { useAuth } from '../../Context/AuthContext';
 import DefaultImage from "../../Assets/Defaults/default-featured-image.png";
+import StarRating from "../Review/StarRating";
+import ReviewList from "../Review/ReviewList";
+import ReviewForm from "../Review/ReviewForm";
 import { FaMapMarkerAlt, FaClock, FaPhone, FaMoneyBillWave } from 'react-icons/fa';
 
 function FacilityDetails() {
@@ -19,6 +29,16 @@ function FacilityDetails() {
   });
   const [membershipError, setMembershipError] = useState(null);
   const [membershipSuccess, setMembershipSuccess] = useState(null);
+  
+  // Review states
+  const [reviews, setReviews] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+  const [reviewLoading, setReviewLoading] = useState(false);
+  const [reviewError, setReviewError] = useState(null);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [replyingTo, setReplyingTo] = useState(null);
+  const [viewingReplies, setViewingReplies] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +49,9 @@ function FacilityDetails() {
         const photoList = await getFacilityPhotoList(facilityId);
         const urls = photoList.map(photo => photo.imageData);
         setImages(urls);
+
+        // Load reviews
+        await loadReviews();
       } catch (err) {
         console.error(err);
         setError("فشل في جلب بيانات المرفق أو الصور.");
@@ -41,34 +64,99 @@ function FacilityDetails() {
     else navigate("/");
   }, [facilityId, navigate]);
 
-const handleMembershipSubmit = async (e) => {
-  e.preventDefault();
-  setMembershipError(null);
-  setMembershipSuccess(null);
-
-  try {
-    const addMembershipDto = {
-      facilityId: facilityId,
-      offerId: null,
-    };
-
-    const result = await createMembership(addMembershipDto, user.token);
-    
-    if (result.success) {
-      setMembershipSuccess("تم إنشاء الاشتراك بنجاح!");
-      // Optional: redirect or refresh user data
-    } else {
-      setMembershipError(result.message || "فشل في إنشاء الاشتراك");
+  const loadReviews = async () => {
+    setReviewLoading(true);
+    setReviewError(null);
+    try {
+      const { reviews, averageRating, reviewCount } = await getFacilityReviews(facilityId);
+      setReviews(reviews);
+      setAverageRating(averageRating || 0);
+      setReviewCount(reviewCount || 0);
+    } catch (err) {
+      console.error(err);
+      setReviewError("فشل في تحميل التقييمات");
+    } finally {
+      setReviewLoading(false);
     }
-    
-  } catch (error) {
-    console.error('Membership creation error:', error);
-    setMembershipError(
-      error.message || 
-      "حدث خطأ غير متوقع أثناء محاولة إنشاء الاشتراك. يرجى المحاولة مرة أخرى لاحقًا"
-    );
-  }
-};
+  };
+
+  const handleMembershipSubmit = async (e) => {
+    e.preventDefault();
+    setMembershipError(null);
+    setMembershipSuccess(null);
+
+    try {
+      const addMembershipDto = {
+        facilityId: facilityId,
+        offerId: null,
+      };
+
+      const result = await createMembership(addMembershipDto, user.token);
+      
+      if (result.success) {
+        setMembershipSuccess("تم إنشاء الاشتراك بنجاح!");
+      } else {
+        setMembershipError(result.message || "فشل في إنشاء الاشتراك");
+      }
+      
+    } catch (error) {
+      console.error('Membership creation error:', error);
+      setMembershipError(
+        error.message || 
+        "حدث خطأ غير متوقع أثناء محاولة إنشاء الاشتراك. يرجى المحاولة مرة أخرى لاحقًا"
+      );
+    }
+  };
+
+  // Review handlers
+  const handleSubmitReview = async (reviewData) => {
+    try {
+      await createReview({
+        facilityId: Number(facilityId),
+        rating: reviewData.rating,
+        comment: reviewData.comment
+      }, user.token);
+      await loadReviews();
+      setShowReviewForm(false);
+    } catch (error) {
+      setReviewError(error.message || "فشل في إضافة التقييم");
+    }
+  };
+
+  const handleLikeReview = async (reviewId) => {
+    try {
+      await likeReview(reviewId, user.token);
+      await loadReviews();
+    } catch (error) {
+      setReviewError(error.message || "فشل في تسجيل الإعجاب");
+    }
+  };
+
+  const handleSubmitReply = async (reviewId, replyText) => {
+    try {
+      await createReviewReply(reviewId, replyText, user.token);
+      await loadReviews();
+      setReplyingTo(null);
+    } catch (error) {
+      setReviewError(error.message || "فشل في إضافة الرد");
+    }
+  };
+
+  const handleViewReplies = async (reviewId) => {
+    if (viewingReplies === reviewId) {
+      setViewingReplies(null);
+    } else {
+      try {
+        const replies = await getReviewReplies(reviewId);
+        setReviews(reviews.map(review => 
+          review.id === reviewId ? { ...review, replies } : review
+        ));
+        setViewingReplies(reviewId);
+      } catch (error) {
+        setReviewError(error.message || "فشل في تحميل الردود");
+      }
+    }
+  };
 
   if (loading) return <div>جاري التحميل...</div>;
   if (error) return <div>{error}</div>;
@@ -115,6 +203,15 @@ const handleMembershipSubmit = async (e) => {
             <p>{facility.phoneNumber}</p>
           </div>
 
+          <div className="rating-summary">
+            <StarRating rating={averageRating} />
+            <span>
+              {reviewCount > 0 
+                ? `${averageRating.toFixed(1)} من 5 (${reviewCount} تقييمات)`
+                : "لا توجد تقييمات بعد"}
+            </span>
+          </div>
+
           <h3 style={{ marginTop: '2rem' }}>اشترك في النادي</h3>
           {membershipError && <div style={{ color: "red" }}>{membershipError}</div>}
           {membershipSuccess && <div style={{ color: "green" }}>{membershipSuccess}</div>}
@@ -124,6 +221,45 @@ const handleMembershipSubmit = async (e) => {
           </form>
         </div>
       </div>
+
+      {/* Reviews Section */}
+      <section className="reviews-section" style={{ marginTop: '3rem' }}>
+        <div className="reviews-header">
+          <h2>تقييمات المرفق</h2>
+          {user && (
+            <button 
+              onClick={() => setShowReviewForm(!showReviewForm)}
+              className="btn btn-primary"
+            >
+              {showReviewForm ? 'إلغاء' : 'أضف تقييمك'}
+            </button>
+          )}
+        </div>
+
+        {reviewError && <div className="alert alert-danger">{reviewError}</div>}
+
+        {showReviewForm && (
+          <ReviewForm 
+            onSubmit={handleSubmitReview}
+            onCancel={() => setShowReviewForm(false)}
+          />
+        )}
+
+        {reviewLoading ? (
+          <div>جاري تحميل التقييمات...</div>
+        ) : (
+          <ReviewList
+            reviews={reviews}
+            onLike={handleLikeReview}
+            onReply={handleSubmitReply}
+            onViewReplies={handleViewReplies}
+            viewingReplies={viewingReplies}
+            currentUserId={user?.id}
+            replyingTo={replyingTo}
+            setReplyingTo={setReplyingTo}
+          />
+        )}
+      </section>
     </div>
   );
 }
