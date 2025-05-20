@@ -52,6 +52,7 @@ export const createReview = async (reviewData, token) => {
     },
     body: JSON.stringify({
       facilityId: reviewData.facilityId,
+      fieldId: reviewData.fieldId,
       rating: reviewData.rating,
       comment: reviewData.comment
     })
