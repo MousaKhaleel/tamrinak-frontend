@@ -216,3 +216,17 @@
 .header-nav .profile .dropdown-item:hover {
   background-color: #f6f9ff;
 }
+.backHome {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
+    color: #102E50;
+    transition: color 0.2s ease;
+  }
+
+  .backHome:hover {
+    color: #19416e;
+  }

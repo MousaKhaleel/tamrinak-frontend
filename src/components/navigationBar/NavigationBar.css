@@ -34,14 +34,14 @@
   position: relative;
   font-size: 1.2rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--secondary-color);
   transition: color 0.3s ease;
 }
 
 /* TODO */
 .nav-link:hover,
 .nav-link.active {
-  color: var(--secondary-color);
+  color: #fff;
 }
 
 .nav-link::after {
