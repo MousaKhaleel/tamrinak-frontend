@@ -22,7 +22,18 @@ export const getFieldReviews = async (fieldId) => {
 export const getFacilityReviews = async (facilityId) => {
   const response = await fetch(`${API_URL}/api/review/facility/${facilityId}`);
   if (!response.ok) throw new Error('Failed to fetch facility reviews');
-  return await response.json();
+  const reviews = await response.json();
+  
+  // Calculate average if not provided by backend
+  const averageRating = reviews.length > 0 
+    ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+    : 0;
+  
+  return {
+    reviews,
+    averageRating,
+    reviewCount: reviews.length
+  };
 };
 
 // Single Review Operations
@@ -40,7 +51,7 @@ export const createReview = async (reviewData, token) => {
       'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify({
-      fieldId: reviewData.fieldId,
+      facilityId: reviewData.facilityId,
       rating: reviewData.rating,
       comment: reviewData.comment
     })
