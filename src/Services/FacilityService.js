@@ -67,17 +67,42 @@ export const removeFacility = async (facilityId) => {
 };
 
 // Add multiple facility images
-export const addFacilityImages = async (formData) => {
-  const response = await fetch(`${API_URL}/api/Facility/facility-images`, {
-    method: "POST",
-    body: formData,
-    headers: {
-      "Authorization": `Bearer ${localStorage.getItem("token")}`
-    }
+const addFacilityImages = async (facilityId, images) => {
+  const formData = new FormData();
+  formData.append("facilityId", facilityId.toString());
+  
+  images.forEach((file, index) => {
+    formData.append(`formFiles`, file);
   });
 
-  if (!response.ok) throw new Error("Failed to upload images");
-  return await response.text();
+  try {
+    const response = await fetch(`${API_URL}/api/Facility/facility-images`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    const text = await response.text();
+    try {
+      // Try to parse as JSON
+      const data = text ? JSON.parse(text) : {};
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to upload images");
+      }
+      return data;
+    } catch (e) {
+      // If not JSON, use the text as error message
+      if (!response.ok) {
+        throw new Error(text || "Failed to upload images");
+      }
+      return text;
+    }
+  } catch (error) {
+    console.error("Error uploading images:", error);
+    throw error;
+  }
 };
 
 
