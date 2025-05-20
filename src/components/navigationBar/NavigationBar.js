@@ -41,8 +41,6 @@ function NavigationBar() {
           <div className="navbar-nav ms-auto me-4 mb-2 mb-lg-0">
             <Link className="nav-link" to="/">الرئيسية</Link>
             <Link className="nav-link" to="/sports">الرياضات</Link>
-            <Link className="nav-link" to="/aboutUs">حول الموقع</Link>
-            {/* <Link className="nav-link" to="/contactUs">تواصل معنا</Link> TODO */}
 
             {isAdmin && (
               <Link className="nav-link text-warning" style={{ background: "green", borderRadius: "5px" }} to="/admin-dashboard">{/*  //todo */}
@@ -50,11 +48,14 @@ function NavigationBar() {
               </Link>
             )}
             {isManager && (
-              <Link className="nav-link text-warning" style={{ background: "black", borderRadius: "5px" }} to="/add-facility">
+              <Link className="nav-link text-warning" style={{ background: "black", borderRadius: "5px" }} to="/add-facility"> {/*  //todo add manager dashboard */}
                 اضف منشأتك
               </Link>
             )}
+                        <Link className="nav-link" to="/aboutUs">حول الموقع</Link>
+            {/* <Link className="nav-link" to="/contactUs">تواصل معنا</Link> TODO */}
           </div>
+          
 
           <div className="d-flex gap-2">
             {user ? (

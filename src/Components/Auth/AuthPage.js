@@ -94,7 +94,7 @@ const handleLoginSubmit = async (e) => {
             required
             disabled={loading}
           />
-          <button type="submit" className="w-100" disabled={loading}>
+          <button type="submit" className="authButton w-100" disabled={loading}>
             {loading ? "جاري الدخول..." : "دخول"}
           </button>
           <p className="toggle-text">
@@ -134,7 +134,7 @@ const handleLoginSubmit = async (e) => {
             required
             disabled={loading}
           />
-          <button type="submit" className="w-100" disabled={loading}>
+          <button type="submit" className="authButton w-100" disabled={loading}>
             {loading ? "جاري التسجيل..." : "تسجيل"}
           </button>
           <p className="toggle-text" onClick={togglePanel}>

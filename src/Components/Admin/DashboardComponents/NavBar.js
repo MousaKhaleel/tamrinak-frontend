@@ -24,7 +24,7 @@ const NavBar = () => {
           <button type="submit" title="Search"><i className="bi bi-search"></i></button>
         </form>
       </div>
-      <div className="back-home icon-wrapper"><a href="/"><GoHome /></a></div>
+      <div className="backHome icon-wrapper"><a href="/"><GoHome /></a></div>
 
       <nav className="header-nav ms-auto">
         <ul className="d-flex align-items-center">
