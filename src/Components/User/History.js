@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getUserBookings } from '../../Services/bookingService';
+import { getUserBookings, cancelBooking } from '../../Services/bookingService';
 import { useAuth } from '../../Context/AuthContext';
 
 function History() {
@@ -27,6 +27,26 @@ function History() {
         }
     }, [userId]);
 
+    const handleCancelBooking = async (bookingId) => {
+        try {
+            await cancelBooking(bookingId);
+            // Update the bookings list after cancellation
+            setBookings(bookings.map(booking => 
+                booking.bookingId === bookingId 
+                    ? { ...booking, status: 'Cancelled' } 
+                    : booking
+            ));
+        } catch (err) {
+            setError(err.message || 'Failed to cancel booking');
+        }
+    };
+
+    const isFutureBooking = (bookingDate) => {
+        const today = new Date();
+        const bookingDateObj = new Date(bookingDate);
+        return bookingDateObj > today;
+    };
+
     if (loading) {
         return <div className="loading-message">Loading your booking history...</div>;
     }
@@ -52,8 +72,17 @@ function History() {
                             <p><strong>Duration:</strong> {booking.duration}</p>
                             <p><strong>Field ID:</strong> {booking.fieldId}</p>
                             <p><strong>Total Cost:</strong> ${booking.totalCost}</p>
-                            <p><strong>Status:</strong> {booking.isPaid ? 'Paid' : 'Unpaid'}</p>
+                            <p><strong>Status:</strong> {booking.status || (booking.isPaid ? 'Paid' : 'Unpaid')}</p>
                             <p><strong>Participants:</strong> {booking.numberOfPeople}</p>
+                            
+                            {isFutureBooking(booking.bookingDate) && booking.status !== 1 && (
+                                <button 
+                                    onClick={() => handleCancelBooking(booking.bookingId)}
+                                    className="cancel-booking-btn"
+                                >
+                                    Cancel Booking
+                                </button>
+                            )}
                         </div>
                     </div>
                 ))}

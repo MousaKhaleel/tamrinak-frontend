@@ -126,7 +126,6 @@ export const getRenFieldPhoto = async (photoId) => {
 
 // Get list of field photos
 export const getFieldPhotoList = async (fieldId) => {
-  console.log("Fetching field photo list for field ID:", fieldId);
   const response = await fetch(`${API_URL}/api/Field/field-photo-list?fieldId=${fieldId}`, {
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("token")}`

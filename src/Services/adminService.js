@@ -1,13 +1,18 @@
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
 // User related endpoints
-export const getAdminUsers = async () => {
-  return await fetch(`${API_URL}/api/admin/users`, {
-    headers: { 
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem("token")}`
-    }
-  }).then(res => res.json());
+export const getUsers = async () => {
+    return await fetch(`${API_URL}/api/admin/users`, {
+        headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+    }).then(res => {
+        if (!res.ok) {
+            throw new Error('Failed to fetch users');
+        }
+        return res.json();
+    });
 };
 
 export const getAdminUserById = async (id) => {
