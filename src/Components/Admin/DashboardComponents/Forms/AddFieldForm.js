@@ -103,66 +103,65 @@ const AddFieldForm = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  setSuccess("");
 
-    try {
-      // Prepare the field data payload
-      const payload = {
-        ...formData,
-        sportId: parseInt(formData.sportId),
-        pricePerHour: parseFloat(formData.pricePerHour || 0),
-        openTime: formData.openTime,
-        closeTime: formData.closeTime,
-        capacity: formData.capacity ? parseInt(formData.capacity) : null,
-        hasLighting: formData.hasLighting,
-        isIndoor: formData.isIndoor,
-      };
+  try {
+    // Prepare and submit the field data
+    const payload = {
+      ...formData,
+      sportId: parseInt(formData.sportId),
+      pricePerHour: parseFloat(formData.pricePerHour || 0),
+      openTime: formData.openTime,
+      closeTime: formData.closeTime,
+      capacity: formData.capacity ? parseInt(formData.capacity) : null,
+      hasLighting: formData.hasLighting,
+      isIndoor: formData.isIndoor,
+    };
 
-      // Submit the field data
-      const field = await addField(payload);  // Assume this returns the new field with an 'id'
+    const field = await addField(payload); // Make sure this returns the new field's ID
 
-      // Upload images if available
-      if (images.length > 0) {
-        const formDataImages = new FormData();
-        images.forEach((image) => {
-          formDataImages.append("formFiles", image);
-        });
-      
-        const uploadResponse = await fetch(
-          `${API_URL}/api/Field/add-field-images?fieldId=${field.id}`,
-          {
-            method: "POST",
-            body: formDataImages
-          }
-        );
-      
-        if (!uploadResponse.ok) {
-          throw new Error("Image upload failed.");
-        }
-      }
-      // Show success message and reset form
-      setSuccess("تمت إضافة الملعب بنجاح!");
-      setFormData({
-        name: "",
-        locationDesc: "",
-        sportId: "",
-        pricePerHour: "",
-        openTime: "",
-        closeTime: "",
-        phoneNumber: "",
-        capacity: "",
-        locationMap: "",
-        hasLighting: false,
-        isIndoor: false,
+    // Upload images if any
+    if (images.length > 0 && field.id) {
+      const formDataObj = new FormData();
+      formDataObj.append("fieldId", field.id);
+      images.forEach((image) => {
+        formDataObj.append("formFiles", image); // name must match your API's parameter
       });
-      setImages([]);
-    } catch (err) {
-      setError("فشل في إضافة الملعب أو الصور. يرجى التحقق من المدخلات.");
+
+      const response = await fetch(`${API_URL}/api/Field/field-images`, {
+        method: "POST",
+        body: formDataObj,
+      });
+
+      if (!response.ok) {
+        throw new Error("Image upload failed");
+      }
     }
-  };
+
+    setSuccess("تمت إضافة الملعب والصور بنجاح!");
+    setFormData({
+      name: "",
+      locationDesc: "",
+      sportId: "",
+      pricePerHour: "",
+      openTime: "",
+      closeTime: "",
+      phoneNumber: "",
+      capacity: "",
+      locationMap: "",
+      hasLighting: false,
+      isIndoor: false,
+    });
+    setImages([]);
+  } catch (err) {
+    console.error(err);
+    setError("فشل في إضافة الملعب أو الصور. يرجى التحقق من المدخلات.");
+  }
+};
+
 
   return (
     <div className="container mt-5" dir="rtl">
