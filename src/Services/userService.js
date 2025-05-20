@@ -149,7 +149,7 @@ export const getProfile = async (token) => {
 
 // Request Venue Ownership
 export const requestVenueOwnership = async () => {
-  const res = await fetch(`${API_URL}/api/User/request-venue-ownership`, {
+  const res = await fetch(`${API_URL}/api/User/request-venue-ownership-existing-venue`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${localStorage.getItem("token")}`

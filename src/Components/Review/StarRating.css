@@ -1,0 +1,51 @@
+.star-rating {
+  direction: ltr; /* Force LTR for star display */
+  display: inline-flex;
+  unicode-bidi: bidi-override;
+}
+
+.star {
+  color: #ddd;
+  font-size: 1.5rem;
+  position: relative;
+  display: inline-block;
+  margin: 0 2px;
+}
+
+.star.full {
+  color: #ffc107; /* Gold color for filled stars */
+}
+
+.star.half::before {
+  color: #ffc107;
+  content: '★';
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+}
+
+.star.empty {
+  color: #ddd; /* Light gray for empty stars */
+}
+
+/* For the stars selector in ReviewForm */
+.stars-selector {
+  display: inline-flex;
+  direction: ltr; /* Force LTR even in RTL contexts */
+}
+
+.stars-selector .star {
+  cursor: pointer;
+  transition: color 0.2s;
+  font-size: 2rem;
+  margin: 0 3px;
+}
+
+.stars-selector .star.selected {
+  color: #ffc107;
+}
+
+.stars-selector .star:hover {
+  transform: scale(1.1);
+}
