@@ -37,9 +37,9 @@ const FacilityCard = ({ facility }) => {
         />
         <div className="card-body">
           <h5 className="card-title">{facility.name}</h5>
-          <p className="card-text text-muted">{facility.locationDesc}</p>
+          <p className="card-text text-muted">{facility.description}</p>
           <p className="card-text">
-            <FaMapMarkerAlt className="icon" /> 
+            {/* <FaMapMarkerAlt className="icon" /> TODO */}
             {facility.pricePerMonth ? `${facility.pricePerMonth} د.أ/شهر` : "call for price."}
           </p>
           <p className="card-text small">
