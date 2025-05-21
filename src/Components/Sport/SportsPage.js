@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchSports } from "../../Services/sportService";
 import SportCard from "./SportCard";
-import Footer from "../Footer/Footer";
-import NavigationBar from "../NavigationBar/NavigationBar";
 
 const SportsPage = () => {
   const [sports, setSports] = useState([]);
