@@ -4,7 +4,7 @@ import Footer from './Components/Footer/Footer';
 import NavigationBar from './Components/NavigationBar/NavigationBar';
 import AdminNavbar from './Components/Admin/DashboardComponents/NavBar';
 import { ThemeProvider } from './Context/ThemeContext';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import AboutUs from './Components/AboutUs/AboutUs';
 import AuthPage from './Components/Auth/AuthPage';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
@@ -16,8 +16,6 @@ import Profile from './Components/User/Profile';
 import AdminDashboard from './Components/Admin/AdminDashboard';
 import FieldsPage from './Components/Field/FieldsPage';
 import FieldDetails from './Components/Field/FieldDetails';
-import AddFacilityForm from './Components/Admin/DashboardComponents/Forms/Facility/AddFacilityPage';
-import AddSportForm from './Components/Admin/DashboardComponents/Forms/AddSportForm';
 import ConfirmEmail from './Components/Confirm/ConfirmEmail';
 import ForgotPassword from './Components/Auth/ForgotPassword';
 import PageNotFound from './Components/Other/PageNotFound';
@@ -37,6 +35,8 @@ import AddFieldPage from './Components/Admin/DashboardComponents/Forms/Field/Add
 import EditFieldPage from './Components/Admin/DashboardComponents/Forms/Field/EditFieldPage';
 import AddFacilityPage from './Components/Admin/DashboardComponents/Forms/Facility/AddFacilityPage';
 import EditFacilityPage from './Components/Admin/DashboardComponents/Forms/Facility/EditFacilityPage';
+import AddSportPage from './Components/Admin/DashboardComponents/Forms/Sport/AddSportPage';
+import EditSportPage from './Components/Admin/DashboardComponents/Forms/Sport/EditSportPage';
 
 function App() {
   const location = useLocation();
@@ -52,7 +52,8 @@ function App() {
     "/fields/edit/:id", 
     "/facility/add",
     "/facility/edit/:id", 
-    "/add-sport",
+    "/sport/add",
+    "/sport/edit/:id",
     "/sport-list",
     "/user-list",
     "/facility-list",
@@ -77,7 +78,8 @@ function App() {
           <Route path="/fields/edit/:id" element={<EditFieldPage />} />
           <Route path='/facility/add' element={<AddFacilityPage />} />
           <Route path='/facility/edit/:id' element={<EditFacilityPage />} />
-          <Route path='/add-sport' element={<AddSportForm />} />
+          <Route path='/sport/add' element={<AddSportPage />} />
+          <Route path='/sport/edit/:id' element={<EditSportPage />} />
           <Route path="/confirm-email" element={<ConfirmEmail />} />
           <Route path='/reset-password' element={<ResetPassword />} />
           <Route path="/facilities" element={<FacilitiesPage />} />

@@ -112,7 +112,7 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/add-sport">
+              <Link to="/sport/add">
                 <i className="bi bi-circle"></i>
                 <span>add sport</span>
               </Link>

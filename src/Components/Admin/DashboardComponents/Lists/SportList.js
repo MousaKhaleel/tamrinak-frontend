@@ -1,3 +1,4 @@
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchSports, deleteSport } from '../../../../Services/sportService';
 
@@ -5,6 +6,7 @@ function SportList() {
     const [sports, setSports] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadSports();
@@ -27,12 +29,8 @@ function SportList() {
     const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete this sport?")) {
             try {
-                const success = await deleteSport(id);
-                if (success) {
-                    setSports(sports.filter(sport => sport.id !== id));
-                } else {
-                    throw new Error("Failed to delete sport");
-                }
+                await deleteSport(id);
+                setSports(sports.filter(sport => sport.id !== id));
             } catch (err) {
                 setError(err.message);
                 console.error("Failed to delete sport:", err);
@@ -40,13 +38,8 @@ function SportList() {
         }
     };
 
-    if (loading) {
-        return <div>Loading sports...</div>;
-    }
-
-    if (error) {
-        return <div className="text-red-500">Error: {error}</div>;
-    }
+    if (loading) return <div>Loading sports...</div>;
+    if (error) return <div className="text-red-500">Error: {error}</div>;
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -64,16 +57,18 @@ function SportList() {
                     <tbody className="bg-white divide-y divide-gray-200">
                         {sports.map((sport) => (
                             <tr key={sport.id}>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="text-sm font-medium text-gray-900">{sport.name}</div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="text-sm text-gray-500">{sport.description}</div>
-                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">{sport.name}</td>
+                                <td className="px-6 py-4">{sport.description}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <Link
+                                        to={`/sport/edit/${sport.id}`}
+                                        className="text-indigo-600 hover:text-indigo-900 mr-4"
+                                    >
+                                        Edit
+                                    </Link>
                                     <button
                                         onClick={() => handleDelete(sport.id)}
-                                        className="text-red-600 hover:text-red-900 mr-4"
+                                        className="text-red-600 hover:text-red-900"
                                     >
                                         Delete
                                     </button>
@@ -85,9 +80,7 @@ function SportList() {
             </div>
 
             {sports.length === 0 && !loading && (
-                <div className="text-center py-8 text-gray-500">
-                    No sports found
-                </div>
+                <div className="text-center py-8 text-gray-500">No sports found</div>
             )}
         </div>
     );
