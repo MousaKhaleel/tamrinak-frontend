@@ -2,6 +2,13 @@ import { useState, useEffect } from 'react';
 import { getUserBookings, cancelBooking } from '../../Services/bookingService';
 import { useAuth } from '../../Context/AuthContext';
 
+// Map the backend status to frontend display
+const BOOKING_STATUS = {
+  Pending: { text: 'Pending', class: 'bg-warning text-dark' },
+  Cancelled: { text: 'Cancelled', class: 'bg-danger' },
+  Completed: { text: 'Completed', class: 'bg-success' }
+};
+
 function History() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -104,14 +111,11 @@ function History() {
                 </p>
                 <p>
                   <strong>Status:</strong>{' '}
-                  {booking.status === 'Cancelled' ? (
-                    <span className="badge bg-danger">Cancelled</span>
-                  ) : booking.status === 1 ? (
-                    <span className="badge bg-success">Active</span>
-                  ) : booking.isPaid ? (
-                    <span className="badge bg-success">Paid</span>
-                  ) : (
-                    <span className="badge bg-warning text-dark">Unpaid</span>
+                  <span className={`badge ${BOOKING_STATUS[booking.status]?.class || 'bg-secondary'}`}>
+                    {BOOKING_STATUS[booking.status]?.text || booking.status}
+                  </span>
+                  {booking.isPaid && booking.status !== 'Cancelled' && (
+                    <span className="badge bg-success ms-2">Paid</span>
                   )}
                 </p>
                 <p>
@@ -119,7 +123,9 @@ function History() {
                 </p>
               </div>
               <div className="card-footer bg-transparent d-flex justify-content-end">
-                {isFutureBooking(booking.bookingDate) && booking.status !== 'Cancelled' && (
+                {isFutureBooking(booking.bookingDate) && 
+                booking.status !== 'Cancelled' && 
+                booking.status !== 'Completed' && (
                   <button
                     onClick={() => handleCancelBooking(booking.bookingId)}
                     className="btn btn-outline-danger btn-sm"

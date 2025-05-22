@@ -122,7 +122,7 @@ const handleCroppedImage = async (croppedFile) => {
 
 
 const handleDeleteProfilePicture = async () => {
-  if (!profile.profileImageUrl) {
+  if (!profile.profileImageBase64) {
     toast.info("لا توجد صورة لحذفها.");
     return;
   }
@@ -163,9 +163,9 @@ const handleVenueManagerRequest = async () => {
     <div className="container mt-1" dir="rtl">
       <div className="card shadow p-4 pt-5 mx-auto" style={{ maxWidth: "600px", borderRadius: "16px" }}>
         <div className="d-flex align-items-center gap-3 mb-4 flex-wrap">
-{profile.profileImageUrl ? (
+{profile.profileImageBase64 ? (
   <img
-    src={`data:image/jpeg;base64,${profile.profileImageUrl}`}
+    src={`data:image/jpeg;base64,${profile.profileImageBase64}`}
     alt="الصورة الشخصية"
     className="rounded-circle border"
     style={{

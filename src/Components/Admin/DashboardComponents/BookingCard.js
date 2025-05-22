@@ -26,7 +26,7 @@ const BookingCard = () => {
           </div>
         </div>
 
-        <div className="card-body">
+        <div className="booking-card-body">
           <h5 className="card-title">الحجوزات <span>| اليوم</span></h5>
           <div className="d-flex align-items-center flex-row-reverse">
             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">

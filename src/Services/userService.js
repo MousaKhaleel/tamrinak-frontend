@@ -73,13 +73,26 @@ export const deleteUser = async (id) => {
 };
 
 // Delete Profile Picture
-export const deleteProfilePicture = async () => {
-  return await fetch(`${API_URL}/api/User/delete-profile-picture`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem("token")}`
+export const deleteProfilePicture = async (userId) => {
+  try {
+    const response = await fetch(`${API_URL}/api/User/delete-profile-picture?userId=${userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to delete profile picture');
     }
-  }).then(res => res.json());
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error deleting profile picture:', error);
+    throw error;
+  }
 };
 
 // Upload Profile Picture
@@ -120,12 +133,15 @@ export const getProfilePicture = async (userId) => {
         'Authorization': `Bearer ${localStorage.getItem("token")}`
       }
     });
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || 'Failed to load profile picture');
-    }
-    const data = await res.json();
-    return data?.Base64Image || null;
+if (res.status === 404) return null;
+
+if (!res.ok) {
+  const errorData = await res.json();
+  throw new Error(errorData.message || "Failed to load profile picture");
+}
+
+const data = await res.json();
+return data?.Base64Image || null;
   } catch (error) {
     console.error('Error fetching profile picture:', error);
     throw error;

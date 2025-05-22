@@ -1,7 +1,27 @@
 :root {
+  --transition-speed: 0.3s;
+}
+
+/* Light Theme */
+:root[data-theme='light'] {
   --primary-color: #F5C45E;
   --secondary-color: #102E50;
-  --transition-speed: 0.3s;
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --card-bg: #ffffff;
+  --card-text: #465b52;
+  --hover-bg: #19416e;
+}
+
+/* Dark Theme */
+:root[data-theme='dark'] {
+  --primary-color: #FFD369;
+  --secondary-color: #222831;
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --card-bg: #1e1e1e;
+  --card-text: #cccccc;
+  --hover-bg: #393e46;
 }
 
 /* :root {
@@ -9,6 +29,36 @@
   --secondary-color: #cf9f0d;
   --transition-speed: 0.3s;
 } */
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+.home-card {
+  background: var(--card-bg);
+  color: var(--card-text);
+}
+
+.we-info h1,
+.sports-card h3 {
+  color: var(--secondary-color);
+}
+
+.we-info p,
+.sports-card p {
+  color: var(--card-text);
+}
+
+.sports-card button {
+  background: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.sports-card button:hover {
+  background-color: var(--hover-bg);
+}
 
 /* Global Reset */
 html, body, h1, h2, p, ul, ol {

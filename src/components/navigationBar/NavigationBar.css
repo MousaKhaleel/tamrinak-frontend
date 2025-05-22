@@ -1,44 +1,50 @@
 :root {
   --primary-color: #F5C45E;
-  --secondary-color: #;
+  --secondary-color: #102E50;
+  --primary-dark-color: #153559; /* Added missing */
+  --text-color: #012970;         /* Added missing */
   --transition-speed: 0.3s;
 }
-/* Maintain fixed header with semi-transparent background */
+
+/*--------------------------------------------------------------
+# General Navbar Styles
+--------------------------------------------------------------*/
 .navbar {
   padding-inline: 20px;
-  /* position: fixed; TODO */
   top: 0;
   width: 100%;
   height: 70px;
   z-index: 9999;
-  transition: background-color 0.3s ease, height 0.3s ease, box-shadow 0.3s ease;
-  background-color: #F5C45E !important; /* Override Bootstrap dark */
+  background-color: var(--primary-color);
+  transition: background-color var(--transition-speed), height var(--transition-speed), box-shadow var(--transition-speed);
+  box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
 }
 
-.bg-highlight {
-  background-color: #F5C45E;
-  padding: 10px;
-  border-radius: 4px;
-}
-
-/* Scrolled state — optional, if you plan to toggle it via JS TODO */
 .navbar.scrolled {
-  background-color: #f5c55edd;
   height: 60px;
   padding: 10px;
+  background-color: #f5c55edd;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Nav links hover + active underline effect */
+/* Background highlight for sections behind links */
+.bg-highlight {
+  background-color: var(--primary-color);
+  padding-inline: 4px;
+  border-radius: 4px;
+}
+
+/*--------------------------------------------------------------
+# Nav Links
+--------------------------------------------------------------*/
 .nav-link {
   position: relative;
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--secondary-color);
-  transition: color 0.3s ease;
+  transition: color var(--transition-speed);
 }
 
-/* TODO */
 .nav-link:hover,
 .nav-link.active {
   color: #fff;
@@ -52,7 +58,7 @@
   width: 0;
   height: 2px;
   background-color: var(--secondary-color);
-  transition: width 0.3s ease;
+  transition: width var(--transition-speed);
 }
 
 .nav-link:hover::after,
@@ -60,13 +66,15 @@
   width: 30%;
 }
 
-/* Style login/register buttons */
+/*--------------------------------------------------------------
+# Buttons
+--------------------------------------------------------------*/
 .btn-outline-light {
   border: 2px solid var(--secondary-color);
   color: var(--secondary-color);
   background-color: rgba(213, 181, 101, 0.1);
   font-weight: 500;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
 .btn-outline-light:hover {
@@ -76,10 +84,169 @@
 
 .btn-primary {
   background-color: var(--secondary-color);
+  color: #fff;
   border: none;
   font-weight: 500;
 }
 
 .btn-primary:hover {
   background-color: #19416e;
+}
+
+/*--------------------------------------------------------------
+# Header / Admin Header
+--------------------------------------------------------------*/
+.header {
+  height: 70px;
+  background-color: #fff;
+  padding-right: 20px;
+  z-index: 9999;
+  transition: all 0.5s;
+  box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
+}
+
+.header .toggle-sidebar-btn {
+  font-size: 32px;
+  padding-right: 10px;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.header .search-bar {
+  min-width: 360px;
+  padding: 0 20px;
+}
+
+@media (max-width: 1199px) {
+  .header .search-bar {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0px 0px 15px rgba(1, 41, 112, 0.1);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s;
+  }
+
+  .header .search-bar-show {
+    top: 60px;
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+/*--------------------------------------------------------------
+# Search Form
+--------------------------------------------------------------*/
+.header .search-form {
+  width: 100%;
+}
+
+.header .search-form input {
+  border: 1px solid rgba(1, 41, 112, 0.2);
+  font-size: 14px;
+  padding: 7px 38px 7px 8px;
+  border-radius: 3px;
+  width: 100%;
+  color: var(--text-color);
+  transition: 0.3s;
+}
+
+.header .search-form input:focus,
+.header .search-form input:hover {
+  outline: none;
+  box-shadow: 0 0 10px rgba(1, 41, 112, 0.15);
+  border-color: rgba(1, 41, 112, 0.3);
+}
+
+.header .search-form button {
+  margin-right: -30px;
+  background: none;
+  border: none;
+}
+
+.header .search-form button i {
+  color: var(--text-color);
+}
+
+/*--------------------------------------------------------------
+# Dark Theme
+--------------------------------------------------------------*/
+.dark .header {
+  background-color: #121212;
+  box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dark .header .toggle-sidebar-btn,
+.dark .header .search-form button i {
+  color: #f5f5f5;
+}
+
+.dark .header .search-form input {
+  background-color: #333;
+  color: #f5f5f5;
+  border-color: #444;
+}
+
+.dark .header .search-form input:focus,
+.dark .header .search-form input:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  border-color: #555;
+}
+
+.dark .dropdown-menu {
+  background-color: #121212;
+  border: 1px solid #333;
+}
+
+.dark .dropdown-item:hover {
+  background-color: #333;
+}
+
+/*--------------------------------------------------------------
+# Utility & Extras
+--------------------------------------------------------------*/
+.backHome {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  color: var(--text-color);
+  transition: color 0.2s ease;
+}
+
+.backHome:hover {
+  color: var(--primary-color);
+}
+
+.dropdown-menu, .dropdown-item {
+  text-align: right;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  transition: background-color 0.2s ease;
+}
+
+.rounded-circle {
+  object-fit: cover;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }

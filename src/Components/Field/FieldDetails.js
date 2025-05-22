@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { 
-  getField, 
-  getFieldPhotoList, 
+import {
+  getField,
+  getFieldPhotoList,
 } from "../../Services/fieldService";
 import {
   getFieldReviews,
@@ -19,7 +19,10 @@ import Slider from "react-slick";
 import StarRating from "../Review/StarRating";
 import ReviewList from "../Review/ReviewList";
 import ReviewForm from "../Review/ReviewForm";
-import { FaClock } from 'react-icons/fa';
+import { FaClock, FaLightbulb, FaHome } from 'react-icons/fa';
+import { GiTennisCourt } from 'react-icons/gi';
+
+import StatusDialog from './../UI/StatusDialog/StatusDialog'
 
 function FieldDetails() {
   const { fieldId } = useParams();
@@ -38,16 +41,21 @@ function FieldDetails() {
   });
   const [bookingError, setBookingError] = useState(null);
   const [bookingSuccess, setBookingSuccess] = useState(null);
-  
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+  const [dialogError, setDialogError] = useState(false);
+
+
   // Review states
-const [reviews, setReviews] = useState([]);
-const [averageRating, setAverageRating] = useState(0);
-const [reviewCount, setReviewCount] = useState(0);
-const [reviewLoading, setReviewLoading] = useState(false);
-const [reviewError, setReviewError] = useState(null);
-const [showReviewForm, setShowReviewForm] = useState(false);
-const [replyingTo, setReplyingTo] = useState(null);
-const [viewingReplies, setViewingReplies] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+  const [reviewLoading, setReviewLoading] = useState(false);
+  const [reviewError, setReviewError] = useState(null);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [replyingTo, setReplyingTo] = useState(null);
+  const [viewingReplies, setViewingReplies] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,21 +81,21 @@ const [viewingReplies, setViewingReplies] = useState(null);
     else navigate("/");
   }, [fieldId, navigate]);
 
-const loadReviews = async () => {
-  setReviewLoading(true);
-  setReviewError(null);
-  try {
-    const { reviews, averageRating, reviewCount } = await getFieldReviews(fieldId);
-    setReviews(reviews);
-    setAverageRating(averageRating || 0); // Ensure it's never undefined
-    setReviewCount(reviewCount || 0);
-  } catch (err) {
-    console.error(err);
-    setReviewError("فشل في تحميل التقييمات");
-  } finally {
-    setReviewLoading(false);
-  }
-};
+  const loadReviews = async () => {
+    setReviewLoading(true);
+    setReviewError(null);
+    try {
+      const { reviews, averageRating, reviewCount } = await getFieldReviews(fieldId);
+      setReviews(reviews);
+      setAverageRating(averageRating || 0); // Ensure it's never undefined
+      setReviewCount(reviewCount || 0);
+    } catch (err) {
+      console.error(err);
+      setReviewError("فشل في تحميل التقييمات");
+    } finally {
+      setReviewLoading(false);
+    }
+  };
 
   const handleBookingChange = (e) => {
     const { name, value } = e.target;
@@ -106,7 +114,9 @@ const loadReviews = async () => {
     const end = 3;
 
     if (start >= end) {
-      setBookingError("وقت النهاية يجب أن يكون بعد وقت البداية.");
+      setDialogMessage("وقت النهاية يجب أن يكون بعد وقت البداية.");
+      setDialogError(true);
+      setDialogOpen(true);
       return;
     }
 
@@ -120,7 +130,10 @@ const loadReviews = async () => {
       };
 
       await bookField(transformedData, user.token);
-      setBookingSuccess("تم الحجز بنجاح!");
+      setDialogMessage("تم الحجز بنجاح!");
+      setDialogError(false);
+      setDialogOpen(true);
+
       setBookingData({
         fieldId,
         bookingDate: "",
@@ -129,60 +142,63 @@ const loadReviews = async () => {
         numberOfPeople: 1,
       });
     } catch (error) {
-      setBookingError(error.message || "فشل الحجز");
+      setDialogMessage(error.message || "فشل الحجز");
+      setDialogError(true);
+      setDialogOpen(true);
     }
   };
 
+
   // Review handlers
-const handleSubmitReview = async (reviewData) => {
-  try {
-    await createReview({
-      facilityId: null,
-      fieldId: Number(fieldId),
-      rating: reviewData.rating,
-      comment: reviewData.comment
-    }, user.token);
-    await loadReviews();
-    setShowReviewForm(false);
-  } catch (error) {
-    setReviewError(error.message || "فشل في إضافة التقييم");
-  }
-};
-
-const handleLikeReview = async (reviewId) => {
-  try {
-    await likeReview(reviewId, user.token);
-    await loadReviews();
-  } catch (error) {
-    setReviewError(error.message || "فشل في تسجيل الإعجاب");
-  }
-};
-
-const handleSubmitReply = async (reviewId, replyText) => {
-  try {
-    await createReviewReply(reviewId, replyText, user.token);
-    await loadReviews();
-    setReplyingTo(null);
-  } catch (error) {
-    setReviewError(error.message || "فشل في إضافة الرد");
-  }
-};
-
-const handleViewReplies = async (reviewId) => {
-  if (viewingReplies === reviewId) {
-    setViewingReplies(null);
-  } else {
+  const handleSubmitReview = async (reviewData) => {
     try {
-      const replies = await getReviewReplies(reviewId);
-      setReviews(reviews.map(review => 
-        review.id === reviewId ? { ...review, replies } : review
-      ));
-      setViewingReplies(reviewId);
+      await createReview({
+        facilityId: null,
+        fieldId: Number(fieldId),
+        rating: reviewData.rating,
+        comment: reviewData.comment
+      }, user.token);
+      await loadReviews();
+      setShowReviewForm(false);
     } catch (error) {
-      setReviewError(error.message || "فشل في تحميل الردود");
+      setReviewError(error.message || "فشل في إضافة التقييم");
     }
-  }
-};
+  };
+
+  const handleLikeReview = async (reviewId) => {
+    try {
+      await likeReview(reviewId, user.token);
+      await loadReviews();
+    } catch (error) {
+      setReviewError(error.message || "فشل في تسجيل الإعجاب");
+    }
+  };
+
+  const handleSubmitReply = async (reviewId, replyText) => {
+    try {
+      await createReviewReply(reviewId, replyText, user.token);
+      await loadReviews();
+      setReplyingTo(null);
+    } catch (error) {
+      setReviewError(error.message || "فشل في إضافة الرد");
+    }
+  };
+
+  const handleViewReplies = async (reviewId) => {
+    if (viewingReplies === reviewId) {
+      setViewingReplies(null);
+    } else {
+      try {
+        const replies = await getReviewReplies(reviewId);
+        setReviews(reviews.map(review =>
+          review.id === reviewId ? { ...review, replies } : review
+        ));
+        setViewingReplies(reviewId);
+      } catch (error) {
+        setReviewError(error.message || "فشل في تحميل الردود");
+      }
+    }
+  };
 
   if (loading) return <div>جاري التحميل...</div>;
   if (error) return <div>{error}</div>;
@@ -205,85 +221,145 @@ const handleViewReplies = async (reviewId) => {
 
         <div className="details">
           <div className="detail-section">
-            <strong>الوصف:</strong>
+            <strong>الرياضة:</strong>
+            <p>
+              <GiTennisCourt style={{ marginLeft: '5px' }} />
+              {field.sport?.name || 'غير محدد'}
+            </p>
+          </div>
+
+          <div className="detail-section">
+            <strong>الموقع:</strong>
             <p>{field.locationDesc}</p>
           </div>
+
+          <div className="detail-section">
+            <strong>الموقع على الخريطة:</strong>
+            <p>{field.locationMap || 'غير متوفر'}</p>
+          </div>
+
           <div className="detail-section">
             <strong>السعر لكل ساعة:</strong>
             <p>{field.pricePerHour ? `${field.pricePerHour} د.أ` : "اتصل للاستعلام"}</p>
           </div>
 
-                    <div className="detail-section">
-                      <strong><FaClock /> أوقات العمل:</strong>
-                      <p>{field.openTime} - {field.closeTime}</p>
-                    </div>
-          
-<div className="rating-summary">
-  <StarRating rating={averageRating} />
-  <span>
-    {reviewCount > 0 
-      ? `${averageRating.toFixed(1)} من 5 (${reviewCount} تقييمات)`
-      : "لا توجد تقييمات بعد"}
-  </span>
-</div>
+          <div className="detail-section">
+            <strong>رقم التواصل:</strong>
+            <p>{field.phoneNumber}</p>
+          </div>
 
-          <h3 style={{ marginTop: '2rem' }}>احجز هذا الملعب</h3>
-          {bookingError && <div style={{ color: "red" }}>{bookingError}</div>}
-          {bookingSuccess && <div style={{ color: "green" }}>{bookingSuccess}</div>}
+          <div className="detail-section">
+            <strong>سعة الملعب:</strong>
+            <p>{field.capacity} أشخاص</p>
+          </div>
 
-          <form className="booking-form" onSubmit={handleBookingSubmit}>
-            <div className="form-group">
-              <label htmlFor="bookingDate">التاريخ:</label>
-              <input
-                type="date"
-                id="bookingDate"
-                name="bookingDate"
-                value={bookingData.bookingDate}
-                onChange={handleBookingChange}
-                required
-              />
+          <div className="detail-section">
+            <strong><FaClock /> أوقات العمل:</strong>
+            <p>{field.openTime} - {field.closeTime}</p>
+          </div>
+
+          <div className="detail-section">
+            <strong>الإضاءة:</strong>
+            <p>
+              <FaLightbulb style={{ color: field.hasLighting ? '#ffc107' : '#6c757d' }} />
+              {field.hasLighting ? 'متوفرة' : 'غير متوفرة'}
+            </p>
+          </div>
+
+          <div className="detail-section">
+            <strong>النوع:</strong>
+            <p>
+              <FaHome style={{ marginLeft: '5px' }} />
+              {field.isIndoor ? 'داخلي' : 'خارجي'}
+            </p>
+          </div>
+
+          <div className="detail-section">
+            <strong>الحالة:</strong>
+            <p>{field.isAvailable ? 'متاح للحجز' : 'غير متاح للحجز حالياً'}</p>
+          </div>
+
+          <div className="rating-summary">
+            <StarRating rating={averageRating} />
+            <span>
+              {reviewCount > 0
+                ? `${averageRating.toFixed(1)} من 5 (${reviewCount} تقييمات)`
+                : "لا توجد تقييمات بعد"}
+            </span>
+          </div>
+
+          {field.isAvailable && (
+            <>
+              <h3 style={{ marginTop: '2rem' }}>احجز هذا الملعب</h3>
+              {bookingError && <div style={{ color: "red" }}>{bookingError}</div>}
+              {bookingSuccess && <div style={{ color: "green" }}>{bookingSuccess}</div>}
+        <StatusDialog
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          title={dialogError ? "خطأ في الحجز" : "نجاح"}
+          message={dialogMessage}
+          isError={dialogError}
+        />
+              <form className="booking-form" onSubmit={handleBookingSubmit}>
+                <div className="form-group">
+                  <label htmlFor="bookingDate">التاريخ:</label>
+                  <input
+                    type="date"
+                    id="bookingDate"
+                    name="bookingDate"
+                    value={bookingData.bookingDate}
+                    onChange={handleBookingChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="startTime">الوقت من:</label>
+                  <input
+                    type="time"
+                    id="startTime"
+                    name="startTime"
+                    value={bookingData.startTime}
+                    onChange={handleBookingChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="endTime">إلى:</label>
+                  <input
+                    type="time"
+                    id="endTime"
+                    name="endTime"
+                    value={bookingData.endTime}
+                    onChange={handleBookingChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="numberOfPeople">عدد الأشخاص:</label>
+                  <input
+                    type="number"
+                    id="numberOfPeople"
+                    name="numberOfPeople"
+                    min="1"
+                    max={field.capacity || 25}
+                    value={bookingData.numberOfPeople}
+                    onChange={handleBookingChange}
+                    required
+                  />
+                </div>
+
+                <button className="reserve-btn" type="submit">احجز الآن</button>
+              </form>
+            </>
+          )}
+          {!field.isAvailable && (
+            <div className="alert alert-warning" style={{ marginTop: '2rem' }}>
+              هذا الملعب غير متاح للحجز حالياً
             </div>
-
-            <div className="form-group">
-              <label htmlFor="startTime">الوقت من:</label>
-              <input
-                type="time"
-                id="startTime"
-                name="startTime"
-                value={bookingData.startTime}
-                onChange={handleBookingChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="endTime">إلى:</label>
-              <input
-                type="time"
-                id="endTime"
-                name="endTime"
-                value={bookingData.endTime}
-                onChange={handleBookingChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="numberOfPeople">عدد الأشخاص:</label>
-              <input
-                type="number"
-                id="numberOfPeople"
-                name="numberOfPeople"
-                min="1"
-                max="25"
-                value={bookingData.numberOfPeople}
-                onChange={handleBookingChange}
-                required
-              />
-            </div>
-
-            <button className="reserve-btn" type="submit">احجز الآن</button>
-          </form>
+          )}
         </div>
       </div>
 
@@ -292,7 +368,7 @@ const handleViewReplies = async (reviewId) => {
         <div className="reviews-header">
           <h2>تقييمات الملعب</h2>
           {user && (
-            <button 
+            <button
               onClick={() => setShowReviewForm(!showReviewForm)}
               className="btn btn-primary"
             >
@@ -304,7 +380,7 @@ const handleViewReplies = async (reviewId) => {
         {reviewError && <div className="alert alert-danger">{reviewError}</div>}
 
         {showReviewForm && (
-          <ReviewForm 
+          <ReviewForm
             onSubmit={handleSubmitReview}
             onCancel={() => setShowReviewForm(false)}
           />

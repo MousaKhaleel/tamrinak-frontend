@@ -84,18 +84,36 @@ const FieldForm = ({ initialData = {}, onSubmit, submitLabel }) => {
     });
   };
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+const validatePhoneNumber = (phone) => {
+  const phoneRegex = /^\+?\d{10,15}$/;
+  return phoneRegex.test(phone);
+};
+
+const handleChange = (e) => {
+  const { name, value, type, checked } = e.target;
+  setFormData((prev) => ({
+    ...prev,
+    [name]: type === "checkbox" ? checked : value,
+  }));
+
+  if (name === "phoneNumber") {
+    if (!validatePhoneNumber(value)) {
+      setError("رقم الهاتف غير صالح. الرجاء إدخال رقم صحيح.");
+    } else {
+      setError("");
+    }
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
+
+      if (!validatePhoneNumber(formData.phoneNumber)) {
+    setError("رقم الهاتف غير صالح. الرجاء إدخال رقم صحيح.");
+    return;
+  }
 
     try {
       const payload = {

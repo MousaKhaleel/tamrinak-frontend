@@ -35,22 +35,23 @@ const handleLoginSubmit = async (e) => {
     const res = await login(loginData);
     const token = res.jwtToken;
 
-    const profileRes = await fetch(`${API_URL}/api/User/profile`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+const profileRes = await fetch(`${API_URL}/api/User/profile`, {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  },
+});
 
-    const profile = await profileRes.json();
-    
-    const profileImage = await getProfilePicture(profile.id);
+const profile = await profileRes.json();
+console.log(profile)
 
-    loginUser(token, profile, profileImage);
+let profileImage = profile.profileImageBase64;
 
-    toast.success("تم تسجيل الدخول بنجاح");
-    navigate("/");
+loginUser(token, profile, profileImage);
+
+toast.success("تم تسجيل الدخول بنجاح");
+navigate("/");
   } catch (err) {
     toast.error(err.message || "حدث خطأ أثناء تسجيل الدخول");
   } finally {

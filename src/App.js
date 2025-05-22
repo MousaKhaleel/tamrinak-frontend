@@ -2,7 +2,6 @@ import './App.css';
 import Homepage from './Components/Homepage/Homepage'
 import Footer from './Components/Footer/Footer';
 import NavigationBar from './Components/NavigationBar/NavigationBar';
-import AdminNavbar from './Components/Admin/DashboardComponents/NavBar';
 import { ThemeProvider } from './Context/ThemeContext';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AboutUs from './Components/AboutUs/AboutUs';
@@ -43,29 +42,30 @@ function App() {
   
   // Paths where we don't want to show any navbar or footer
   const authPaths = ["/auth"];
-  const hideAll = authPaths.includes(location.pathname);
+  const hideAll = authPaths.some(path => location.pathname.startsWith(path));
   
   // Admin paths where we want to show the admin navbar
   const adminPaths = [
     "/admin-dashboard", 
     "/fields/add",
-    "/fields/edit/:id", 
+    "/fields/edit/", 
     "/facility/add",
-    "/facility/edit/:id", 
+    "/facility/edit/", 
     "/sport/add",
-    "/sport/edit/:id",
+    "/sport/edit/",
     "/sport-list",
     "/user-list",
     "/facility-list",
-    "/field-list"
+    "/field-list",
+    "/pending-requests"
   ];
-  const isAdminPath = adminPaths.includes(location.pathname);
+  
+  const isAdminPath = adminPaths.some(path => location.pathname.startsWith(path));
 
   return (
     <div className="App">
       <ThemeProvider>
-        {!hideAll && isAdminPath && <AdminNavbar />}
-        {!hideAll && !isAdminPath && <NavigationBar />}
+        {!hideAll && <NavigationBar variant={isAdminPath ? "admin" : "default"} />}
         
         <Routes>
           <Route path="/" element={<Homepage />} />

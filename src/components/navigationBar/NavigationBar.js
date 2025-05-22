@@ -1,15 +1,19 @@
 import React from 'react';
-import Logo from '../../Assets/Logo/1vWOEn-LogoMakr (1).png';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
-import './NavigationBar.css';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthContext';
-
+import { useTheme } from '../../Context/ThemeContext';
+import { GoHome } from "react-icons/go";
+import logo from '../../Assets/Logo/1vWOEn-LogoMakr (1).png';
 import pic from '../../Assets/Defaults/profile-42914_1280.png';
+import './NavigationBar.css';
 
-function NavigationBar() {
+const NavigationBar = ({ variant = 'default' }) => {
   const { user, logoutUser } = useAuth();
+  const { theme, toggleTheme, isDark } = useTheme();
+
+  const handleToggleSidebar = () => {
+    document.body.classList.toggle('sidebar-collapsed');
+  };
 
   const handleLogout = () => {
     logoutUser();
@@ -18,11 +22,70 @@ function NavigationBar() {
   const isAdmin = user?.profile?.roles?.includes('Admin') || user?.profile?.roles?.includes('SuperAdmin');
   const isManager = user?.profile?.roles?.includes('VenueManager');
 
+  // Determine navbar theme classes
+const getNavbarThemeClasses = () => {
+  if (variant === 'admin') return '';
+
+  return theme === 'dark'
+    ? 'navbar-dark bg-dark'
+    : ''; // Don't override background for light       : 'navbar-light bg-light';
+};
+  if (variant === 'admin') {
+    return (
+      <header id="header" className={`header fixed-top d-flex align-items-center ${theme}`} dir="rtl">
+        <div className="d-flex align-items-center justify-content-between">
+          <Link to="/" className="logo d-flex align-items-center">
+            <img width={'90px'} src={logo} alt="" />
+          </Link>
+          <i className="bi bi-list toggle-sidebar-btn" onClick={handleToggleSidebar}></i>
+        </div>
+
+        <div className="search-bar">
+          <form className="search-form d-flex align-items-center" method="POST" action="#">
+            <input
+              type="text"
+              name="query"
+              placeholder="Search"
+              title="Enter search keyword"
+              className={theme}
+            />
+            <button type="submit" title="Search">
+              <i className={`bi bi-search ${theme === 'dark' ? 'text-light' : 'text-dark'}`}></i>
+            </button>
+          </form>
+        </div>
+
+        <div className="d-flex align-items-center">
+          <button
+            onClick={toggleTheme}
+            className="btn btn-sm mx-2"
+            title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
+          >
+            {isDark ? '☀️' : '🌙'}
+          </button>
+          <div className="backHome icon-wrapper">
+            <a href="/"><GoHome className={theme === 'dark' ? 'text-light' : 'text-dark'} /></a>
+          </div>
+        </div>
+
+        <nav className="header-nav ms-auto">
+          <ul className="d-flex align-items-center">
+            <li className="nav-item d-block d-lg-none">
+              <a className="nav-link nav-icon search-bar-toggle" href="#">
+                <i className={`bi bi-search ${theme === 'dark' ? 'text-light' : 'text-dark'}`}></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+    );
+  }
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark" dir="rtl">
+    <nav className={`navbar navbar-expand-lg ${getNavbarThemeClasses()}`} dir="rtl">
       <div className="container-fluid">
         <Link className="navbar-brand d-flex align-items-center" to="/">
-          <img src={Logo} width="90px" alt="Tamrinak Logo" />
+          <img src={logo} width="90px" alt="Tamrinak Logo" />
         </Link>
 
         <button
@@ -37,27 +100,34 @@ function NavigationBar() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="collapse navbar-collapse bg-highlight" id="navbarNavAltMarkup">
+        <div className={`collapse navbar-collapse bg-highlight`} id="navbarNavAltMarkup">
           <div className="navbar-nav ms-auto me-4 mb-2 mb-lg-0">
             <Link className="nav-link" to="/">الرئيسية</Link>
             <Link className="nav-link" to="/sports">الرياضات</Link>
 
             {isAdmin && (
-              <Link className="nav-link text-warning" style={{ background: "green", borderRadius: "5px" }} to="/admin-dashboard">{/*  //todo */}
+              <Link className="nav-link text-warning" style={{ background: "green", borderRadius: "5px" }} to="/admin-dashboard">
                 لوحة التحكم
               </Link>
             )}
             {isManager && (
-              <Link className="nav-link text-warning" style={{ background: "black", borderRadius: "5px" }} to="/facility/add"> {/*  //todo add manager dashboard */}
+              <Link className="nav-link text-warning" style={{ background: "black", borderRadius: "5px" }} to="/facility/add">
                 اضف منشأتك
               </Link>
             )}
-                        <Link className="nav-link" to="/aboutUs">حول الموقع</Link>
-            {/* <Link className="nav-link" to="/contactUs">تواصل معنا</Link> TODO */}
-          </div>
-          
 
-          <div className="d-flex gap-2">
+            <Link className="nav-link" to="/aboutUs">حول الموقع</Link>
+          </div>
+
+          <div className="d-flex gap-2 align-items-center">
+            <button
+              onClick={toggleTheme}
+              className="btn btn-sm mx-2"
+              title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
+            >
+              {isDark ? '☀️' : '🌙'}
+            </button>
+
             {user ? (
               <div className="dropdown">
                 <button
@@ -67,23 +137,15 @@ function NavigationBar() {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  {user.profileImage ? (
-                    <img
-                      src={`data:image/jpeg;base64,${user.profileImage}`}
-                      alt="Avatar"
-                      className="rounded-circle m-1 ms-2 me-2"
-                      width="30"
-                      height="30"
-                    />
-                  ) : (
-                    <img
-                      src={pic}
-                      alt="Avatar"
-                      className="rounded-circle m-1 ms-2 me-2"
-                      width="30"
-                      height="30"
-                    />
-                  )}
+                  <img
+                    src={user.profileImage
+                      ? `data:image/jpeg;base64,${user.profileImage}`
+                      : pic}
+                    alt="Avatar"
+                    className="rounded-circle m-1 ms-2 me-2"
+                    width="30"
+                    height="30"
+                  />
                   <span className="text-light">مرحبا {user?.profile?.name}!</span>
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end text-end" aria-labelledby="userDropdown">
@@ -104,6 +166,6 @@ function NavigationBar() {
       </div>
     </nav>
   );
-}
+};
 
 export default NavigationBar;

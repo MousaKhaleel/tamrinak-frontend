@@ -84,7 +84,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #012970;
 }
 
-.card-body {
+.booking-card-body {
   padding: 20px;
   display: flex;
   flex-direction: column;
