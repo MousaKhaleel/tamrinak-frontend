@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchFields, removeField } from '../../../../Services/fieldService';
+import { Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function FieldList() {
     const [fields, setFields] = useState([]);
@@ -28,7 +30,6 @@ function FieldList() {
         if (window.confirm("Are you sure you want to delete this field?")) {
             try {
                 await removeField(fieldId);
-                // Remove the deleted field from the local state
                 setFields(fields.filter(field => field.id !== fieldId));
             } catch (err) {
                 setError(err.message);
@@ -37,52 +38,57 @@ function FieldList() {
         }
     };
 
-    if (loading) {
-        return <div>Loading fields...</div>;
-    }
-
-    if (error) {
-        return <div className="error">Error: {error}</div>;
-    }
-
-    if (fields.length === 0) {
-        return <div>No fields found.</div>;
-    }
-
     return (
-        <div className="field-list">
-            <h2>Fields List</h2>
-            <table className="fields-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Sport</th>
-                        <th>Location</th>
-                        <th>Price</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {fields.map(field => (
-                        <tr key={field.id}>
-                            <td>{field.id}</td>
-                            <td>{field.name}</td>
-                            <td>{field.sportName}</td>
-                            <td>{field.location}</td>
-                            <td>${field.pricePerHour?.toFixed(2)}</td>
-                            <td>
-                                <button 
-                                    onClick={() => handleDelete(field.id)}
-                                    className="delete-button"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className="container mt-4">
+            <h2 className="mb-4">Fields List</h2>
+
+            {loading && <div className="alert alert-info">Loading fields...</div>}
+            {error && <div className="alert alert-danger">Error: {error}</div>}
+            {!loading && fields.length === 0 && (
+                <div className="alert alert-warning">No fields found.</div>
+            )}
+
+            {!loading && fields.length > 0 && (
+                <div className="table-responsive">
+                    <table className="table table-striped table-hover">
+                        <thead className="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Sport</th>
+                                <th>Location</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {fields.map(field => (
+                                <tr key={field.id}>
+                                    <td>{field.id}</td>
+                                    <td>{field.name}</td>
+                                    <td>{field.sportName}</td>
+                                    <td>{field.location}</td>
+                                    <td>${field.pricePerHour?.toFixed(2)}</td>
+                                    <td>
+                                        <Link
+                                            to={`/fields/edit/${field.id}`}
+                                            className="btn btn-sm btn-primary me-2"
+                                        >
+                                            Edit
+                                        </Link>
+                                        <button
+                                            onClick={() => handleDelete(field.id)}
+                                            className="btn btn-sm btn-danger"
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
 }

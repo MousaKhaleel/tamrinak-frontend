@@ -1,10 +1,35 @@
-body {
+/* CSS Variables */
+:root {
+  --bg-color: #fff;
+  --text-color: #333;
+  --link-hover-color: #007bff;
+  --btn-bg: #102E50;
+  --btn-border: #004085;
+  --btn-hover-bg: #004080;
+  --btn-hover-border: #002752;
+}
+
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --link-hover-color: #66b2ff;
+  --btn-bg: #1e88e5;
+  --btn-border: #1565c0;
+  --btn-hover-bg: #0d47a1;
+  --btn-hover-border: #082b64;
+}
+
+body { 
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  padding-top: 80px;  
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 code {
@@ -30,13 +55,6 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
-  line-height: 1.6;
-  background-color: #fff;
-  color: #333;
-  padding-top: 80px;  
-}
-
 /* Links */
 a {
   color: inherit;
@@ -44,7 +62,7 @@ a {
   transition: color 0.3s ease;
 }
 a:hover {
-  color: #007bff;
+  color: var(--link-hover-color);
 }
 
 /* Headings */
@@ -70,12 +88,15 @@ button {
   color: #6c757d;
 }
 
-/* Optional Bootstrap Override Tweaks (if any) */
+/* Button styles using CSS variables */
 .btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: var(--btn-bg);
+  border-color: var(--btn-border);
+  color: #fff;
+  transition: background-color 0.3s, border-color 0.3s;
 }
+
 .btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #004085;
+  background-color: var(--btn-hover-bg);
+  border-color: var(--btn-hover-border);
 }

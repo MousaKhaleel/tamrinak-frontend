@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getFacility, getFacilityPhotoList } from "../../Services/facilityService";
 import { createMembership } from "../../Services/membershipService";
 import './FacilityDetails.css'
-
 import {
   getFacilityReviews,
   createReview,
@@ -17,6 +16,7 @@ import StarRating from "../Review/StarRating";
 import ReviewList from "../Review/ReviewList";
 import ReviewForm from "../Review/ReviewForm";
 import { FaMapMarkerAlt, FaClock, FaPhone, FaMoneyBillWave } from 'react-icons/fa';
+import StatusDialog from './../UI/StatusDialog/StatusDialog';
 
 function FacilityDetails() {
   const { facilityId } = useParams();
@@ -29,9 +29,12 @@ function FacilityDetails() {
   const [membershipData, setMembershipData] = useState({
     facilityId,
   });
-  const [membershipError, setMembershipError] = useState(null);
-  const [membershipSuccess, setMembershipSuccess] = useState(null);
   
+  // Dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+  const [dialogError, setDialogError] = useState(false);
+
   // Review states
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
@@ -82,11 +85,9 @@ function FacilityDetails() {
     }
   };
 
-  const handleMembershipSubmit = async (e) => {
+const handleMembershipSubmit = async (e) => {
     e.preventDefault();
-    setMembershipError(null);
-    setMembershipSuccess(null);
-
+    
     try {
       const addMembershipDto = {
         facilityId: facilityId,
@@ -96,19 +97,28 @@ function FacilityDetails() {
       const result = await createMembership(addMembershipDto, user.token);
       
       if (result.success) {
-        setMembershipSuccess("تم إنشاء الاشتراك بنجاح!");
+        setDialogMessage("تم إنشاء الاشتراك بنجاح!");
+        setDialogError(false);
       } else {
-        setMembershipError(result.message || "فشل في إنشاء الاشتراك");
+        setDialogMessage(result.message || "فشل في إنشاء الاشتراك");
+        setDialogError(true);
       }
-      
     } catch (error) {
       console.error('Membership creation error:', error);
-      setMembershipError(
+      setDialogMessage(
         error.message || 
         "حدث خطأ غير متوقع أثناء محاولة إنشاء الاشتراك. يرجى المحاولة مرة أخرى لاحقًا"
       );
+      setDialogError(true);
+    } finally {
+      setDialogOpen(true);
     }
   };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
 
   // Review handlers
   const handleSubmitReview = async (reviewData) => {
@@ -215,13 +225,10 @@ function FacilityDetails() {
             </span>
           </div>
 
-          <h3 style={{ marginTop: '2rem' }}>اشترك في النادي</h3>
-          {membershipError && <div style={{ color: "red" }}>{membershipError}</div>}
-          {membershipSuccess && <div style={{ color: "green" }}>{membershipSuccess}</div>}
-
-          <form className="membership-form" onSubmit={handleMembershipSubmit}>
-            <button className="subscribe-btn" type="submit">اشترك الآن</button>
-          </form>
+      <h3 style={{ marginTop: '2rem' }}>اشترك في النادي</h3>
+      <form className="membership-form" onSubmit={handleMembershipSubmit}>
+        <button className="subscribe-btn" type="submit">اشترك الآن</button>
+      </form>
         </div>
       </div>
 
@@ -263,6 +270,12 @@ function FacilityDetails() {
           />
         )}
       </section>
+            <StatusDialog 
+        open={dialogOpen}
+        onClose={handleDialogClose}
+        message={dialogMessage}
+        isError={dialogError}
+      />
     </div>
   );
 }

@@ -1,22 +1,27 @@
-import React, { useState } from 'react';
-import { addSport } from '../../../../Services/sportService';
-import { toast } from "react-toastify";
+import React, { useState, useEffect } from 'react';
 
-const AddSportForm = () => {
-  const [sportData, setSportData] = useState({
-    Name: '',
-    Description: '',
-  });
-
+const SportForm = ({ initialData = { Name: '', Description: '' }, onSubmit, submitLabel = 'Add Sport', requireImage = true }) => {
   const [formFile, setFormFile] = useState(null);
   const [errors, setErrors] = useState({});
+  const [sportData, setSportData] = useState(() => ({
+  Name: initialData.Name || '',
+  Description: initialData.Description || '',
+}));
+
+useEffect(() => {
+  if (initialData && Object.keys(initialData).length > 0) {
+    setSportData({
+      Name: initialData.Name || '',
+      Description: initialData.Description || '',
+    });
+  }
+  // Only clear file input when initialData changes, maybe?
+  setFormFile(null);
+}, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSportData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setSportData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e) => {
@@ -35,7 +40,7 @@ const AddSportForm = () => {
       newErrors.Description = 'Description cannot be longer than 100 characters';
     }
 
-    if (!formFile) {
+    if (requireImage && !formFile) {
       newErrors.formFile = 'Image is required';
     }
 
@@ -46,19 +51,14 @@ const AddSportForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      const fullData = {
-        ...sportData,
-        formFile: formFile,
-      };
-
-      const response = await addSport(fullData);
-      if (response) {
-        toast.success('Sport added successfully!');
+      await onSubmit({ ...sportData, formFile });
+      // Optionally reset form on add
+      if (submitLabel.toLowerCase().includes('add')) {
         setSportData({ Name: '', Description: '' });
         setFormFile(null);
-        document.getElementById('formFile').value = null; // Reset file input manually
-      } else {
-        toast.error('Failed to add sport');
+        if (document.getElementById('formFile')) {
+          document.getElementById('formFile').value = null;
+        }
       }
     }
   };
@@ -67,7 +67,7 @@ const AddSportForm = () => {
     <div className="container mt-4">
       <div className="card shadow-sm">
         <div className="card-header bg-primary text-white">
-          <h5 className="mb-0">Add New Sport</h5>
+          <h5 className="mb-0">{submitLabel}</h5>
         </div>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
@@ -102,7 +102,7 @@ const AddSportForm = () => {
 
             {/* Image Input */}
             <div className="mb-3">
-              <label htmlFor="formFile" className="form-label">Sport Image</label>
+              <label htmlFor="formFile" className="form-label">Sport Image {requireImage ? '' : '(Optional)'}</label>
               <input
                 type="file"
                 id="formFile"
@@ -114,7 +114,7 @@ const AddSportForm = () => {
               {errors.formFile && <div className="invalid-feedback">{errors.formFile}</div>}
             </div>
 
-            <button type="submit" className="btn btn-success w-100">Add Sport</button>
+            <button type="submit" className="btn btn-success w-100">{submitLabel}</button>
           </form>
         </div>
       </div>
@@ -122,4 +122,4 @@ const AddSportForm = () => {
   );
 };
 
-export default AddSportForm;
+export default SportForm;

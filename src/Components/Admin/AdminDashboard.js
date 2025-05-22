@@ -1,7 +1,6 @@
 import React from 'react';
 import BookingCard from './DashboardComponents/BookingCard';
 import ReportsChart from './DashboardComponents/ReportsCard';
-import NavBar from './DashboardComponents/NavBar';
 import Sidebar from './DashboardComponents/SideBar';
 
 import './adminStyle.css';
@@ -13,7 +12,6 @@ import { Link } from 'react-router-dom';
 const AdminDashboard = () => {
   return (
     <div dir="rtl">
-      <NavBar />
       <Sidebar />
       <main id="main" className="main">
         <div className="pagetitle">

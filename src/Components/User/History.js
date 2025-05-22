@@ -2,93 +2,144 @@ import { useState, useEffect } from 'react';
 import { getUserBookings, cancelBooking } from '../../Services/bookingService';
 import { useAuth } from '../../Context/AuthContext';
 
+// Map the backend status to frontend display
+const BOOKING_STATUS = {
+  Pending: { text: 'Pending', class: 'bg-warning text-dark' },
+  Cancelled: { text: 'Cancelled', class: 'bg-danger' },
+  Completed: { text: 'Completed', class: 'bg-success' }
+};
+
 function History() {
-    const [bookings, setBookings] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const { user } = useAuth();
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { user } = useAuth();
 
-    const userId = user?.profile?.id;
+  const userId = user?.profile?.id;
 
-    useEffect(() => {
-        const fetchBookings = async () => {
-            try {
-                const userBookings = await getUserBookings(userId);
-                setBookings(userBookings);
-            } catch (err) {
-                setError(err.message || 'Failed to load booking history');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (userId) {
-            fetchBookings();
-        }
-    }, [userId]);
-
-    const handleCancelBooking = async (bookingId) => {
-        try {
-            await cancelBooking(bookingId);
-            // Update the bookings list after cancellation
-            setBookings(bookings.map(booking => 
-                booking.bookingId === bookingId 
-                    ? { ...booking, status: 'Cancelled' } 
-                    : booking
-            ));
-        } catch (err) {
-            setError(err.message || 'Failed to cancel booking');
-        }
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const userBookings = await getUserBookings(userId);
+        setBookings(userBookings);
+      } catch (err) {
+        setError(err.message || 'Failed to load booking history');
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const isFutureBooking = (bookingDate) => {
-        const today = new Date();
-        const bookingDateObj = new Date(bookingDate);
-        return bookingDateObj > today;
-    };
-
-    if (loading) {
-        return <div className="loading-message">Loading your booking history...</div>;
+    if (userId) {
+      fetchBookings();
     }
+  }, [userId]);
 
-    if (error) {
-        return <div className="error-message">Error: {error}</div>;
+  const handleCancelBooking = async (bookingId) => {
+    try {
+      await cancelBooking(bookingId);
+      setBookings(
+        bookings.map((booking) =>
+          booking.bookingId === bookingId
+            ? { ...booking, status: 'Cancelled' }
+            : booking
+        )
+      );
+    } catch (err) {
+      setError(err.message || 'Failed to cancel booking');
     }
+  };
 
-    if (bookings.length === 0) {
-        return <div className="no-bookings">No booking history found.</div>;
-    }
+  const isFutureBooking = (bookingDate) => {
+    const today = new Date();
+    const bookingDateObj = new Date(bookingDate);
+    return bookingDateObj > today;
+  };
 
+  if (loading) {
     return (
-        <div className="history-container">
-            <h2>Your Booking History</h2>
-            <div className="bookings-list">
-                {bookings.map((booking) => (
-                    <div key={booking.bookingId} className="booking-card">
-                        <h3>Booking #{booking.bookingId}</h3>
-                        <div className="booking-details">
-                            <p><strong>Date:</strong> {new Date(booking.bookingDate).toLocaleDateString()}</p>
-                            <p><strong>Time:</strong> {booking.startTime} - {booking.endTime}</p>
-                            <p><strong>Duration:</strong> {booking.duration}</p>
-                            <p><strong>Field ID:</strong> {booking.fieldId}</p>
-                            <p><strong>Total Cost:</strong> ${booking.totalCost}</p>
-                            <p><strong>Status:</strong> {booking.status || (booking.isPaid ? 'Paid' : 'Unpaid')}</p>
-                            <p><strong>Participants:</strong> {booking.numberOfPeople}</p>
-                            
-                            {isFutureBooking(booking.bookingDate) && booking.status !== 1 && (
-                                <button 
-                                    onClick={() => handleCancelBooking(booking.bookingId)}
-                                    className="cancel-booking-btn"
-                                >
-                                    Cancel Booking
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                ))}
-            </div>
+      <div className="d-flex justify-content-center my-5">
+        <div className="spinner-border text-primary" role="status" aria-label="Loading spinner">
+          <span className="visually-hidden">Loading...</span>
         </div>
+        <span className="ms-3 fs-5">Loading your booking history...</span>
+      </div>
     );
+  }
+
+  if (error) {
+    return (
+      <div className="alert alert-danger text-center my-5" role="alert">
+        Error: {error}
+      </div>
+    );
+  }
+
+  if (bookings.length === 0) {
+    return (
+      <div className="alert alert-info text-center my-5" role="alert">
+        No booking history found.
+      </div>
+    );
+  }
+
+  return (
+    <div className="container my-5">
+      <h2 className="mb-4 text-center">Your Booking History</h2>
+      <div className="row g-4">
+        {bookings.map((booking) => (
+          <div key={booking.bookingId} className="col-md-6 col-lg-4">
+            <div className="card shadow-sm h-100">
+              <div className="card-header bg-primary text-white">
+                <h5 className="card-title mb-0">Booking #{booking.bookingId}</h5>
+              </div>
+              <div className="card-body">
+                <p>
+                  <strong>Date:</strong>{' '}
+                  {new Date(booking.bookingDate).toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>Time:</strong> {booking.startTime} - {booking.endTime}
+                </p>
+                <p>
+                  <strong>Duration:</strong> {booking.duration}
+                </p>
+                <p>
+                  <strong>Field ID:</strong> {booking.fieldId}
+                </p>
+                <p>
+                  <strong>Total Cost:</strong> ${booking.totalCost}
+                </p>
+                <p>
+                  <strong>Status:</strong>{' '}
+                  <span className={`badge ${BOOKING_STATUS[booking.status]?.class || 'bg-secondary'}`}>
+                    {BOOKING_STATUS[booking.status]?.text || booking.status}
+                  </span>
+                  {booking.isPaid && booking.status !== 'Cancelled' && (
+                    <span className="badge bg-success ms-2">Paid</span>
+                  )}
+                </p>
+                <p>
+                  <strong>Participants:</strong> {booking.numberOfPeople}
+                </p>
+              </div>
+              <div className="card-footer bg-transparent d-flex justify-content-end">
+                {isFutureBooking(booking.bookingDate) && 
+                booking.status !== 'Cancelled' && 
+                booking.status !== 'Completed' && (
+                  <button
+                    onClick={() => handleCancelBooking(booking.bookingId)}
+                    className="btn btn-outline-danger btn-sm"
+                  >
+                    Cancel Booking
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default History;

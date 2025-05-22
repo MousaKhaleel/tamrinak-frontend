@@ -100,19 +100,19 @@ const Sidebar = () => {
           </a>
           <ul id="forms-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
           <li>
-              <Link to="/add-field">
+              <Link to="/fields/add">
                 <i className="bi bi-circle"></i>
                 <span>add field</span>
               </Link>
             </li>
             <li>
-              <Link to="/add-facility">
+              <Link to="/facility/add">
                 <i className="bi bi-circle"></i>
                 <span>add facility</span>
               </Link>
             </li>
             <li>
-              <Link to="/add-sport">
+              <Link to="/sport/add">
                 <i className="bi bi-circle"></i>
                 <span>add sport</span>
               </Link>

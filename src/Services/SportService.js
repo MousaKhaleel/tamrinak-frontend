@@ -24,15 +24,23 @@ export const fetchSports = async () => {
 export const getSport = async (id) => {
   try {
     const response = await fetch(`${API_URL}/api/Sport/sport/${id}`, {
+      method: 'GET',
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json"
       }
     });
-    if (!response.ok) throw new Error("Failed to fetch sport");
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      const errorMessage = errorData?.message || `HTTP error! status: ${response.status}`;
+      throw new Error(errorMessage);
+    }
+    
     return await response.json();
   } catch (error) {
-    console.error("Error fetching sport:", error);
-    return null;
+    console.error("Error fetching sport:", error.message);
+    throw error; // Re-throw to let the caller handle it
   }
 };
 
