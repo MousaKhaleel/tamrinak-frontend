@@ -80,7 +80,7 @@ const AboutUs = () => {
       </div>
 
       {/* Main Content */}
-      <div className="container">
+      <div className="abou-container">
         <div className="img-people">
           <img src={basketball} alt="People Playing Sports" />
         </div>

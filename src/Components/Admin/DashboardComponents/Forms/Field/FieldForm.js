@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { addField } from "../../../../Services/fieldService";
-import { fetchSports } from "../../../../Services/sportService";
+import { fetchSports } from "../../../../../Services/sportService";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
-const AddFieldForm = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    locationDesc: "",
-    sportId: "",
-    pricePerHour: "",
-    openTime: "",
-    closeTime: "",
-    phoneNumber: "",
-    capacity: "",
-    locationMap: "",
-    hasLighting: false,
-    isIndoor: false,
-  });
+const defaultFieldData = {
+  name: "",
+  locationDesc: "",
+  sportId: "",
+  pricePerHour: "",
+  openTime: "",
+  closeTime: "",
+  phoneNumber: "",
+  capacity: "",
+  locationMap: "",
+  hasLighting: false,
+  isIndoor: false,
+};
 
+const FieldForm = ({ initialData = {}, onSubmit, submitLabel }) => {
+  const [formData, setFormData] = useState({ ...defaultFieldData, ...initialData });
+  const [images, setImages] = useState([]);
   const [sports, setSports] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [images, setImages] = useState([]);
   const [loadingSports, setLoadingSports] = useState(true);
 
   useEffect(() => {
@@ -31,9 +31,9 @@ const AddFieldForm = () => {
       try {
         const sportsData = await fetchSports();
         setSports(sportsData);
-        setLoadingSports(false);
-      } catch (err) {
-        setError("Failed to load sports. Please try again later.");
+      } catch {
+        setError("فشل تحميل الرياضات.");
+      } finally {
         setLoadingSports(false);
       }
     };
@@ -43,43 +43,34 @@ const AddFieldForm = () => {
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     const processedImages = [];
-  
+
     const resizeAndCropImage = (file) => {
       return new Promise((resolve) => {
         const img = new Image();
         img.src = URL.createObjectURL(file);
         img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-  
-          // Set target dimensions
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
           const targetWidth = 800;
           const targetHeight = 600;
           canvas.width = targetWidth;
           canvas.height = targetHeight;
-  
-          // Calculate cropping (center crop)
-          const aspectRatio = file.width / file.height;
-          const sourceAspectRatio = img.width / img.height;
-  
+
           let sx = 0, sy = 0, sWidth = img.width, sHeight = img.height;
-  
+          const sourceAspectRatio = img.width / img.height;
+
           if (sourceAspectRatio > targetWidth / targetHeight) {
-            // Wider image
             sWidth = img.height * (targetWidth / targetHeight);
             sx = (img.width - sWidth) / 2;
           } else {
-            // Taller image
             sHeight = img.width * (targetHeight / targetWidth);
             sy = (img.height - sHeight) / 2;
           }
-  
+
           ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, targetWidth, targetHeight);
-  
           canvas.toBlob((blob) => {
             if (blob) {
-              const croppedFile = new File([blob], file.name, { type: "image/jpeg" });
-              resolve(croppedFile);
+              resolve(new File([blob], file.name, { type: "image/jpeg" }));
             } else {
               resolve(null);
             }
@@ -87,11 +78,9 @@ const AddFieldForm = () => {
         };
       });
     };
-  
-    Promise.all(files.map(resizeAndCropImage)).then((resizedFiles) => {
-      const validFiles = resizedFiles.filter(Boolean);
-      setImages(validFiles);
-      setError("");
+
+    Promise.all(files.map(resizeAndCropImage)).then((resized) => {
+      setImages(resized.filter(Boolean));
     });
   };
 
@@ -103,83 +92,57 @@ const AddFieldForm = () => {
     }));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
-  setSuccess("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
 
-  try {
-    // Prepare and submit the field data
-    const payload = {
-      ...formData,
-      sportId: parseInt(formData.sportId),
-      pricePerHour: parseFloat(formData.pricePerHour || 0),
-      openTime: formData.openTime,
-      closeTime: formData.closeTime,
-      capacity: formData.capacity ? parseInt(formData.capacity) : null,
-      hasLighting: formData.hasLighting,
-      isIndoor: formData.isIndoor,
-    };
+    try {
+      const payload = {
+        ...formData,
+        sportId: parseInt(formData.sportId),
+        pricePerHour: parseFloat(formData.pricePerHour || 0),
+        capacity: formData.capacity ? parseInt(formData.capacity) : null,
+      };
 
-    const field = await addField(payload); // Make sure this returns the new field's ID
+      const field = await onSubmit(payload); // passed from Add/Edit page
 
-    // Upload images if any
-    if (images.length > 0 && field.id) {
-      const formDataObj = new FormData();
-      formDataObj.append("fieldId", field.id);
-      images.forEach((image) => {
-        formDataObj.append("formFiles", image); // name must match your API's parameter
-      });
+      if (images.length > 0 && field?.id) {
+        const formDataObj = new FormData();
+        formDataObj.append("fieldId", field.id);
+        images.forEach((img) => formDataObj.append("formFiles", img));
 
-      const response = await fetch(`${API_URL}/api/Field/field-images`, {
-        method: "POST",
-        body: formDataObj,
-      });
+        const response = await fetch(`${API_URL}/api/Field/field-images`, {
+          method: "POST",
+          body: formDataObj,
+        });
 
-      if (!response.ok) {
-        throw new Error("Image upload failed");
+        if (!response.ok) throw new Error("Image upload failed");
       }
+
+      setSuccess("تمت العملية بنجاح!");
+      if (!initialData?.id) {
+        setFormData(defaultFieldData);
+        setImages([]);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("حدث خطأ أثناء حفظ البيانات.");
     }
-
-    setSuccess("تمت إضافة الملعب والصور بنجاح!");
-    setFormData({
-      name: "",
-      locationDesc: "",
-      sportId: "",
-      pricePerHour: "",
-      openTime: "",
-      closeTime: "",
-      phoneNumber: "",
-      capacity: "",
-      locationMap: "",
-      hasLighting: false,
-      isIndoor: false,
-    });
-    setImages([]);
-  } catch (err) {
-    console.error(err);
-    setError("فشل في إضافة الملعب أو الصور. يرجى التحقق من المدخلات.");
-  }
-};
-
+  };
 
   return (
     <div className="container mt-5" dir="rtl">
       <div className="card shadow">
         <div className="card-header bg-primary text-white text-end">
-          <h5 className="mb-0">إضافة ملعب جديد</h5>
+          <h5 className="mb-0">{submitLabel}</h5>
         </div>
         <div className="card-body">
           <form onSubmit={handleSubmit} className="row g-3">
             {[
               { name: "name", placeholder: "اسم الملعب", required: true },
               { name: "locationDesc", placeholder: "وصف الموقع", required: true },
-              { 
-                name: "pricePerHour", 
-                type: "number", 
-                placeholder: "السعر لكل ساعة", 
-                step: "0.01" 
-              },
+              { name: "pricePerHour", type: "number", placeholder: "السعر لكل ساعة", step: "0.01" },
               { name: "openTime", type: "time", required: true },
               { name: "closeTime", type: "time", required: true },
               { name: "phoneNumber", type: "tel", placeholder: "رقم الهاتف", required: true },
@@ -200,7 +163,6 @@ const handleSubmit = async (e) => {
               </div>
             ))}
 
-            {/* Sport Selection Dropdown */}
             <div className="col-12">
               <select
                 name="sportId"
@@ -260,7 +222,7 @@ const handleSubmit = async (e) => {
             {success && <div className="alert alert-success text-end">{success}</div>}
 
             <div className="col-12">
-              <button type="submit" className="btn btn-primary w-100">إضافة الملعب</button>
+              <button type="submit" className="btn btn-primary w-100">{submitLabel}</button>
             </div>
           </form>
         </div>
@@ -269,4 +231,4 @@ const handleSubmit = async (e) => {
   );
 };
 
-export default AddFieldForm;
+export default FieldForm;

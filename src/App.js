@@ -16,8 +16,7 @@ import Profile from './Components/User/Profile';
 import AdminDashboard from './Components/Admin/AdminDashboard';
 import FieldsPage from './Components/Field/FieldsPage';
 import FieldDetails from './Components/Field/FieldDetails';
-import AddFieldForm from './Components/Admin/DashboardComponents/Forms/AddFieldForm';
-import AddFacilityForm from './Components/Admin/DashboardComponents/Forms/AddFacilityForm';
+import AddFacilityForm from './Components/Admin/DashboardComponents/Forms/Facility/AddFacilityPage';
 import AddSportForm from './Components/Admin/DashboardComponents/Forms/AddSportForm';
 import ConfirmEmail from './Components/Confirm/ConfirmEmail';
 import ForgotPassword from './Components/Auth/ForgotPassword';
@@ -34,6 +33,10 @@ import UserList from './Components/Admin/DashboardComponents/Lists/UserList';
 import FacilityList from './Components/Admin/DashboardComponents/Lists/FacilityList';
 import FieldList from './Components/Admin/DashboardComponents/Lists/FieldList';
 import PendingRequestsList from './Components/Admin/DashboardComponents/Lists/PendingRequestsList';
+import AddFieldPage from './Components/Admin/DashboardComponents/Forms/Field/AddFieldPage';
+import EditFieldPage from './Components/Admin/DashboardComponents/Forms/Field/EditFieldPage';
+import AddFacilityPage from './Components/Admin/DashboardComponents/Forms/Facility/AddFacilityPage';
+import EditFacilityPage from './Components/Admin/DashboardComponents/Forms/Facility/EditFacilityPage';
 
 function App() {
   const location = useLocation();
@@ -45,8 +48,10 @@ function App() {
   // Admin paths where we want to show the admin navbar
   const adminPaths = [
     "/admin-dashboard", 
-    "/add-field", 
-    "/add-facility", 
+    "/fields/add",
+    "/fields/edit/:id", 
+    "/facility/add",
+    "/facility/edit/:id", 
     "/add-sport",
     "/sport-list",
     "/user-list",
@@ -68,8 +73,10 @@ function App() {
           <Route path="/sports" element={<SportsPage />} />
           <Route path="/field-details/:fieldId" element={<FieldDetails />} />
           <Route path="/fields" element={<FieldsPage />} />
-          <Route path='/add-field' element={<AddFieldForm />} />
-          <Route path='/add-facility' element={<AddFacilityForm />} />
+          <Route path="/fields/add" element={<AddFieldPage />} />
+          <Route path="/fields/edit/:id" element={<EditFieldPage />} />
+          <Route path='/facility/add' element={<AddFacilityPage />} />
+          <Route path='/facility/edit/:id' element={<EditFacilityPage />} />
           <Route path='/add-sport' element={<AddSportForm />} />
           <Route path="/confirm-email" element={<ConfirmEmail />} />
           <Route path='/reset-password' element={<ResetPassword />} />

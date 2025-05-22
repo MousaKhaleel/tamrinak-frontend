@@ -67,7 +67,7 @@ export const removeFacility = async (facilityId) => {
 };
 
 // Add multiple facility images
-const addFacilityImages = async (facilityId, images) => {
+export const addFacilityImages = async (facilityId, images) => {
   const formData = new FormData();
   formData.append("facilityId", facilityId.toString());
   

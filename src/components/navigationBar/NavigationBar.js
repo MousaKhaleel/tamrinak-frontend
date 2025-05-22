@@ -48,7 +48,7 @@ function NavigationBar() {
               </Link>
             )}
             {isManager && (
-              <Link className="nav-link text-warning" style={{ background: "black", borderRadius: "5px" }} to="/add-facility"> {/*  //todo add manager dashboard */}
+              <Link className="nav-link text-warning" style={{ background: "black", borderRadius: "5px" }} to="/facility/add"> {/*  //todo add manager dashboard */}
                 اضف منشأتك
               </Link>
             )}
