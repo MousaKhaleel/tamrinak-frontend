@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchSports } from "../../../../../Services/sportService";
+import { fetchSports } from "../../../../../Services/SportService";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const API_URL = process.env.API_URL || "https://localhost:7160";

@@ -1,6 +1,6 @@
 import React from 'react';
 import SportForm from './SportForm';
-import { addSport } from '../../../../../Services/sportService';
+import { addSport } from '../../../../../Services/SportService';
 import { toast } from 'react-toastify';
 
 const AddSportPage = () => {

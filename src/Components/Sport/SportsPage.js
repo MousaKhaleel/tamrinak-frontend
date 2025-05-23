@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchSports } from "../../Services/sportService";
+import { fetchSports } from "../../Services/SportService";
 import SportCard from "./SportCard";
 
 const SportsPage = () => {

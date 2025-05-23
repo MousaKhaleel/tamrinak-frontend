@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getFacilityPhotoList } from "../../Services/facilityService";
+import { getFacilityPhotoList } from "../../Services/FacilityService";
 import DefaultImage from "../../Assets/Defaults/default-featured-image.png";
 import { FaMapMarkerAlt } from 'react-icons/fa';
 

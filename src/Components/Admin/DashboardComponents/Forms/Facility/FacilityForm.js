@@ -1,6 +1,6 @@
 // components/FacilityForm.jsx
 import React, { useState, useEffect } from "react";
-import { addFacilityImages } from "../../../../../Services/facilityService";
+import { addFacilityImages } from "../../../../../Services/FacilityService";
 
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
