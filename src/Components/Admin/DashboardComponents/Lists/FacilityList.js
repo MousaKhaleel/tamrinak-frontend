@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchFacilities, removeFacility } from '../../../../Services/FacilityService';
+import { fetchFacilities, removeFacility } from '../../../../Services/facilityService';
 
 function FacilityList() {
   const [facilities, setFacilities] = useState([]);

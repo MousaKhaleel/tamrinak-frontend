@@ -1,7 +1,7 @@
 // FacilitiesPage.js
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { getFacilitiesBySport } from "../../Services/FacilityService";
+import { getFacilitiesBySport } from "../../Services/facilityService";
 import FacilityCard from "./FacilityCard"; // You'll need to create this component
 
 const FacilitiesPage = () => {

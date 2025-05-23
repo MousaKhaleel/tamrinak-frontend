@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SportForm from './SportForm';
-import { getSport, updateSport } from '../../../../../Services/SportService';
+import { getSport, updateSport } from '../../../../../Services/sportService';
 import { toast } from 'react-toastify';
 
 const EditSportPage = ({ sportId }) => {

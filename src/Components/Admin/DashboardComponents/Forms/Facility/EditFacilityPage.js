@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FacilityForm from "./FacilityForm";
-import { updateFacility, getFacility } from "../../../../../Services/FacilityService";
+import { updateFacility, getFacility } from "../../../../../Services/facilityService";
 import { useParams } from "react-router-dom";
 
 const EditFacilityPage = () => {

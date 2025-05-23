@@ -1,6 +1,6 @@
 import React from "react";
 import FacilityForm from "./FacilityForm";
-import { addFacility } from "../../../../../Services/FacilityService";
+import { addFacility } from "../../../../../Services/facilityService";
 
 const AddFacilityPage = () => {
   const initialData = {
