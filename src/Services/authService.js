@@ -1,49 +1,53 @@
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
-export const register = async (userData) => {//TODO use
+// Helper function to parse response as JSON or text
+async function parseResponse(response) {
+  const text = await response.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
+}
+
+export const register = async (userData) => {
   const response = await fetch(`${API_URL}/api/User/Register`, {
     method: "POST",
-    headers: { "Content-Type": "application/json",
-     },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(userData),
   });
 
+  const data = await parseResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Registration failed");
+    throw new Error(data.message || data || "Registration failed");
   }
-
-  return await response.json();
+  return data;
 };
 
 export const login = async (credentials) => {
   const response = await fetch(`${API_URL}/api/Authentication/Login`, {
     method: "POST",
-    headers: { "Content-Type": "application/json",
-     },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credentials),
   });
 
+  const data = await parseResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Login failed");
+    throw new Error(data.message || data || "Login failed");
   }
-
-  return await response.json(); // Should return { jwtToken, expiration }, name, role, id (?)
+  return data; // e.g., { jwtToken, expiration, name, role, id }
 };
 
-//TODO: logout, confim email, rest password
 export const logout = async () => {
   const response = await fetch(`${API_URL}/api/Authentication/logout`, {
     method: "POST",
-        headers: { "Content-Type": "application/json",
-     },
-    credentials: "include", // optional: include cookies if using them
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
   });
 
+  const data = await parseResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Logout failed");
+    throw new Error(data.message || data || "Logout failed");
   }
 };
 
@@ -56,43 +60,41 @@ export const sendConfirmationEmail = async (token) => {
     },
   });
 
+  const data = await parseResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Sending confirmation email failed");
+    throw new Error(data.message || data || "Sending confirmation email failed");
   }
 };
 
 export const confirmEmail = async (token) => {
   const response = await fetch(`${API_URL}/api/Authentication/confirm-email?token=${token}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem("token")}`
-     },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
   });
 
+  const data = await parseResponse(response);
   if (!response.ok) {
-    const errorMessage = await response.text(); // Use text() to get plain text
-    throw new Error(errorMessage || "Email confirmation failed");
+    throw new Error(data.message || data || "Email confirmation failed");
   }
-
-  return response.text(); // Use text() to get plain text
+  return data;
 };
-
-
 
 export const forgotPassword = async (email, token) => {
   const response = await fetch(`${API_URL}/api/Authentication/forgot-password`, {
     method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(email), // Send just the string
+    body: JSON.stringify(email),
   });
 
+  const data = await parseResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Forgot password request failed");
+    throw new Error(data.message || data || "Forgot password request failed");
   }
 };
 
@@ -100,24 +102,15 @@ export const resetPassword = async (token, newPassword) => {
   const response = await fetch(`${API_URL}/api/Authentication/reset-password`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ 
+    body: JSON.stringify({
       Token: token,
-      NewPassword: newPassword 
+      NewPassword: newPassword,
     }),
   });
 
-  const responseText = await response.text();
-  
-  try {
-    const data = JSON.parse(responseText);
-    if (!response.ok) {
-      throw new Error(data.message || "Password reset failed");
-    }
-    return data;
-  } catch {
-    if (!response.ok) {
-      throw new Error(responseText || "Password reset failed");
-    }
-    return { message: responseText };
+  const data = await parseResponse(response);
+  if (!response.ok) {
+    throw new Error(data.message || data || "Password reset failed");
   }
+  return data;
 };

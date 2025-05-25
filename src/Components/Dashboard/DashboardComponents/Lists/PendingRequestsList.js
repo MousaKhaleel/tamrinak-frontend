@@ -97,18 +97,18 @@ function PendingRequestsList() {
                 </td>
                 <td className="py-2 px-4 border-b text-center">{request.email}</td>
                 <td className="py-2 px-4 border-b text-center">
-                  {new Date(request.requestDate).toLocaleDateString()}
+                  {new Date(request.VenueRequestDate).toLocaleDateString()}
                 </td>
                 <td className="py-2 px-4 border-b text-center">
                   <button
                     onClick={() => handleApprove(request.userId)}
-                    className="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded mr-2"
+                    className="btn btn-success bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded mr-2"
                   >
                     Approve
                   </button>
                   <button
                     onClick={() => handleReject(request.userId)}
-                    className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
+                    className="btn btn-danger bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
                   >
                     Reject
                   </button>

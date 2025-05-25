@@ -108,7 +108,7 @@ const getNavbarThemeClasses = () => {
             <a className="nav-link" href='#contact'>تواصل معنا</a>
 
             {isAdmin && (
-              <Link className="nav-link text-warning" style={{ background: "green", borderRadius: "5px" }} to="/admin-dashboard">
+              <Link className="nav-link text-warning" style={{ background: "green", borderRadius: "5px" }} to="/dashboard">
                 لوحة التحكم
               </Link>
             )}

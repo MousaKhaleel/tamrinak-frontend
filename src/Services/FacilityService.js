@@ -1,5 +1,14 @@
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
+async function parseResponse(response) {
+  const text = await response.text();
+  try {
+    return text ? JSON.parse(text) : {};
+  } catch {
+    return text;
+  }
+}
+
 // Get all facilities
 export const fetchFacilities = async () => {
   try {
@@ -11,59 +20,69 @@ export const fetchFacilities = async () => {
       },
     });
 
+    const data = await parseResponse(response);
     if (!response.ok) {
-      throw new Error(`Failed to fetch facilities: ${response.status} ${response.statusText}`);
+      throw new Error(data.message || `Failed to fetch facilities: ${response.status} ${response.statusText}`);
     }
-
-    return await response.json();
+    return data;
   } catch (error) {
     console.error("Error fetching facilities:", error);
     return [];
   }
 };
 
-// Get one facility by ID (assumed ID is sent via query or body — update if needed)
+// Get one facility by ID
 export const getFacility = async (facilityId) => {
-  const response = await fetch(`${API_URL}/api/Facility/facility/${facilityId}`);
-  if (!response.ok) throw new Error("Failed to fetch facility");
-  return await response.json();
+  const response = await fetch(`${API_URL}/api/Facility/facility/${facilityId}`, {
+    headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
+  });
+  const data = await parseResponse(response);
+  if (!response.ok) throw new Error(data.message || "Failed to fetch facility");
+  return data;
 };
 
 // Add a new facility
 export const addFacility = async (facilityData) => {
   const response = await fetch(`${API_URL}/api/Facility/facility`, {
     method: "POST",
-    headers: { "Content-Type": "application/json",
+    headers: { 
+      "Content-Type": "application/json",
       "Authorization": `Bearer ${localStorage.getItem("token")}`
-     },
+    },
     body: JSON.stringify(facilityData),
   });
-  if (!response.ok) throw new Error("Failed to add facility");
-  return await response.json();
+  const data = await parseResponse(response);
+  if (!response.ok) throw new Error(data.message || "Failed to add facility");
+  return data;
 };
 
 // Update an existing facility
 export const updateFacility = async (facilityData) => {
   const response = await fetch(`${API_URL}/api/Facility/facility`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json",
+    headers: { 
+      "Content-Type": "application/json",
       "Authorization": `Bearer ${localStorage.getItem("token")}`
-     },
+    },
     body: JSON.stringify(facilityData),
   });
-  if (!response.ok) throw new Error("Failed to update facility");
-  return await response.json();
+  const data = await parseResponse(response);
+  if (!response.ok) throw new Error(data.message || "Failed to update facility");
+  return data;
 };
 
 // Remove a facility
 export const removeFacility = async (facilityId) => {
   const response = await fetch(`${API_URL}/api/Facility/facility?id=${facilityId}`, {
     method: "DELETE",
-    headers: { "Content-Type": "application/json",
+    headers: { 
+      "Content-Type": "application/json",
       "Authorization": `Bearer ${localStorage.getItem("token")}`
-     },
+    },
   });
-  if (!response.ok) throw new Error("Failed to remove facility");
+  const data = await parseResponse(response);
+  if (!response.ok) throw new Error(data.message || "Failed to remove facility");
+  return data;
 };
 
 // Add multiple facility images
@@ -71,41 +90,22 @@ export const addFacilityImages = async (facilityId, images) => {
   const formData = new FormData();
   formData.append("facilityId", facilityId.toString());
   
-  images.forEach((file, index) => {
+  images.forEach((file) => {
     formData.append(`formFiles`, file);
   });
 
-  try {
-    const response = await fetch(`${API_URL}/api/Facility/facility-images`, {
-      method: "POST",
-      body: formData,
-      headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
-      }
-    });
-
-    const text = await response.text();
-    try {
-      // Try to parse as JSON
-      const data = text ? JSON.parse(text) : {};
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to upload images");
-      }
-      return data;
-    } catch (e) {
-      // If not JSON, use the text as error message
-      if (!response.ok) {
-        throw new Error(text || "Failed to upload images");
-      }
-      return text;
+  const response = await fetch(`${API_URL}/api/Facility/facility-images`, {
+    method: "POST",
+    body: formData,
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
     }
-  } catch (error) {
-    console.error("Error uploading images:", error);
-    throw error;
-  }
+  });
+
+  const data = await parseResponse(response);
+  if (!response.ok) throw new Error(data.message || "Failed to upload images");
+  return data;
 };
-
-
 
 // Delete facility image
 export const deleteFacilityImage = async (imageId) => {
@@ -115,28 +115,37 @@ export const deleteFacilityImage = async (imageId) => {
       "Authorization": `Bearer ${localStorage.getItem("token")}`
     }
   });
-  if (!response.ok) throw new Error("Failed to delete image");
+  const data = await parseResponse(response);
+  if (!response.ok) throw new Error(data.message || "Failed to delete image");
+  return data;
 };
 
-// Get a facility photo
+// Get a facility photo (blob expected)
 export const getFacilityPhoto = async (photoId) => {
   const response = await fetch(`${API_URL}/api/Facility/facility-photo?id=${photoId}`, {
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("token")}`
     }
   });
-  if (!response.ok) throw new Error("Failed to get facility photo");
-  return await response.blob(); // Use blob() if you're loading an image
+  if (!response.ok) {
+    // Try text/json error parsing
+    const errorText = await response.text();
+    throw new Error(errorText || "Failed to get facility photo");
+  }
+  return await response.blob();
 };
 
-// Get a "renamed" (or rendered?) facility photo
+// Get a "renamed" (rendered) facility photo (blob expected)
 export const getRenFacilityPhoto = async (photoId) => {
   const response = await fetch(`${API_URL}/api/Facility/ren-facility-photo?id=${photoId}`, {
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("token")}`
     }
   });
-  if (!response.ok) throw new Error("Failed to get rendered facility photo");
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Failed to get rendered facility photo");
+  }
   return await response.blob();
 };
 
@@ -147,22 +156,24 @@ export const getFacilityPhotoList = async (facilityId) => {
       "Authorization": `Bearer ${localStorage.getItem("token")}`
     }
   });
-  if (!response.ok) throw new Error("Failed to get photo list");
-  return await response.json();
+  const data = await parseResponse(response);
+  if (!response.ok) throw new Error(data.message || "Failed to get photo list");
+  return data;
 };
 
 // Get facilities by sport ID
 export const getFacilitiesBySport = async (sportId) => {
-    try {
-  const response = await fetch(`${API_URL}/api/Facility/by-sport/${sportId}`, {
-    headers: {
-      "Authorization": `Bearer ${localStorage.getItem("token")}`
-    }
-  });
-  if (!response.ok) throw new Error("Failed to fetch by sport");
-  return await response.json();
+  try {
+    const response = await fetch(`${API_URL}/api/Facility/by-sport/${sportId}`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    const data = await parseResponse(response);
+    if (!response.ok) throw new Error(data.message || "Failed to fetch by sport");
+    return data;
   } catch (error) {
     console.error(`Error fetching facilities for sport ${sportId}:`, error);
-    return []; // Returning empty array as per your original implementation
+    return [];
   }
 };

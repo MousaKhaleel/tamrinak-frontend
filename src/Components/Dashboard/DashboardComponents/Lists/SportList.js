@@ -38,37 +38,57 @@ function SportList() {
         }
     };
 
-    if (loading) return <div>Loading sports...</div>;
-    if (error) return <div className="text-red-500">Error: {error}</div>;
+    if (loading) 
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        );
+    if (error) 
+        return <div className="alert alert-danger text-center" role="alert">Error: {error}</div>;
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h1 className="text-2xl font-bold mb-6">Sports Management</h1>
-            
-            <div className="bg-white shadow-md rounded-lg overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+        <div className="container py-4">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h1 className="h3">Sports Management</h1>
+                <Link to="/sport/create" className="btn btn-primary">
+                    + Add New Sport
+                </Link>
+            </div>
+
+            <div className="table-responsive shadow rounded">
+                <table className="table table-striped table-hover align-middle mb-0 bg-white">
+                    <thead className="table-dark">
                         <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th style={{ width: "150px" }}>Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody>
+                        {sports.length === 0 && (
+                            <tr>
+                                <td colSpan="3" className="text-center text-muted py-4">
+                                    No sports found
+                                </td>
+                            </tr>
+                        )}
                         {sports.map((sport) => (
                             <tr key={sport.id}>
-                                <td className="px-6 py-4 whitespace-nowrap">{sport.name}</td>
-                                <td className="px-6 py-4">{sport.description}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <td>{sport.name}</td>
+                                <td>{sport.description}</td>
+                                <td>
                                     <Link
                                         to={`/sport/edit/${sport.id}`}
-                                        className="text-indigo-600 hover:text-indigo-900 mr-4"
+                                        className="btn btn-sm btn-outline-primary me-2"
                                     >
                                         Edit
                                     </Link>
                                     <button
                                         onClick={() => handleDelete(sport.id)}
-                                        className="text-red-600 hover:text-red-900"
+                                        className="btn btn-sm btn-outline-danger"
                                     >
                                         Delete
                                     </button>
@@ -78,10 +98,6 @@ function SportList() {
                     </tbody>
                 </table>
             </div>
-
-            {sports.length === 0 && !loading && (
-                <div className="text-center py-8 text-gray-500">No sports found</div>
-            )}
         </div>
     );
 }
