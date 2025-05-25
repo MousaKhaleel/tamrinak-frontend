@@ -1,15 +1,33 @@
 import React from 'react';
 import './Footer.css';
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import { contactUs } from '../../Services/adminService';
 
 function Footer() {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: handle form logic
+    const form = e.target;
+    const formData = new FormData(form);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const message = formData.get('message');
+
+    try {
+      const response = await contactUs(name, email, message);
+      if (response.success) {
+        alert('تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
+        form.reset(); // Clear the form after successful submission
+      } else {
+        alert('حدث خطأ أثناء إرسال الرسالة: ' + (response.message || 'يرجى المحاولة لاحقاً'));
+      }
+    } catch (error) {
+      console.error('Error contacting us:', error);
+      alert('حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة لاحقاً.');
+    }
   };
 
   return (
-    <footer className="footer">
+    <footer id='contact' className="footer">
       <div className="footer-container">
         <div className="info-section">
           <h2>تواصل معنا الآن</h2>
@@ -40,9 +58,9 @@ function Footer() {
         <div className="form-section">
           <h2>أرسل رسالة لنا</h2>
           <form onSubmit={handleSubmit}>
-            <input type="text" placeholder="الاسم" required />
-            <input type="email" placeholder="البريد الإلكتروني" required />
-            <textarea placeholder="نص الرسالة" rows={4} required />
+            <input name="name" type="text" placeholder="الاسم" required />
+            <input name="email" type="email" placeholder="البريد الإلكتروني" required />
+            <textarea name="message" placeholder="نص الرسالة" rows={4} required />
             <button type="submit">إرسال</button>
           </form>
         </div>

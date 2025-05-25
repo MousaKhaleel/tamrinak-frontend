@@ -10,7 +10,7 @@ function HeroSection() {
         <h4>إختر مرفق رياضي - حجز فوري مع دفع آمن</h4>
         <div className="hero-content-btn">
           <Link to="/aboutUs" className="hero-btn outline">من نحن؟</Link>
-          <Link to="/booking" className="hero-btn filled">ابدا الحجز</Link>
+          <Link to="/sports" className="hero-btn filled">ابدا الحجز</Link>
         </div>
       </div>
 
@@ -22,8 +22,8 @@ function HeroSection() {
         />
         <Card
           icon={<FaTrophy size={48} />}
-          title="سهولة الاستخدام"
-          description="يتيح للمستخدمين الوصول السريع إلى المرافق الرياضية التي يبحثون عنها."
+          title="تقييمات المستخدمين"
+          description="اقرأ تقييمات حقيقية من مستخدمين سابقين لكل مرفق، وساعد غيرك بترك رأيك بعد كل حجز. الشفافية هي أساس الثقة."
         />
         <Card
           icon={<FaUsers size={48} />}

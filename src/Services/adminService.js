@@ -299,3 +299,14 @@ export const getBasicInfoUserList = async () => {
     }
   }).then(res => res.json());
 };
+
+export const contactUs = async (name, email, message) => {
+  return await fetch(`${API_URL}/api/User/contact`, {
+    method: 'POST', // Added method
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
+    body: JSON.stringify({ name, email, message }) // Added body with form data
+  }).then(res => res.json());
+};

@@ -19,6 +19,10 @@
   --btn-hover-border: #082b64;
 }
 
+/* .btn{
+  background-color: var(--btn-bg);
+} */
+
 body { 
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

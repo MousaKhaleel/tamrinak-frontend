@@ -85,8 +85,13 @@ const FieldForm = ({ initialData = {}, onSubmit, submitLabel }) => {
   };
 
 const validatePhoneNumber = (phone) => {
-  const phoneRegex = /^\+?\d{10,15}$/;
+  const phoneRegex = /^(\+962|00962|0)?(78|77|79)\d{7}$/;
   return phoneRegex.test(phone);
+};
+
+const validateLocationDesc = (desc) => {
+  // Check if the input is only numbers
+  return !/^\d+$/.test(desc);
 };
 
 const handleChange = (e) => {
@@ -103,51 +108,65 @@ const handleChange = (e) => {
       setError("");
     }
   }
+  
+  // Add validation for locationDesc
+  if (name === "locationDesc") {
+    if (!validateLocationDesc(value)) {
+      setError("عنوان الملعب لا يمكن أن يكون أرقامًا فقط.");
+    } else {
+      setError("");
+    }
+  }
 };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  setSuccess("");
 
-      if (!validatePhoneNumber(formData.phoneNumber)) {
+  if (!validatePhoneNumber(formData.phoneNumber)) {
     setError("رقم الهاتف غير صالح. الرجاء إدخال رقم صحيح.");
     return;
   }
 
-    try {
-      const payload = {
-        ...formData,
-        sportId: parseInt(formData.sportId),
-        pricePerHour: parseFloat(formData.pricePerHour || 0),
-        capacity: formData.capacity ? parseInt(formData.capacity) : null,
-      };
+  if (!validateLocationDesc(formData.locationDesc)) {
+    setError("عنوان الملعب لا يمكن أن يكون أرقامًا فقط.");
+    return;
+  }
 
-      const field = await onSubmit(payload); // passed from Add/Edit page
+  try {
+    const payload = {
+      ...formData,
+      sportId: parseInt(formData.sportId),
+      pricePerHour: parseFloat(formData.pricePerHour || 0),
+      capacity: formData.capacity ? parseInt(formData.capacity) : null,
+    };
 
-      if (images.length > 0 && field?.id) {
-        const formDataObj = new FormData();
-        formDataObj.append("fieldId", field.id);
-        images.forEach((img) => formDataObj.append("formFiles", img));
+    const field = await onSubmit(payload); // passed from Add/Edit page
 
-        const response = await fetch(`${API_URL}/api/Field/field-images`, {
-          method: "POST",
-          body: formDataObj,
-        });
+    if (images.length > 0 && field?.id) {
+      const formDataObj = new FormData();
+      formDataObj.append("fieldId", field.id);
+      images.forEach((img) => formDataObj.append("formFiles", img));
 
-        if (!response.ok) throw new Error("Image upload failed");
-      }
+      const response = await fetch(`${API_URL}/api/Field/field-images`, {
+        method: "POST",
+        body: formDataObj,
+      });
 
-      setSuccess("تمت العملية بنجاح!");
-      if (!initialData?.id) {
-        setFormData(defaultFieldData);
-        setImages([]);
-      }
-    } catch (err) {
-      console.error(err);
-      setError("حدث خطأ أثناء حفظ البيانات.");
+      if (!response.ok) throw new Error("Image upload failed");
     }
-  };
+
+    setSuccess("تمت العملية بنجاح!");
+    if (!initialData?.id) {
+      setFormData(defaultFieldData);
+      setImages([]);
+    }
+  } catch (err) {
+    console.error(err);
+    setError("حدث خطأ أثناء حفظ البيانات.");
+  }
+};
 
   return (
     <div className="container mt-5" dir="rtl">
@@ -159,7 +178,7 @@ const handleChange = (e) => {
           <form onSubmit={handleSubmit} className="row g-3">
             {[
               { name: "name", placeholder: "اسم الملعب", required: true },
-              { name: "locationDesc", placeholder: "وصف الموقع", required: true },
+              { name: "locationDesc", placeholder: "عنوان الملعب", required: true },
               { name: "pricePerHour", type: "number", placeholder: "السعر لكل ساعة", step: "0.01" },
               { name: "openTime", type: "time", required: true },
               { name: "closeTime", type: "time", required: true },

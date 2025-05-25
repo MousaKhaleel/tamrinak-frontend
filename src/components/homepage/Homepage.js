@@ -82,7 +82,7 @@ function Homepage() {
             </section>
 
             <section id="sports">
-                <div id="title">
+                <div style={{backgroundColor: '#102E50'}} id="title">
                     <h1>إختر رياضتك المفضلة الآن</h1>
                 </div>
 
