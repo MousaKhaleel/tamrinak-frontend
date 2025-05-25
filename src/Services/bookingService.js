@@ -1,5 +1,15 @@
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
+// Helper function to parse response as JSON or fallback to text message
+const parseResponse = async (response) => {
+  const text = await response.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { message: text };
+  }
+};
+
 // Book a field
 export const bookField = async (bookingData, token) => {
   const response = await fetch(`${API_URL}/api/Booking/book-field`, {
@@ -11,14 +21,7 @@ export const bookField = async (bookingData, token) => {
     body: JSON.stringify(bookingData),
   });
 
-  let responseData;
-  const text = await response.text();
-
-  try {
-    responseData = JSON.parse(text);
-  } catch {
-    responseData = { message: text }; // fallback for non-JSON errors
-  }
+  const responseData = await parseResponse(response);
 
   if (!response.ok) {
     console.error("Booking error:", responseData);
@@ -28,45 +31,42 @@ export const bookField = async (bookingData, token) => {
   return responseData;
 };
 
-
 // Get a specific booking by ID
 export const getBooking = async (bookingId) => {
   const response = await fetch(`${API_URL}/api/Booking/booking/${bookingId}`, {
     method: "GET",
-    headers: { "Content-Type": "application/json",
+    headers: {
+      "Content-Type": "application/json",
       "Authorization": `Bearer ${localStorage.getItem("token")}`
-     },
+    },
   });
 
+  const responseData = await parseResponse(response);
+
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Fetching booking failed");
+    throw new Error(responseData.message || "Fetching booking failed");
   }
 
-  return await response.json();
+  return responseData;
 };
 
 // Get all bookings for a user
 export const getUserBookings = async (userId) => {
-  try {
-    const response = await fetch(`${API_URL}/api/Booking/user-bookings/${userId}`, {
-      method: 'GET',
-      headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
-      },
-    });
+  const response = await fetch(`${API_URL}/api/Booking/user-bookings/${userId}`, {
+    method: 'GET',
+    headers: {
+      "Accept": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
+  });
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || "Failed to fetch user bookings");
-    }
+  const responseData = await parseResponse(response);
 
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching user bookings:', error);
-    throw error; // Re-throw to allow calling code to handle it
+  if (!response.ok) {
+    throw new Error(responseData.message || "Failed to fetch user bookings");
   }
+
+  return responseData;
 };
 
 // Delete a booking
@@ -78,9 +78,10 @@ export const deleteBooking = async (bookingId) => {
     }
   });
 
+  const responseData = await parseResponse(response);
+
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Deleting booking failed");
+    throw new Error(responseData.message || "Deleting booking failed");
   }
 };
 
@@ -93,9 +94,10 @@ export const cancelBooking = async (bookingId) => {
     }
   });
 
+  const responseData = await parseResponse(response);
+
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Canceling booking failed");
+    throw new Error(responseData.message || "Canceling booking failed");
   }
 };
 
@@ -108,9 +110,10 @@ export const payForBooking = async (bookingId) => {
     }
   });
 
+  const responseData = await parseResponse(response);
+
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Payment failed");
+    throw new Error(responseData.message || "Payment failed");
   }
 };
 
@@ -125,12 +128,13 @@ export const changeBooking = async (bookingId, updatedData) => {
     body: JSON.stringify(updatedData),
   });
 
+  const responseData = await parseResponse(response);
+
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Updating booking failed");
+    throw new Error(responseData.message || "Updating booking failed");
   }
 
-  return await response.json();
+  return responseData;
 };
 
 // Check availability
@@ -142,10 +146,11 @@ export const getAvailability = async (queryParams = "") => {
     }
   });
 
+  const responseData = await parseResponse(response);
+
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Fetching availability failed");
+    throw new Error(responseData.message || "Fetching availability failed");
   }
 
-  return await response.json();
+  return responseData;
 };

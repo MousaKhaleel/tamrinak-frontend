@@ -1,5 +1,15 @@
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
+const parseResponse = async (response) => {
+  const contentType = response.headers.get("Content-Type") || "";
+  if (contentType.includes("application/json")) {
+    return await response.json();
+  } else {
+    return await response.text();
+  }
+};
+
+// Get all sports
 export const fetchSports = async () => {
   try {
     const response = await fetch(`${API_URL}/api/Sport/all-sports`, {
@@ -8,19 +18,16 @@ export const fetchSports = async () => {
         "Authorization": `Bearer ${localStorage.getItem("token")}`
       }
     });
-    if (!response.ok) {
-      throw new Error("Failed to fetch sports");
-    }
-    const data = await response.json();
-    return data;
+
+    if (!response.ok) throw new Error(await parseResponse(response));
+    return await parseResponse(response);
   } catch (error) {
     console.error("Error fetching sports:", error);
     return [];
   }
 };
 
-//TODO: add sport admin, update sport, delete sport
-// Get single sport by ID (assuming ID is passed as query param like ?id=123)
+// Get single sport by ID
 export const getSport = async (id) => {
   try {
     const response = await fetch(`${API_URL}/api/Sport/sport/${id}`, {
@@ -30,17 +37,12 @@ export const getSport = async (id) => {
         "Content-Type": "application/json"
       }
     });
-    
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      const errorMessage = errorData?.message || `HTTP error! status: ${response.status}`;
-      throw new Error(errorMessage);
-    }
-    
-    return await response.json();
+
+    if (!response.ok) throw new Error(await parseResponse(response));
+    return await parseResponse(response);
   } catch (error) {
     console.error("Error fetching sport:", error.message);
-    throw error; // Re-throw to let the caller handle it
+    throw error;
   }
 };
 
@@ -60,35 +62,35 @@ export const addSport = async (sportData) => {
       }
     });
 
-    if (!response.ok) throw new Error("Failed to add sport");
-    return await response.json();
+    if (!response.ok) throw new Error(await parseResponse(response));
+    return await parseResponse(response);
   } catch (error) {
     console.error("Error adding sport:", error);
     return null;
   }
 };
 
-
-
 // Update an existing sport
 export const updateSport = async (sportData) => {
   try {
     const response = await fetch(`${API_URL}/api/Sport/sport`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem("token")}`
-     },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
       body: JSON.stringify(sportData),
     });
-    if (!response.ok) throw new Error("Failed to update sport");
-    return await response.json();
+
+    if (!response.ok) throw new Error(await parseResponse(response));
+    return await parseResponse(response);
   } catch (error) {
     console.error("Error updating sport:", error);
     return null;
   }
 };
 
-// Delete a sport by ID (assuming ID is passed as query param like ?id=123)
+// Delete a sport
 export const deleteSport = async (id) => {
   try {
     const response = await fetch(`${API_URL}/api/Sport/sport?id=${id}`, {
@@ -97,7 +99,8 @@ export const deleteSport = async (id) => {
         "Authorization": `Bearer ${localStorage.getItem("token")}`
       }
     });
-    if (!response.ok) throw new Error("Failed to delete sport");
+
+    if (!response.ok) throw new Error(await parseResponse(response));
     return true;
   } catch (error) {
     console.error("Error deleting sport:", error);
@@ -105,7 +108,7 @@ export const deleteSport = async (id) => {
   }
 };
 
-// Update sport image (FormData, typically includes image file)
+// Update sport image
 export const updateSportImage = async (id, formData) => {
   try {
     const response = await fetch(`${API_URL}/api/Sport/sport-image/${id}`, {
@@ -115,8 +118,9 @@ export const updateSportImage = async (id, formData) => {
         "Authorization": `Bearer ${localStorage.getItem("token")}`
       }
     });
-    if (!response.ok) throw new Error("Failed to update sport image");
-    return await response.json();
+
+    if (!response.ok) throw new Error(await parseResponse(response));
+    return await parseResponse(response);
   } catch (error) {
     console.error("Error updating sport image:", error);
     return null;

@@ -1,5 +1,14 @@
-//TODO
-const API_URL = process.env.REACT_APP_API_URL || "https://localhost:7160"; // It's common to use REACT_APP_ prefix for env vars in React
+const API_URL = process.env.REACT_APP_API_URL || "https://localhost:7160";
+
+const parseResponse = async (response) => {
+  const contentType = response.headers.get("Content-Type");
+
+  if (contentType && contentType.includes("application/json")) {
+    return await response.json();
+  } else {
+    return await response.text();
+  }
+};
 
 export const createPayment = async (paymentData, authToken) => {
   try {
@@ -7,21 +16,22 @@ export const createPayment = async (paymentData, authToken) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${authToken}`, // Use the authToken parameter
+        "Authorization": `Bearer ${authToken}`,
       },
       body: JSON.stringify(paymentData),
     });
 
+    const result = await parseResponse(response);
+
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ message: response.statusText }));
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      const message = typeof result === "string" ? result : result.message || response.statusText;
+      throw new Error(message);
     }
 
-    const result = await response.json();
     return result;
   } catch (error) {
     console.error("Failed to create payment:", error);
-    throw error; // Re-throw to be caught by the caller
+    throw error;
   }
 };
 
@@ -35,11 +45,15 @@ export const createStripePaymentIntent = async (paymentIntentRequest, authToken)
       },
       body: JSON.stringify(paymentIntentRequest),
     });
+
+    const result = await parseResponse(response);
+
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ message: response.statusText }));
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      const message = typeof result === "string" ? result : result.message || response.statusText;
+      throw new Error(message);
     }
-    return await response.json();
+
+    return result;
   } catch (error) {
     console.error("Failed to create Stripe PaymentIntent:", error);
     throw error;

@@ -5,7 +5,7 @@ const ReportsChart = () => {
   useEffect(() => {
     const chart = new ApexCharts(document.querySelector("#reportsChart"), {
       series: [{
-        name: 'Sales',
+        name: 'Bookings',
         data: [31, 40, 28, 51, 42, 82, 56],
       }, {
         name: 'Revenue',

@@ -12,7 +12,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import SportsPage from './Components/Sport/SportsPage';
 import FacilitiesPage from './Components/Facility/FacilitiesPage';
 import Profile from './Components/User/Profile';
-import AdminDashboard from './Components/Admin/AdminDashboard';
+import Dashboard from './Components/Dashboard/Dashboard';
 import FieldsPage from './Components/Field/FieldsPage';
 import FieldDetails from './Components/Field/FieldDetails';
 import ConfirmEmail from './Components/Confirm/ConfirmEmail';
@@ -25,17 +25,17 @@ import "slick-carousel/slick/slick-theme.css";
 import ResetPassword from './Components/Auth/ResetPassword';
 import FacilityDetails from './Components/Facility/FacilityDetails';
 import History from './Components/User/History';
-import SportList from './Components/Admin/DashboardComponents/Lists/SportList';
-import UserList from './Components/Admin/DashboardComponents/Lists/UserList';
-import FacilityList from './Components/Admin/DashboardComponents/Lists/FacilityList';
-import FieldList from './Components/Admin/DashboardComponents/Lists/FieldList';
-import PendingRequestsList from './Components/Admin/DashboardComponents/Lists/PendingRequestsList';
-import AddFieldPage from './Components/Admin/DashboardComponents/Forms/Field/AddFieldPage';
-import EditFieldPage from './Components/Admin/DashboardComponents/Forms/Field/EditFieldPage';
-import AddFacilityPage from './Components/Admin/DashboardComponents/Forms/Facility/AddFacilityPage';
-import EditFacilityPage from './Components/Admin/DashboardComponents/Forms/Facility/EditFacilityPage';
-import AddSportPage from './Components/Admin/DashboardComponents/Forms/Sport/AddSportPage';
-import EditSportPage from './Components/Admin/DashboardComponents/Forms/Sport/EditSportPage';
+import SportList from './Components/Dashboard/DashboardComponents/Lists/SportList';
+import UserList from './Components/Dashboard/DashboardComponents/Lists/UserList';
+import FacilityList from './Components/Dashboard/DashboardComponents/Lists/FacilityList';
+import FieldList from './Components/Dashboard/DashboardComponents/Lists/FieldList';
+import PendingRequestsList from './Components/Dashboard/DashboardComponents/Lists/PendingRequestsList';
+import AddFieldPage from './Components/Dashboard/DashboardComponents/Forms/Field/AddFieldPage';
+import EditFieldPage from './Components/Dashboard/DashboardComponents/Forms/Field/EditFieldPage';
+import AddFacilityPage from './Components/Dashboard/DashboardComponents/Forms/Facility/AddFacilityPage';
+import EditFacilityPage from './Components/Dashboard/DashboardComponents/Forms/Facility/EditFacilityPage';
+import AddSportPage from './Components/Dashboard/DashboardComponents/Forms/Sport/AddSportPage';
+import EditSportPage from './Components/Dashboard/DashboardComponents/Forms/Sport/EditSportPage';
 import FAQ from './Components/Other/FAQ';
 
 function App() {
@@ -47,7 +47,7 @@ function App() {
   
   // Admin paths where we want to show the admin navbar
   const adminPaths = [
-    "/admin-dashboard", 
+    "/dashboard", 
     "/fields/add",
     "/fields/edit/", 
     "/facility/add",
@@ -87,7 +87,7 @@ function App() {
           <Route path="/facility-details/:facilityId" element={<FacilityDetails />} />
           <Route path="/profile" element={<Profile />} />
           <Route path='/history' element={<History />} />
-          <Route path='/admin-dashboard' element={<AdminDashboard />} />
+          <Route path='/dashboard' element={<Dashboard />} />
           <Route path="/sport-list" element={<SportList />} />
           <Route path="/user-list" element={<UserList />} />
           <Route path="/facility-list" element={<FacilityList />} />

@@ -1,16 +1,16 @@
 import React from 'react';
-import BookingCard from './DashboardComponents/BookingCard';
-import ReportsChart from './DashboardComponents/ReportsCard';
+import BookingCard from './DashboardComponents/Admin/BookingCard';
+import ReportsChart from './DashboardComponents/Admin/ReportsCard';
 import Sidebar from './DashboardComponents/SideBar';
 
-import './adminStyle.css';
+import './Dashboard.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthContext';
 
-const AdminDashboard = () => {
+const Dashboard = () => {
   const { user, logoutUser } = useAuth();
 
   const isAdmin = user?.profile?.roles?.includes('Admin') || user?.profile?.roles?.includes('SuperAdmin');
@@ -25,7 +25,7 @@ const AdminDashboard = () => {
           <nav>
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/admin-dashboard">الرئيسية</Link>
+                <Link to="/dashboard">الرئيسية</Link>
               </li>
               <li className="breadcrumb-item active">لوحة التحكم</li>
             </ol>
@@ -57,4 +57,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default Dashboard;
