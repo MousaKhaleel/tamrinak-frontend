@@ -55,7 +55,7 @@ const getNavbarThemeClasses = () => {
           </form>
         </div>
 
-        <div className="d-flex align-items-center">
+        {/* <div className="d-flex align-items-center">
           <button
             onClick={toggleTheme}
             className="btn btn-sm mx-2"
@@ -66,7 +66,7 @@ const getNavbarThemeClasses = () => {
           <div className="backHome icon-wrapper">
             <a href="/"><GoHome className={theme === 'dark' ? 'text-light' : 'text-dark'} /></a>
           </div>
-        </div>
+        </div> */}
 
         <nav className="header-nav ms-auto">
           <ul className="d-flex align-items-center">
@@ -120,13 +120,13 @@ const getNavbarThemeClasses = () => {
           </div>
 
           <div className="d-flex gap-2 align-items-center">
-            <button
+            {/* <button
               onClick={toggleTheme}
               className="btn btn-sm mx-2"
               title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
             >
               {isDark ? '☀️' : '🌙'}
-            </button>
+            </button> */}
 
             {user ? (
               <div className="dropdown">
