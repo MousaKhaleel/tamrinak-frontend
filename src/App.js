@@ -36,6 +36,7 @@ import AddFacilityPage from './Components/Admin/DashboardComponents/Forms/Facili
 import EditFacilityPage from './Components/Admin/DashboardComponents/Forms/Facility/EditFacilityPage';
 import AddSportPage from './Components/Admin/DashboardComponents/Forms/Sport/AddSportPage';
 import EditSportPage from './Components/Admin/DashboardComponents/Forms/Sport/EditSportPage';
+import FAQ from './Components/Other/FAQ';
 
 function App() {
   const location = useLocation();
@@ -93,6 +94,7 @@ function App() {
           <Route path="/field-list" element={<FieldList />} />
           <Route path="/pending-requests" element={<PendingRequestsList />} />
           <Route path="/aboutUs" element={<AboutUs />} />
+          <Route path="/faq" element={<FAQ />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         

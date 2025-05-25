@@ -39,15 +39,15 @@
 --------------------------------------------------------------*/
 .nav-link {
   position: relative;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--secondary-color);
-  transition: color var(--transition-speed);
+  font-size: 1.2rem !important;
+  font-weight: 600 !important;
+  color: var(--secondary-color) !important;
+  transition: color var(--transition-speed) !important;
 }
 
 .nav-link:hover,
 .nav-link.active {
-  color: #fff;
+  color: #fff !important;
 }
 
 .nav-link::after {

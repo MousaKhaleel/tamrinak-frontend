@@ -34,7 +34,7 @@ const Sidebar = () => {
       <aside dir="rtl" id="sidebar" className="sidebar">
         <ul className="sidebar-nav" id="sidebar-nav">
         <li className="nav-item">
-          <Link className="nav-link" to="/admin-dashboard">
+          <Link className="nav-link2" to="/admin-dashboard">
             <i className="bi bi-grid"></i>
             <span>Dashboard</span>
           </Link>
@@ -42,7 +42,7 @@ const Sidebar = () => {
 
         <li className="nav-item">
           <a
-            className="nav-link collapsed"
+            className="nav-link2 collapsed"
             href="#components-nav"
             data-bs-toggle="collapse"
             role="button"
@@ -93,7 +93,7 @@ const Sidebar = () => {
 
         {/* Forms Nav */}
         <li className="nav-item">
-          <a className="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <a className="nav-link2 collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
             <i className="bi bi-journal-text"></i>
             <span>Forms</span>
             <i className="bi bi-chevron-down ms-auto"></i>
@@ -134,7 +134,7 @@ const Sidebar = () => {
 
         {/* Tables Nav */}
         <li className="nav-item">
-          <a className="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <a className="nav-link2 collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
             <i className="bi bi-layout-text-window-reverse"></i>
             <span>Tables</span>
             <i className="bi bi-chevron-down ms-auto"></i>
@@ -157,7 +157,7 @@ const Sidebar = () => {
 
         {/* Charts Nav */}
         <li className="nav-item">
-          <a className="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+          <a className="nav-link2 collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
             <i className="bi bi-bar-chart"></i>
             <span>Charts</span>
             <i className="bi bi-chevron-down ms-auto"></i>
@@ -189,7 +189,7 @@ const Sidebar = () => {
 
         {/* Profile Page */}
         <li className="nav-item">
-          <Link className="nav-link collapsed" to="/profile">
+          <Link className="nav-link2 collapsed" to="/profile">
             <i className="bi bi-person"></i>
             <span>Profile</span>
           </Link>
@@ -197,33 +197,25 @@ const Sidebar = () => {
 
         {/* F.A.Q Page */}
         <li className="nav-item">
-          <Link className="nav-link collapsed" to="/pages-faq">
+          <Link className="nav-link2 collapsed" to="/faq">
             <i className="bi bi-question-circle"></i>
             <span>F.A.Q</span>
           </Link>
         </li>
 
         {/* Contact Page */}
-        <li className="nav-item">
-          <Link className="nav-link collapsed" to="/pages-contact">
+        {/* <li className="nav-item">
+          <Link className="nav-link2 collapsed" to="#contact">
             <i className="bi bi-envelope"></i>
             <span>Contact</span>
           </Link>
-        </li>
+        </li> */}
 
         {/* Error 404 Page */}
         <li className="nav-item">
-          <Link className="nav-link collapsed" to="/pages-error-404">
+          <Link className="nav-link2 collapsed" to="/pages-error-404">
             <i className="bi bi-dash-circle"></i>
             <span>Error 404</span>
-          </Link>
-        </li>
-
-        {/* Blank Page */}
-        <li className="nav-item">
-          <Link className="nav-link collapsed" to="/pages-blank">
-            <i className="bi bi-file-earmark"></i>
-            <span>Blank</span>
           </Link>
         </li>
         </ul>

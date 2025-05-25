@@ -8,8 +8,14 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../Context/AuthContext';
 
 const AdminDashboard = () => {
+  const { user, logoutUser } = useAuth();
+
+  const isAdmin = user?.profile?.roles?.includes('Admin') || user?.profile?.roles?.includes('SuperAdmin');
+  const isManager = user?.profile?.roles?.includes('VenueManager');
+
   return (
     <div dir="rtl">
       <Sidebar />
@@ -30,10 +36,14 @@ const AdminDashboard = () => {
           <div className="row">
             <div className="col-lg-10">
               <div className="row">
-                <BookingCard />
-                {/* <RevenueCard /> */}
-                {/* <CustomersCard /> */}
-                <ReportsChart />
+                {isAdmin && (
+                  <>
+                    <BookingCard />
+                    {/* <RevenueCard /> */}
+                    {/* <CustomersCard /> */}
+                    <ReportsChart />
+                  </>
+                )}
               </div>
             </div>
 
@@ -46,6 +56,5 @@ const AdminDashboard = () => {
     </div>
   );
 };
-
 
 export default AdminDashboard;

@@ -19,13 +19,13 @@
   --btn-hover-border: #082b64;
 }
 
-.btn{
+/* .btn{
   background-color: var(--btn-bg) !important;
 }
 
 .btn:hover{
   background-color: var(--btn-hover-bg) !important;
-}
+} */
 
 body { 
   margin: 0;
@@ -98,13 +98,13 @@ button {
 
 /* Button styles using CSS variables */
 .btn-primary {
-  background-color: var(--btn-bg);
-  border-color: var(--btn-border);
-  color: #fff;
+  background-color: var(--btn-bg) !important;
+  border-color: var(--btn-border) !important;
+color: #fff !important;
   transition: background-color 0.3s, border-color 0.3s;
 }
 
 .btn-primary:hover {
-  background-color: var(--btn-hover-bg);
-  border-color: var(--btn-hover-border);
+  background-color: var(--btn-hover-bg) !important;
+  border-color: var(--btn-hover-border) !important;
 }
