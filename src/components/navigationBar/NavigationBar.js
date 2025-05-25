@@ -41,7 +41,7 @@ const getNavbarThemeClasses = () => {
         </div>
 
         <div className="search-bar">
-          <form className="search-form d-flex align-items-center" method="POST" action="#">
+          <form className="search-form d-flex align-items-center">
             <input
               type="text"
               name="query"
@@ -103,7 +103,9 @@ const getNavbarThemeClasses = () => {
         <div className={`collapse navbar-collapse bg-highlight`} id="navbarNavAltMarkup">
           <div className="navbar-nav ms-auto me-4 mb-2 mb-lg-0">
             <Link className="nav-link" to="/">الرئيسية</Link>
-            <Link className="nav-link" to="/sports">الرياضات</Link>
+            <Link className="nav-link" to="/sports">الانشطة</Link>
+            <Link className="nav-link" to="/aboutUs">حول الموقع</Link>
+            <a className="nav-link" href='#contact'>تواصل معنا</a>
 
             {isAdmin && (
               <Link className="nav-link text-warning" style={{ background: "green", borderRadius: "5px" }} to="/admin-dashboard">
@@ -115,8 +117,6 @@ const getNavbarThemeClasses = () => {
                 اضف منشأتك
               </Link>
             )}
-
-            <Link className="nav-link" to="/aboutUs">حول الموقع</Link>
           </div>
 
           <div className="d-flex gap-2 align-items-center">

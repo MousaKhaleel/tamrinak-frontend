@@ -16,24 +16,24 @@ const SportCard = ({ sports }) => {
 
   return (
     <div className="container py-4" dir="rtl">
-      <h1 className="text-center mb-5">الرياضات</h1>
-      
+      <h1 className="text-center mb-5">اختر النشاط الرياضي</h1>
       {/* Toggle switch for fields/facilities */}
       <div className="text-center mb-4">
-        <div className="btn-group" role="group">
+      <h5 className="text-center">نوع الخدمة:</h5>
+        <div className="btn-group gap-3" role="group">
           <button 
             type="button" 
             className={`btn ${selectedType === 'fields' ? 'btn-primary' : 'btn-outline-primary'}`}
             onClick={() => setSelectedType('fields')}
           >
-            الملاعب
+            الحجز اليومي
           </button>
           <button 
             type="button" 
             className={`btn ${selectedType === 'facilities' ? 'btn-primary' : 'btn-outline-primary'}`}
             onClick={() => setSelectedType('facilities')}
           >
-            المنشآت
+            اشتراك شهري
           </button>
         </div>
       </div>
