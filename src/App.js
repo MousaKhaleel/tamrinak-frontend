@@ -40,6 +40,7 @@ import FAQ from './Components/Other/FAQ';
 import Help from './Components/Help/Help';
 import PaymentSuccess from './Components/Payment/PaymentSuccess';
 import PaymentCancelled from './Components/Payment/PaymentCancelled';
+import OfferPage from './Components/Offer/OfferPage';
 
 function App() {
   const location = useLocation();
@@ -76,6 +77,7 @@ function App() {
           <Route path="/auth" element={<AuthPage />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path="/sports" element={<SportsPage />} />
+          <Route path="/offers" element={<OfferPage />} />
           <Route path="/field-details/:fieldId" element={<FieldDetails />} />
           <Route path="/fields" element={<FieldsPage />} />
           <Route path="/fields/add" element={<AddFieldPage />} />

@@ -104,6 +104,7 @@ const getNavbarThemeClasses = () => {
           <div className="navbar-nav ms-auto me-4 mb-2 mb-lg-0">
             <Link className="nav-link" to="/">الرئيسية</Link>
             <Link className="nav-link" to="/sports">الانشطة</Link>
+            {/* <Link className="nav-link" to="/offers">العروض</Link> */}
             <Link className="nav-link" to="/aboutUs">حول الموقع</Link>
             <a className="nav-link" href='#contact'>تواصل معنا</a>
 

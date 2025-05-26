@@ -98,12 +98,3 @@ export const updateOffer = async (offerId, durationInMonths, price) => {
     throw error;
   }
 };
-
-const offerService = {
-  addOffer,
-  getOffersByFacilityId,
-  removeOffer,
-  updateOffer,
-};
-
-export default offerService;

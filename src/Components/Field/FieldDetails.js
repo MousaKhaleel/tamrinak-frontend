@@ -237,7 +237,7 @@ function FieldDetails() {
           const paymentRequest = {
             bookingId: newBookingId,
             membershipId: null, // or a valid ID if it's a membership
-            amount: amountInSmallestUnit,
+            amount: amountInSmallestUnit/10,
             currency: "jod"
           };
           //console.log(newBookingId+"")
