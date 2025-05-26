@@ -11,6 +11,7 @@
   background-position: 10% -20px;
   position: relative;
   padding-top: 90px;
+  background-attachment: fixed;
   animation: fadeIn 1.5s ease-out;
 }
 
@@ -66,13 +67,13 @@
 }
 
 .hero-btn.outline:hover {
-  background-color: #ffae00;
+  background-color: #feb821;
   color: var(--secondary-color);
 }
 
 /* من نحن */
 .hero-btn.filled {
-  background-color: #ffae00;
+  background-color: #feb821;
   color: var(--secondary-color);
   border: none;
 }
@@ -89,6 +90,8 @@
   gap: 30px;
   flex-wrap: wrap;
   padding: 0 20px;
+  max-width: 1200px;  /* optional max width */
+  margin: 0 auto;     /* center container */
 }
 
 .home-card {
@@ -96,17 +99,23 @@
   padding: 20px;
   border-radius: 10px;
   max-width: 300px;
+  width: 100%;         /* let it grow to fill available space */
+  box-sizing: border-box;
   text-align: center;
+  flex: 1 1 280px;     /* flex-grow, flex-shrink, flex-basis */
+  min-width: 250px;    /* prevent shrinking too small */
 }
 
 .home-card img {
   width: 100%;
   height: auto;
   margin-bottom: 10px;
+  border-radius: 8px;  /* optional for better look */
 }
 
 .home-card h3 {
   margin-bottom: 10px;
+  font-size: 1.25rem;
 }
 
 .home-card p {
@@ -115,9 +124,38 @@
 }
 
 .icon-wrapper {
-  color: #102E50;  ; /* or whatever matches your theme */
+  color: #102E50; /* theme color */
   margin-bottom: 10px;
 }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .home-cards-container {
+    gap: 20px;
+    padding: 0 10px;
+  }
+  
+  .home-card {
+    flex: 1 1 100%;  /* cards take full width on smaller screens */
+    max-width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-card {
+    padding: 15px;
+  }
+
+  .home-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .home-card p {
+    font-size: 13px;
+  }
+}
+
 
 
 @media (max-width: 768px) {
