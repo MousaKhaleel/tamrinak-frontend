@@ -133,25 +133,27 @@ const AboutUs = () => {
       </div>
 
       {/* Team Section */}
-      <div className="team-container">
-      <p>our team</p>TODO
-        <div className="team-row">
-          {["يزيد محمد الفيومي", "دانيال أيمن جبر", "موسى محمد خليل", "سيف الله المحمديين", "بكر باسم"].map((name, index) => (
-            <div className="our-team" key={index}>
-              <div className="picture">
-                <img src={avatar} alt={name} /> TODO: add image
+      <div>
+        <h2 className='text-center mt-5'>فريقنا</h2>
+        <div className="team-container">
+          <div className="team-row">
+            {["يزيد محمد الفيومي", "دانيال أيمن جبر", "موسى محمد خليل", "سيف الله المحمديين", "بكر باسم"].map((name, index) => (
+              <div className="our-team" key={index}>
+                <div className="picture">
+                  <img src={avatar} alt={name} />
+                </div>
+                <div className="team-content">
+                  <h3 className="name">{name}</h3>
+                  <h4 className="title">هندسة البرمجيات</h4>
+                </div>
+                <ul className="social">
+                  <li><a href="#" className="fa fa-facebook"></a></li>
+                  <li><a href="#" className="fa fa-instagram"></a></li>
+                  <li><a href="#" className="fa fa-linkedin"></a></li>
+                </ul>
               </div>
-              <div className="team-content">
-                <h3 className="name">{name}</h3>
-                <h4 className="title">هندسة البرمجيات</h4>
-              </div>
-              <ul className="social">
-                <li><a href="#" className="fa fa-facebook"></a></li>
-                <li><a href="#" className="fa fa-instagram"></a></li>
-                <li><a href="#" className="fa fa-linkedin"></a></li>
-              </ul>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

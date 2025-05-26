@@ -23,10 +23,10 @@ import DefaultImage from "../../Assets/Defaults/default-featured-image.png";
 import StarRating from "../Review/StarRating";
 import ReviewList from "../Review/ReviewList";
 import ReviewForm from "../Review/ReviewForm";
-import { FaClock, FaLightbulb, FaHome } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaClock, FaPhone, FaMoneyBillWave, FaLightbulb, FaHome } from 'react-icons/fa';
 import { GiTennisCourt } from 'react-icons/gi';
 import StatusDialog from './../UI/StatusDialog/StatusDialog';
-import StripeCheckoutForm from '../../Components/Payment/StripeCheckoutForm'; // Ensure this path is correct
+import StripeCheckoutForm from '../../Components/Payment/StripeCheckoutForm';
 
 // Load Stripe.js outside of a component’s render to avoid recreating the Stripe object on every render.
 // Replace "YOUR_STRIPE_PUBLISHABLE_KEY" with your actual Stripe Publishable Key
@@ -164,7 +164,7 @@ function FieldDetails() {
       if (calculatedAmount <= 0) {
         throw new Error("قيمة الحجز يجب أن تكون أكبر من صفر.");
       }
-    } catch(calcError) {
+    } catch (calcError) {
       setDialogMessage(`خطأ في حساب مدة أو قيمة الحجز: ${calcError.message}`);
       setDialogError(true);
       setDialogOpen(true);
@@ -263,11 +263,11 @@ function FieldDetails() {
       // Reset form if cash payment or if Stripe intent creation succeeded and form is now shown
       if (selectedPaymentMethod === "Cash" || (selectedPaymentMethod === "Stripe" && clientSecret)) {
         setBookingData({
-            fieldId,
-            bookingDate: "",
-            startTime: "",
-            endTime: "",
-            numberOfPeople: 1,
+          fieldId,
+          bookingDate: "",
+          startTime: "",
+          endTime: "",
+          numberOfPeople: 1,
         });
       }
 
@@ -343,8 +343,8 @@ function FieldDetails() {
   const handleViewReplies = async (reviewId) => {
     if (viewingReplies === reviewId) {
       setViewingReplies(null); // Hide replies if already viewing
-        // Optionally, reset replies in state to collapse them visually
-        setReviews(currentReviews => currentReviews.map(r => r.id === reviewId ? {...r, replies: undefined} : r));
+      // Optionally, reset replies in state to collapse them visually
+      setReviews(currentReviews => currentReviews.map(r => r.id === reviewId ? { ...r, replies: undefined } : r));
 
     } else {
       try {
@@ -399,19 +399,32 @@ function FieldDetails() {
             )}
           </div>
 
+          {/* <div className="map-container">
+            <iframe
+              src={field.locationMap}
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="خريطة الموقع"
+            />
+          </div> */}
+
           <div className="details">
             {/* ... (existing field details sections) ... */}
-            <div className="detail-section"><strong>الرياضة:</strong> <p><GiTennisCourt style={{ marginLeft: '5px' }} /> {field.sport?.name || 'غير محدد'}</p></div>
-            <div className="detail-section"><strong>الموقع:</strong> <p>{field.locationDesc}</p></div>
-            <div className="detail-section"><strong>الموقع على الخريطة:</strong> <p>{field.locationMap || 'غير متوفر'}</p></div>
-            <div className="detail-section"><strong>السعر لكل ساعة:</strong> <p>{field.pricePerHour ? `${field.pricePerHour} د.أ` : "اتصل للاستعلام"}</p></div>
-            <div className="detail-section"><strong>رقم التواصل:</strong> <p>{field.phoneNumber}</p></div>
+            <div className="detail-section"><strong><GiTennisCourt /> الرياضة:</strong> <p>{field.sport?.name || 'غير محدد'}</p></div>
+            <div className="detail-section"><strong><FaMapMarkerAlt/> العنوان:</strong> <p>{field.locationDesc}</p></div>
+            {/* <div className="detail-section"><strong><FaMapMarkerAlt/> الموقع على الخريطة:</strong> <p>{field.locationMap || 'غير متوفر'}</p></div> */}
+            <div className="detail-section"><strong><FaMoneyBillWave /> السعر لكل ساعة:</strong> <p>{field.pricePerHour ? `${field.pricePerHour} د.أ` : "اتصل للاستعلام"}</p></div>
+            <div className="detail-section"><strong><FaPhone/> رقم التواصل:</strong> <p>{field.phoneNumber}</p></div>
             <div className="detail-section"><strong>سعة الملعب:</strong> <p>{field.capacity} أشخاص</p></div>
             <div className="detail-section"><strong><FaClock /> أوقات العمل:</strong> <p>{field.openTime} - {field.closeTime}</p></div>
             <div className="detail-section"><strong>الإضاءة:</strong> <p><FaLightbulb style={{ color: field.hasLighting ? '#ffc107' : '#6c757d' }} /> {field.hasLighting ? 'متوفرة' : 'غير متوفرة'}</p></div>
             <div className="detail-section"><strong>النوع:</strong> <p><FaHome style={{ marginLeft: '5px' }} /> {field.isIndoor ? 'داخلي' : 'خارجي'}</p></div>
             <div className="detail-section"><strong>الحالة:</strong> <p>{field.isAvailable ? 'متاح للحجز' : 'غير متاح للحجز حالياً'}</p></div>
-            <div className="rating-summary"><StarRating rating={averageRating} /> <span>{reviewCount > 0 ? `${averageRating.toFixed(1)} من 5 (${reviewCount} تقييمات)`: "لا توجد تقييمات بعد"}</span></div>
+            <div className="rating-summary"><StarRating rating={averageRating} /> <span>{reviewCount > 0 ? `${averageRating.toFixed(1)} من 5 (${reviewCount} تقييمات)` : "لا توجد تقييمات بعد"}</span></div>
 
 
             {field.isAvailable && (
@@ -481,11 +494,11 @@ function FieldDetails() {
                   )}
                   {/* Show a "Continue to Payment" button for Stripe if not yet processing */}
                   {selectedPaymentMethod === "Stripe" && !clientSecret && !isSubmitting && (
-                      <button className="reserve-btn" type="submit" disabled={!user}>
-                        {user ? `المتابعة للدفع (${currentBookingAmount} د.أ)` : 'يرجى تسجيل الدخول للحجز'}
-                      </button>
+                    <button className="reserve-btn" type="submit" disabled={!user}>
+                      {user ? `المتابعة للدفع (${currentBookingAmount} د.أ)` : 'يرجى تسجيل الدخول للحجز'}
+                    </button>
                   )}
-                  {!user && <p style={{color: 'red', marginTop: '10px'}}>يجب تسجيل الدخول لتتمكن من الحجز.</p>}
+                  {!user && <p style={{ color: 'red', marginTop: '10px' }}>يجب تسجيل الدخول لتتمكن من الحجز.</p>}
                 </form>
 
                 {/* Stripe Payment Form */}

@@ -44,6 +44,9 @@ const Dashboard = () => {
                     <ReportsChart />
                   </>
                 )}
+                {isManager && 
+                <h2 className='text-center mb-5' >Welcome</h2>
+                }
               </div>
             </div>
 

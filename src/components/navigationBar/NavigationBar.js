@@ -113,8 +113,8 @@ const getNavbarThemeClasses = () => {
               </Link>
             )}
             {isManager && (
-              <Link className="nav-link text-warning" style={{ background: "black", borderRadius: "5px" }} to="/facility/add">
-                اضف منشأتك
+              <Link className="nav-link text-warning" style={{ background: "black", borderRadius: "5px" }} to="/dashboard">
+                لوحة التحكم
               </Link>
             )}
           </div>

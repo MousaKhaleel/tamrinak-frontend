@@ -23,7 +23,7 @@ import StatusDialog from './../UI/StatusDialog/StatusDialog';
 import StripeCheckoutForm from '../../Components/Payment/StripeCheckoutForm';
 
 // Load Stripe.js
-const stripePromise = loadStripe("YOUR_STRIPE_PUBLISHABLE_KEY");
+const stripePromise = loadStripe("pk_test_51RPR6zEPJ1mDrKAI475vu7BCG5kWllIQ0RuXMlSgASoAmDBMizJMnLwsZ3qfPZANbVQrNqfkJq0rUqvp80S8yv4i00kiBXJz7o");
 
 function FacilityDetails() {
   const { facilityId } = useParams();
@@ -36,12 +36,12 @@ function FacilityDetails() {
   const [membershipData, setMembershipData] = useState({
     facilityId,
   });
-  
+
   // Payment state
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("Cash");
   const [clientSecret, setClientSecret] = useState(null);
   const [stripePaymentProcessing, setStripePaymentProcessing] = useState(false);
-  
+
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -119,7 +119,7 @@ function FacilityDetails() {
       };
 
       const membershipResult = await createMembership(addMembershipDto, user.token);
-      
+
       if (!membershipResult || !membershipResult.id) {
         console.error("Membership response missing ID:", membershipResult);
         setDialogMessage("حدث خطأ أثناء إنشاء الاشتراك. يرجى مراجعة الإدارة.");
@@ -130,7 +130,7 @@ function FacilityDetails() {
       }
 
       const newMembershipId = membershipResult.id;
-      
+
       // Handle payment based on selected method
       if (selectedPaymentMethod === "Cash") {
         const paymentDetails = {
@@ -183,7 +183,7 @@ function FacilityDetails() {
     } catch (error) {
       console.error('Membership creation error:', error);
       setDialogMessage(
-        error.message || 
+        error.message ||
         "حدث خطأ غير متوقع أثناء محاولة إنشاء الاشتراك. يرجى المحاولة مرة أخرى لاحقًا"
       );
       setDialogError(true);
@@ -253,7 +253,7 @@ function FacilityDetails() {
     } else {
       try {
         const replies = await getReviewReplies(reviewId);
-        setReviews(reviews.map(review => 
+        setReviews(reviews.map(review =>
           review.id === reviewId ? { ...review, replies } : review
         ));
         setViewingReplies(reviewId);
@@ -312,7 +312,7 @@ function FacilityDetails() {
             <div className="rating-summary">
               <StarRating rating={averageRating} />
               <span>
-                {reviewCount > 0 
+                {reviewCount > 0
                   ? `${averageRating.toFixed(1)} من 5 (${reviewCount} تقييمات)`
                   : "لا توجد تقييمات بعد"}
               </span>
@@ -326,7 +326,7 @@ function FacilityDetails() {
               message={dialogMessage}
               isError={dialogError}
             />
-            
+
             <form className="membership-form" onSubmit={handleMembershipSubmit}>
               {/* Payment Method Selection */}
               <div className="form-group">
@@ -365,15 +365,15 @@ function FacilityDetails() {
                   {isSubmitting ? 'جاري المعالجة...' : (user ? `اشترك الآن (${facility.pricePerMonth} د.أ)` : 'يرجى تسجيل الدخول للاشتراك')}
                 </button>
               )}
-              
+
               {/* Show a "Continue to Payment" button for Stripe if not yet processing */}
               {selectedPaymentMethod === "Stripe" && !clientSecret && !isSubmitting && (
                 <button className="subscribe-btn" type="submit" disabled={!user}>
                   {user ? `المتابعة للدفع (${facility.pricePerMonth} د.أ)` : 'يرجى تسجيل الدخول للاشتراك'}
                 </button>
               )}
-              
-              {!user && <p style={{color: 'red', marginTop: '10px'}}>يجب تسجيل الدخول لتتمكن من الاشتراك.</p>}
+
+              {!user && <p style={{ color: 'red', marginTop: '10px' }}>يجب تسجيل الدخول لتتمكن من الاشتراك.</p>}
             </form>
 
             {/* Stripe Payment Form */}
@@ -390,7 +390,7 @@ function FacilityDetails() {
                 />
               </div>
             )}
-            
+
             {selectedPaymentMethod === "Stripe" && isSubmitting && !clientSecret && (
               <div style={{ textAlign: 'center', marginTop: '20px', color: '#555' }}>
                 جاري تجهيز بيانات الدفع...
@@ -404,7 +404,7 @@ function FacilityDetails() {
           <div className="reviews-header">
             <h2>تقييمات المرفق</h2>
             {user && (
-              <button 
+              <button
                 onClick={() => setShowReviewForm(!showReviewForm)}
                 className="btn btn-primary"
               >
@@ -416,7 +416,7 @@ function FacilityDetails() {
           {reviewError && <div className="alert alert-danger">{reviewError}</div>}
 
           {showReviewForm && (
-            <ReviewForm 
+            <ReviewForm
               onSubmit={handleSubmitReview}
               onCancel={() => setShowReviewForm(false)}
             />
@@ -438,6 +438,16 @@ function FacilityDetails() {
           )}
         </section>
       </div>
+      {clientSecret && (
+        <div className="stripe-checkout-container">
+          <h3>إدخال بيانات البطاقة لإتمام الدفع</h3>
+          <StripeCheckoutForm
+            clientSecret={clientSecret}
+            onSuccess={handleStripePaymentSuccess}
+            onError={handleStripePaymentError}
+          />
+        </div>
+      )}
     </Elements>
   );
 }

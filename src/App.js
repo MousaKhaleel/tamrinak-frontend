@@ -37,6 +37,9 @@ import EditFacilityPage from './Components/Dashboard/DashboardComponents/Forms/F
 import AddSportPage from './Components/Dashboard/DashboardComponents/Forms/Sport/AddSportPage';
 import EditSportPage from './Components/Dashboard/DashboardComponents/Forms/Sport/EditSportPage';
 import FAQ from './Components/Other/FAQ';
+import Help from './Components/Help/Help';
+import PaymentSuccess from './Components/Payment/PaymentSuccess';
+import PaymentCancelled from './Components/Payment/PaymentCancelled';
 
 function App() {
   const location = useLocation();
@@ -87,6 +90,8 @@ function App() {
           <Route path="/facility-details/:facilityId" element={<FacilityDetails />} />
           <Route path="/profile" element={<Profile />} />
           <Route path='/history' element={<History />} />
+          <Route path='/payment-success' element={<PaymentSuccess />} />
+          <Route path='/payment-cancelled' element={<PaymentCancelled />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path="/sport-list" element={<SportList />} />
           <Route path="/user-list" element={<UserList />} />
@@ -95,6 +100,7 @@ function App() {
           <Route path="/pending-requests" element={<PendingRequestsList />} />
           <Route path="/aboutUs" element={<AboutUs />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/help" element={<Help />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         
