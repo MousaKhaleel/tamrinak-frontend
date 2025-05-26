@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Elements } from '@stripe/react-stripe-js'; // Import Elements
 import { loadStripe } from '@stripe/stripe-js'; // Import loadStripe
+import { getFieldAvailability } from "../../Services/bookingService";
 
 import {
   getField,
@@ -47,6 +48,10 @@ function FieldDetails() {
     endTime: "",
     numberOfPeople: 1,
   });
+
+  const [availableSlots, setAvailableSlots] = useState([]);
+  const [checkingAvailability, setCheckingAvailability] = useState(false);
+  const [showSlots, setShowSlots] = useState(false);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -107,6 +112,33 @@ function FieldDetails() {
       setReviewLoading(false);
     }
   };
+
+  const handleCheckAvailability = async () => {
+  console.log("🟡 Button clicked"); // ADD THIS LINE
+  if (!bookingData.bookingDate) {
+    setDialogMessage("يرجى اختيار التاريخ أولاً.");
+    setDialogError(true);
+    setDialogOpen(true);
+    return;
+  }
+
+  try {
+    console.log("📡 Sending request to backend...");
+    setCheckingAvailability(true);
+    const result = await getFieldAvailability(fieldId, bookingData.bookingDate);
+    console.log("✅ Received slots:", result); // CHECK THIS
+    setAvailableSlots(result || []);
+    setShowSlots(true);
+  } catch (err) {
+    console.error("❌ Error fetching availability:", err);
+    setDialogMessage("حدث خطأ أثناء جلب المواعيد المتاحة.");
+    setDialogError(true);
+    setDialogOpen(true);
+  } finally {
+    setCheckingAvailability(false);
+  }
+};
+
 
   const handleBookingChange = (e) => {
     const { name, value } = e.target;
@@ -430,7 +462,7 @@ function FieldDetails() {
             <div className="detail-section"><strong>النوع:</strong> <p><FaHome style={{ marginLeft: '5px' }} /> {field.isIndoor ? 'داخلي' : 'خارجي'}</p></div>
             <div className="detail-section"><strong>الحالة:</strong> <p>{field.isAvailable ? 'متاح للحجز' : 'غير متاح للحجز حالياً'}</p></div>
             <div className="rating-summary"><StarRating rating={averageRating} /> <span>{reviewCount > 0 ? `${averageRating.toFixed(1)} من 5 (${reviewCount} تقييمات)` : "لا توجد تقييمات بعد"}</span></div>
-
+            
 
             {field.isAvailable && (
               <>
@@ -442,11 +474,46 @@ function FieldDetails() {
                   message={dialogMessage}
                   isError={dialogError}
                 />
+        
                 <form className="booking-form" onSubmit={handleBookingSubmit}>
                   <div className="form-group">
                     <label htmlFor="bookingDate">التاريخ:</label>
                     <input type="date" id="bookingDate" name="bookingDate" value={bookingData.bookingDate} onChange={handleBookingChange} required />
                   </div>
+                          <div className="form-group">
+        <button type="button" className="btn btn-info" onClick={handleCheckAvailability} disabled={!bookingData.bookingDate || checkingAvailability}>
+          {checkingAvailability ? "جارٍ التحميل..." : "عرض المواعيد المتاحة"}
+        </button>
+        
+      </div>
+      {showSlots && availableSlots.length > 0 && (
+      <div className="available-slots-box">
+        <h4>الأوقات المتاحة في {bookingData.bookingDate}:</h4>
+        <ul>
+         {availableSlots.map((slot, index) => {
+  const formatTime = (timeStr) => {
+    const [hour, minute] = timeStr.split(":").map(Number);
+    const date = new Date();
+    date.setHours(hour);
+    date.setMinutes(minute);
+
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+
+  return (
+    <li key={index}>
+      من <strong>{formatTime(slot.startTime)}</strong> إلى <strong>{formatTime(slot.endTime)}</strong>
+    </li>
+  );
+})}
+
+        </ul>
+      </div>
+    )}
                   <div className="form-group">
                     <label htmlFor="startTime">الوقت من:</label>
                     <input type="time" id="startTime" name="startTime" value={bookingData.startTime} onChange={handleBookingChange} required />
@@ -534,7 +601,13 @@ function FieldDetails() {
               </div>
             )}
           </div>
+
         </div>
+          
+
+    {showSlots && availableSlots.length === 0 && (
+      <p style={{ color: "red", marginTop: "10px" }}>لا توجد أوقات متاحة في هذا اليوم.</p>
+    )}
 
         {/* Reviews Section */}
         <section className="reviews-section" style={{ marginTop: '3rem' }}>
@@ -563,6 +636,7 @@ function FieldDetails() {
             />
           )}
         </section>
+      
       </div>
     </Elements> // Close Elements provider
   );
