@@ -186,7 +186,7 @@ function FieldDetails() {
       // IMPORTANT: Assume bookField returns { id: bookingId, ... } on success
       const bookingConfirmation = await bookField(transformedData, user.token);
 
-      if (!bookingConfirmation || !bookingConfirmation.id) {
+      if (!bookingConfirmation || !bookingConfirmation.bookingId) {
         console.error("Booking response missing ID:", bookingConfirmation);
         setDialogMessage("تم الحجز ولكن لم يتم استلام معرف الحجز. يرجى مراجعة الإدارة.");
         setDialogError(true); // Or a warning
@@ -196,7 +196,7 @@ function FieldDetails() {
         setIsSubmitting(false);
         return;
       }
-      const newBookingId = bookingConfirmation.id;
+      const newBookingId = bookingConfirmation.bookingId;
       // Store the booking ID temporarily for Stripe payment if needed
       setBookingData(prev => ({ ...prev, bookingId: newBookingId }));
 
@@ -234,16 +234,21 @@ function FieldDetails() {
       } else if (selectedPaymentMethod === "Stripe") {
         setStripePaymentProcessing(true); // Indicate Stripe flow is starting
         try {
-          const paymentIntentResponse = await createStripePaymentIntent(
-            {
-              amount: amountInSmallestUnit,
-              currency: "JOD", // Ensure this matches your backend's currency
-              bookingId: newBookingId, // Pass bookingId to backend for context
-              membershipId: null,
-            },
-            user.token
-          );
-          setClientSecret(paymentIntentResponse.clientSecret);
+          const paymentRequest = {
+            bookingId: newBookingId,
+            membershipId: null, // or a valid ID if it's a membership
+            amount: amountInSmallestUnit,
+            currency: "jod"
+          };
+          //console.log(newBookingId+"")
+          const paymentSessionResponse = await createStripePaymentIntent(paymentRequest, user.token);
+
+          const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+          
+          await stripe.redirectToCheckout({
+             sessionId: paymentSessionResponse.sessionId,
+          //setClientSecret(paymentIntentResponse.clientSecret);
+          });
           // Do NOT show dialog here; the StripeCheckoutForm will handle its own UI feedback
           // The form will render and user will input card details.
         } catch (stripeIntentError) {
@@ -508,7 +513,7 @@ function FieldDetails() {
                       clientSecret={clientSecret}
                       bookingId={bookingData.bookingId} // Ensure bookingId is available from state
                       amountInSmallestUnit={Math.round(currentBookingAmount * 100)} // Pass calculated amount to Stripe form
-                      currency="JOD" // Ensure this matches your backend's currency
+                      currency="jod" // Ensure this matches your backend's currency
                       authToken={user.token}
                       onSuccessfulPayment={handleStripePaymentSuccess}
                       onPaymentError={handleStripePaymentError}
