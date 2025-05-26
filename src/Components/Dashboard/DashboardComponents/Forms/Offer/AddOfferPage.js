@@ -1,8 +1,8 @@
 // TODO
-function AddOfferForm() {
+function AddOfferPage() {
     return ( 
         <div>TODO</div>
      );
 }
 
-export default AddOfferForm;
+export default AddOfferPage;

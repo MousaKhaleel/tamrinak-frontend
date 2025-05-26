@@ -120,7 +120,7 @@ function FacilityDetails() {
 
       const membershipResult = await createMembership(addMembershipDto, user.token);
 
-      if (!membershipResult || !membershipResult.id) {
+      if (!membershipResult || !membershipResult.membershipId) {
         console.error("Membership response missing ID:", membershipResult);
         setDialogMessage("حدث خطأ أثناء إنشاء الاشتراك. يرجى مراجعة الإدارة.");
         setDialogError(true);
@@ -129,7 +129,7 @@ function FacilityDetails() {
         return;
       }
 
-      const newMembershipId = membershipResult.id;
+      const newMembershipId = membershipResult.membershipId;
 
       // Handle payment based on selected method
       if (selectedPaymentMethod === "Cash") {
