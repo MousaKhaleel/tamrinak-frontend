@@ -71,9 +71,9 @@ export const addSport = async (sportData) => {
 };
 
 // Update an existing sport
-export const updateSport = async (sportData) => {
+export const updateSport = async (id, sportData) => {
   try {
-    const response = await fetch(`${API_URL}/api/Sport/sport`, {
+    const response = await fetch(`${API_URL}/api/Sport/sport?id=${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
