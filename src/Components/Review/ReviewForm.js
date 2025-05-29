@@ -41,10 +41,10 @@ const ReviewForm = ({ onSubmit, onCancel }) => {
         />
       </div>
       <div className="form-actions">
-        <button type="submit" disabled={rating === 0 || !comment.trim()}>
+        <button className='btn btn-primary' type="submit" disabled={rating === 0 || !comment.trim()}>
           إرسال التقييم
         </button>
-        <button type="button" onClick={onCancel}>
+        <button className='btn btn-danger' type="button" onClick={onCancel}>
           إلغاء
         </button>
       </div>
