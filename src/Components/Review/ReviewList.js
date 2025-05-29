@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import StarRating from './StarRating';
+import './ReviewList.css'
 
 const ReviewList = ({ 
   reviews, 
@@ -41,7 +42,7 @@ const ReviewList = ({
                 onClick={() => onLike(review.id)}
                 className="like-btn"
               >
-                أعجبني ({review.likesCount})
+                أعجبني ({review.likesCount} 0 )
               </button>
               
               {currentUserId && (

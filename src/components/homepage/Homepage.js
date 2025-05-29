@@ -44,7 +44,7 @@ const sports = [
         title: "More-المزيد",
         description: "اكتشف المزيد من الرياضات والمرافق الرياضية المتاحة لدينا.",
         button: "عرض الكل",
-        link: "/sports" // Adding a link property
+        link: "/sports"
     }
 ];
 

@@ -112,7 +112,6 @@ function FacilityDetails() {
     }
 
     try {
-      // First create the membership
       const addMembershipDto = {
         facilityId: facilityId,
         offerId: null,
@@ -131,13 +130,12 @@ function FacilityDetails() {
 
       const newMembershipId = membershipResult.membershipId;
 
-      // Handle payment based on selected method
       if (selectedPaymentMethod === "Cash") {
         const paymentDetails = {
           membershipId: newMembershipId,
           bookingId: null,
           amount: parseFloat(facility.pricePerMonth.toFixed(2)),
-          method: 0, // 0 for Cash
+          method: 0,
           transactionId: null,
         };
 
@@ -159,7 +157,7 @@ function FacilityDetails() {
         try {
           const paymentIntentResponse = await createStripePaymentIntent(
             {
-              amount: Math.round(facility.pricePerMonth * 100), // Convert to smallest currency unit
+              amount: Math.round(facility.pricePerMonth * 100),
               currency: "JOD",
               membershipId: newMembershipId,
               bookingId: null,
@@ -212,7 +210,6 @@ function FacilityDetails() {
     setDialogOpen(false);
   };
 
-  // Review handlers
   const handleSubmitReview = async (reviewData) => {
     try {
       await createReview({
@@ -359,14 +356,12 @@ function FacilityDetails() {
                 </div>
               </div>
 
-              {/* Show the submit button if Cash is selected or if Stripe flow hasn't started */}
               {selectedPaymentMethod === "Cash" && (
                 <button className="subscribe-btn" type="submit" disabled={isSubmitting || !user}>
                   {isSubmitting ? 'جاري المعالجة...' : (user ? `اشترك الآن (${facility.pricePerMonth} د.أ)` : 'يرجى تسجيل الدخول للاشتراك')}
                 </button>
               )}
 
-              {/* Show a "Continue to Payment" button for Stripe if not yet processing */}
               {selectedPaymentMethod === "Stripe" && !clientSecret && !isSubmitting && (
                 <button className="subscribe-btn" type="submit" disabled={!user}>
                   {user ? `المتابعة للدفع (${facility.pricePerMonth} د.أ)` : 'يرجى تسجيل الدخول للاشتراك'}
@@ -376,7 +371,6 @@ function FacilityDetails() {
               {!user && <p style={{ color: 'red', marginTop: '10px' }}>يجب تسجيل الدخول لتتمكن من الاشتراك.</p>}
             </form>
 
-            {/* Stripe Payment Form */}
             {selectedPaymentMethod === "Stripe" && clientSecret && (
               <div style={{ marginTop: '2rem' }}>
                 <StripeCheckoutForm
@@ -399,7 +393,6 @@ function FacilityDetails() {
           </div>
         </div>
 
-        {/* Reviews Section */}
         <section className="reviews-section" style={{ marginTop: '3rem' }}>
           <div className="reviews-header">
             <h2>تقييمات المرفق</h2>

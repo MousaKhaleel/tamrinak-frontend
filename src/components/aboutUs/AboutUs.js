@@ -13,7 +13,6 @@ const AboutUs = () => {
   const [rotatingWord, setRotatingWord] = useState("سريعة");
   const words = ["سريعة", "بسيطة", "ذكية", "موثوقة"];
 
-  // Hero section word rotation effect
   useEffect(() => {
     const changeWord = () => {
       setRotatingWord((prev) => {
@@ -22,10 +21,9 @@ const AboutUs = () => {
       });
     };
     const intervalId = setInterval(changeWord, 2000);
-    return () => clearInterval(intervalId); // Cleanup on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
-  // Stats section counters
   useEffect(() => {
     const counters = document.querySelectorAll('.stat-number');
     let statsStarted = false;
@@ -61,7 +59,7 @@ const AboutUs = () => {
     }, { threshold: 0.5 });
 
     observer.observe(statsSection);
-    return () => observer.disconnect(); // Cleanup observer on unmount
+    return () => observer.disconnect();
   }, []);
 
   return (

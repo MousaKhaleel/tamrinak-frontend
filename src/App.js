@@ -45,11 +45,11 @@ import OfferPage from './Components/Offer/OfferPage';
 function App() {
   const location = useLocation();
   
-  // Paths where we don't want to show any navbar or footer
+  // no navbar or footer
   const authPaths = ["/auth"];
   const hideAll = authPaths.some(path => location.pathname.startsWith(path));
   
-  // Admin paths where we want to show the admin navbar
+  // dashboard navbar
   const adminPaths = [
     "/dashboard", 
     "/fields/add",

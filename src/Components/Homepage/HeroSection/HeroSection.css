@@ -90,8 +90,8 @@
   gap: 30px;
   flex-wrap: wrap;
   padding: 0 20px;
-  max-width: 1200px;  /* optional max width */
-  margin: 0 auto;     /* center container */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .home-card {
@@ -99,18 +99,18 @@
   padding: 20px;
   border-radius: 10px;
   max-width: 300px;
-  width: 100%;         /* let it grow to fill available space */
+  width: 100%;
   box-sizing: border-box;
   text-align: center;
-  flex: 1 1 280px;     /* flex-grow, flex-shrink, flex-basis */
-  min-width: 250px;    /* prevent shrinking too small */
+  flex: 1 1 280px;
+  min-width: 250px;
 }
 
 .home-card img {
   width: 100%;
   height: auto;
   margin-bottom: 10px;
-  border-radius: 8px;  /* optional for better look */
+  border-radius: 8px;
 }
 
 .home-card h3 {
@@ -136,7 +136,7 @@
   }
   
   .home-card {
-    flex: 1 1 100%;  /* cards take full width on smaller screens */
+    flex: 1 1 100%;
     max-width: 100%;
     min-width: auto;
   }

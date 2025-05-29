@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react';
 import { getUserBookings, cancelBooking } from '../../Services/bookingService';
 import { useAuth } from '../../Context/AuthContext';
 
-// Map the backend status to frontend display
 const BOOKING_STATUS = {
-  0: { text: 'Pending', class: 'bg-warning text-dark' },
-  1: { text: 'Cancelled', class: 'bg-danger' },
-  2: { text: 'Completed', class: 'bg-success' }
+  0: { text: 'Pending', class: 'bg-warning text-dark' },
+  1: { text: 'Cancelled', class: 'bg-danger' },
+  2: { text: 'Completed', class: 'bg-success' }
 };
 
 function History() {
@@ -90,7 +89,7 @@ function History() {
         {bookings.map((booking) => (
           <div key={booking.bookingId} className="col-md-6 col-lg-4">
             <div className="card shadow-sm h-100">
-              <div className="card-header bg-primary text-white">
+              <div className={`card-header ${BOOKING_STATUS[booking.status]?.class || 'bg-secondary text-white'}`}>
                 <h5 className="card-title mb-0">Booking #{booking.bookingId}</h5>
               </div>
               <div className="card-body">
@@ -124,16 +123,16 @@ function History() {
                 </p>
               </div>
               <div className="card-footer bg-transparent d-flex justify-content-end">
-                {isFutureBooking(booking.bookingDate) && 
-                booking.status !== 1 && 
-                booking.status !== 2 && (
-                  <button
-                    onClick={() => handleCancelBooking(booking.bookingId)}
-                    className="btn btn-outline-danger btn-sm"
-                  >
-                    Cancel Booking
-                  </button>
-                )}
+                {isFutureBooking(booking.bookingDate) &&
+                  booking.status !== 1 &&
+                  booking.status !== 2 && (
+                    <button
+                      onClick={() => handleCancelBooking(booking.bookingId)}
+                      className="btn btn-outline-danger btn-sm"
+                    >
+                      Cancel Booking
+                    </button>
+                  )}
               </div>
             </div>
           </div>

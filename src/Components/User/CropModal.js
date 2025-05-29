@@ -2,8 +2,8 @@ import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import Slider from "@mui/material/Slider";
 import Button from "@mui/material/Button";
-import getCroppedImg from "./Helper/cropImage"; // helper (next step)
-import "./CropModel.css"; // Add your CSS styles here
+import getCroppedImg from "./Helper/cropImage";
+import "./CropModel.css";
 
 const CropModal = ({ image, onCancel, onCropComplete }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });

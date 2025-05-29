@@ -209,7 +209,7 @@
   }
 
   .icon-wrapper {
-    color: #102E50;  ; /* or whatever matches your theme */
+    color: #102E50 !important;
     /* margin-bottom: 10px; */
   }
   

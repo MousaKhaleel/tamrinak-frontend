@@ -16,7 +16,7 @@ function Footer() {
       const response = await contactUs(name, email, message);
       if (response.success) {
         alert('تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
-        form.reset(); // Clear the form after successful submission
+        form.reset();
       } else {
         alert('حدث خطأ أثناء إرسال الرسالة: ' + (response.message || 'يرجى المحاولة لاحقاً'));
       }

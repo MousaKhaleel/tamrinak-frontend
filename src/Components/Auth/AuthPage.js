@@ -5,7 +5,6 @@ import "./AuthStyle.css";
 import { login, register } from "../../Services/authService";
 import { toast } from "react-toastify";
 import { useAuth } from "../../Context/AuthContext";
-import { getProfilePicture } from "../../Services/userService";
 const API_URL = process.env.API_URL || "https://localhost:7160";
 
 const AuthPage = () => {
@@ -61,6 +60,12 @@ navigate("/");
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
+    
+  if (registerData.Password.length < 8) {
+    toast.error("كلمة المرور يجب أن تكون 8 أحرف على الأقل");
+    return;
+  }
+
     setLoading(true);
     try {
       await register(registerData);

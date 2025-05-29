@@ -1,5 +1,5 @@
 import React from 'react';
-import './StarRating.css'; // Assuming you have a CSS file for styling
+import './StarRating.css';
 
 const StarRating = ({ rating = 0 }) => {
   const fullStars = Math.floor(rating);
