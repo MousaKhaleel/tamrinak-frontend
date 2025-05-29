@@ -70,7 +70,8 @@ export const updateField = async (fieldData) => {
 
 // Remove a field
 export const removeField = async (fieldId) => {
-  const response = await fetch(`${API_URL}/api/Field/field?id=${fieldId}`, {
+  // Pass fieldId directly in the URL path
+  const response = await fetch(`${API_URL}/api/Field/field/?fieldId=${fieldId}`, { 
     method: "DELETE",
     headers: getHeaders(false)
   });
