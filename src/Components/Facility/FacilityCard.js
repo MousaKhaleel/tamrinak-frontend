@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { getFacilityPhotoList } from "../../Services/facilityService"; // No longer directly needed here for the main image
 import DefaultImage from "../../Assets/Defaults/default-featured-image.png";
 import { FaMoneyBillWave } from 'react-icons/fa';
 

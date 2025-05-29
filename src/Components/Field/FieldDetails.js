@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Elements } from '@stripe/react-stripe-js'; // Import Elements
-import { loadStripe } from '@stripe/stripe-js'; // Import loadStripe
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { getFieldAvailability } from "../../Services/bookingService";
+import ImageSlider from '../../Components/UI/ImageSlider/ImageSlider';
 
 import {
   getField,
   getFieldPhotoList,
-} from "../../Services/fieldService"; // Adjust path if needed
+} from "../../Services/fieldService";
 import {
   getFieldReviews,
   createReview,
   likeReview,
   createReviewReply,
   getReviewReplies
-} from "../../Services/reviewService"; // Adjust path if needed
-import { bookField } from "../../Services/bookingService"; // Adjust path if needed
-import { createPayment, createStripePaymentIntent } from "../../Services/paymentService"; // Import createStripePaymentIntent
+} from "../../Services/reviewService";
+import { bookField } from "../../Services/bookingService";
+import { createPayment, createStripePaymentIntent } from "../../Services/paymentService";
 
-import './FieldDetails.css'; // Make sure your CSS path is correct
+import './FieldDetails.css';
 import { useAuth } from '../../Context/AuthContext';
 import DefaultImage from "../../Assets/Defaults/default-featured-image.png";
 import StarRating from "../Review/StarRating";
@@ -29,8 +30,6 @@ import { GiTennisCourt } from 'react-icons/gi';
 import StatusDialog from './../UI/StatusDialog/StatusDialog';
 import StripeCheckoutForm from '../../Components/Payment/StripeCheckoutForm';
 
-// Load Stripe.js outside of a component’s render to avoid recreating the Stripe object on every render.
-// Replace "YOUR_STRIPE_PUBLISHABLE_KEY" with your actual Stripe Publishable Key
 const stripePromise = loadStripe("YOUR_STRIPE_PUBLISHABLE_KEY");
 
 function FieldDetails() {
@@ -56,14 +55,12 @@ function FieldDetails() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [dialogError, setDialogError] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // For disabling button during booking/payment initiation
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Payment Method State
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("Cash"); // Default to Cash
-  const [clientSecret, setClientSecret] = useState(null); // To store Stripe client secret
-  const [stripePaymentProcessing, setStripePaymentProcessing] = useState(false); // To manage Stripe payment loading state
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("Cash");
+  const [clientSecret, setClientSecret] = useState(null);
+  const [stripePaymentProcessing, setStripePaymentProcessing] = useState(false);
 
-  // Review states (existing)
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
@@ -114,7 +111,6 @@ function FieldDetails() {
   };
 
   const handleCheckAvailability = async () => {
-  console.log("🟡 Button clicked"); // ADD THIS LINE
   if (!bookingData.bookingDate) {
     setDialogMessage("يرجى اختيار التاريخ أولاً.");
     setDialogError(true);
@@ -126,7 +122,6 @@ function FieldDetails() {
     console.log("📡 Sending request to backend...");
     setCheckingAvailability(true);
     const result = await getFieldAvailability(fieldId, bookingData.bookingDate);
-    console.log("✅ Received slots:", result); // CHECK THIS
     setAvailableSlots(result || []);
     setShowSlots(true);
   } catch (err) {
@@ -151,7 +146,7 @@ function FieldDetails() {
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setClientSecret(null); // Clear any previous client secret when a new booking attempt starts
+    setClientSecret(null);
 
     const { bookingDate, startTime, endTime, numberOfPeople } = bookingData;
 
@@ -179,7 +174,6 @@ function FieldDetails() {
       return;
     }
 
-    // Calculate duration and amount for payment
     let calculatedAmount = 0;
     try {
       const [startH, startM] = startTime.split(':').map(Number);
@@ -209,38 +203,33 @@ function FieldDetails() {
       const transformedData = {
         fieldId: Number(fieldId),
         bookingDate: bookingDate,
-        startTime: startTime + ":00", // Assuming backend expects HH:mm:ss
-        endTime: endTime + ":00",      // Assuming backend expects HH:mm:ss
+        startTime: startTime + ":00", // HH:mm:ss
+        endTime: endTime + ":00",
         numberOfPeople: Number(numberOfPeople),
       };
 
-      // --- 1. Create Booking ---
-      // IMPORTANT: Assume bookField returns { id: bookingId, ... } on success
       const bookingConfirmation = await bookField(transformedData, user.token);
 
       if (!bookingConfirmation || !bookingConfirmation.bookingId) {
         console.error("Booking response missing ID:", bookingConfirmation);
         setDialogMessage("تم الحجز ولكن لم يتم استلام معرف الحجز. يرجى مراجعة الإدارة.");
-        setDialogError(true); // Or a warning
+        setDialogError(true);
         setDialogOpen(true);
-        // Reset form as booking *might* have been made on backend without confirmation
         setBookingData({ fieldId, bookingDate: "", startTime: "", endTime: "", numberOfPeople: 1 });
         setIsSubmitting(false);
         return;
       }
       const newBookingId = bookingConfirmation.bookingId;
-      // Store the booking ID temporarily for Stripe payment if needed
       setBookingData(prev => ({ ...prev, bookingId: newBookingId }));
 
-      const amountInSmallestUnit = Math.round(calculatedAmount * 100); // Stripe expects amount in cents/smallest unit
+      const amountInSmallestUnit = Math.round(calculatedAmount * 100);
 
-      // --- 2. Handle Payment ---
       if (selectedPaymentMethod === "Cash") {
         const paymentDetails = {
           bookingId: newBookingId,
-          membershipId: null, // Or pass if available/relevant
+          membershipId: null,
           amount: parseFloat(calculatedAmount.toFixed(2)),
-          method: 0, // 0 for Cash, as per C# enum (Cash, Stripe)
+          method: 0,
           transactionId: null,
         };
         try {
@@ -252,10 +241,10 @@ function FieldDetails() {
           setDialogMessage(
             `تم الحجز بنجاح، ولكن فشل تسجيل الدفع النقدي: ${paymentError.message}. يرجى إبلاغ الإدارة لتأكيد الدفع.`
           );
-          setDialogError(true); // Indicate an issue with payment part
+          setDialogError(true);
         }
         setDialogOpen(true);
-        setBookingData({ // Reset form on successful booking submission path
+        setBookingData({
           fieldId,
           bookingDate: "",
           startTime: "",
@@ -264,25 +253,21 @@ function FieldDetails() {
         });
 
       } else if (selectedPaymentMethod === "Stripe") {
-        setStripePaymentProcessing(true); // Indicate Stripe flow is starting
+        setStripePaymentProcessing(true);
         try {
           const paymentRequest = {
             bookingId: newBookingId,
-            membershipId: null, // or a valid ID if it's a membership
+            membershipId: null,
             amount: amountInSmallestUnit/10,
             currency: "jod"
           };
-          //console.log(newBookingId+"")
           const paymentSessionResponse = await createStripePaymentIntent(paymentRequest, user.token);
 
           const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
           
           await stripe.redirectToCheckout({
              sessionId: paymentSessionResponse.sessionId,
-          //setClientSecret(paymentIntentResponse.clientSecret);
           });
-          // Do NOT show dialog here; the StripeCheckoutForm will handle its own UI feedback
-          // The form will render and user will input card details.
         } catch (stripeIntentError) {
           console.error("Failed to create Stripe Payment Intent:", stripeIntentError);
           setDialogMessage(`فشل في تهيئة الدفع بالبطاقة: ${stripeIntentError.message || "خطأ غير معروف."}`);
@@ -291,13 +276,11 @@ function FieldDetails() {
           setStripePaymentProcessing(false);
         }
       } else {
-        // Fallback if no specific payment method logic applies but booking was successful
         setDialogMessage("تم الحجز بنجاح!");
         setDialogError(false);
         setDialogOpen(true);
       }
 
-      // Reset form if cash payment or if Stripe intent creation succeeded and form is now shown
       if (selectedPaymentMethod === "Cash" || (selectedPaymentMethod === "Stripe" && clientSecret)) {
         setBookingData({
           fieldId,
@@ -309,12 +292,12 @@ function FieldDetails() {
       }
 
 
-    } catch (bookingError) { // Catches errors from bookField primarily
+    } catch (bookingError) {
       setDialogMessage(bookingError.message || "فشل عملية الحجز.");
       setDialogError(true);
       setDialogOpen(true);
     } finally {
-      setIsSubmitting(false); // Always reset submission state
+      setIsSubmitting(false);
     }
   };
 
@@ -322,9 +305,8 @@ function FieldDetails() {
     setDialogMessage("تم الدفع بنجاح!");
     setDialogError(false);
     setDialogOpen(true);
-    setClientSecret(null); // Clear client secret after successful payment
+    setClientSecret(null);
     setStripePaymentProcessing(false);
-    // Reset booking form data
     setBookingData({
       fieldId,
       bookingDate: "",
@@ -342,7 +324,6 @@ function FieldDetails() {
   };
 
 
-  // Review handlers (handleSubmitReview, handleLikeReview, handleSubmitReply, handleViewReplies)
   const handleSubmitReview = async (reviewData) => {
     try {
       await createReview({
@@ -370,7 +351,7 @@ function FieldDetails() {
   const handleSubmitReply = async (reviewId, replyText) => {
     try {
       await createReviewReply(reviewId, replyText, user.token);
-      await loadReviews(); // Reload reviews to show the new reply
+      await loadReviews();
       setReplyingTo(null);
     } catch (error) {
       setReviewError(error.message || "فشل في إضافة الرد");
@@ -379,8 +360,7 @@ function FieldDetails() {
 
   const handleViewReplies = async (reviewId) => {
     if (viewingReplies === reviewId) {
-      setViewingReplies(null); // Hide replies if already viewing
-      // Optionally, reset replies in state to collapse them visually
+      setViewingReplies(null);
       setReviews(currentReviews => currentReviews.map(r => r.id === reviewId ? { ...r, replies: undefined } : r));
 
     } else {
@@ -401,7 +381,6 @@ function FieldDetails() {
   if (error) return <div style={{ textAlign: 'center', padding: '2rem', color: 'red' }}>{error}</div>;
   if (!field) return <div style={{ textAlign: 'center', padding: '2rem' }}>الملعب غير موجود.</div>;
 
-  // Calculate amount for display and Stripe form if a time range is selected
   let currentBookingAmount = 0;
   if (bookingData.startTime && bookingData.endTime && field && field.pricePerHour) {
     try {
@@ -415,13 +394,12 @@ function FieldDetails() {
         currentBookingAmount = (durationInHours * field.pricePerHour).toFixed(2);
       }
     } catch (e) {
-      // Ignore calculation errors for display purposes, will be caught on submit
       currentBookingAmount = 0;
     }
   }
 
   return (
-    <Elements stripe={stripePromise}> {/* Wrap your component with Elements */}
+    <Elements stripe={stripePromise}>
       <div dir="rtl" style={{ fontFamily: 'Tajawal, sans-serif', padding: '2rem' }}>
         <header><h1>{field.name}</h1></header>
 
@@ -450,7 +428,6 @@ function FieldDetails() {
           </div> */}
 
           <div className="details">
-            {/* ... (existing field details sections) ... */}
             <div className="detail-section"><strong><GiTennisCourt /> الرياضة:</strong> <p>{field.sport?.name || 'غير محدد'}</p></div>
             <div className="detail-section"><strong><FaMapMarkerAlt/> العنوان:</strong> <p>{field.locationDesc}</p></div>
             {/* <div className="detail-section"><strong><FaMapMarkerAlt/> الموقع على الخريطة:</strong> <p>{field.locationMap || 'غير متوفر'}</p></div> */}
@@ -558,13 +535,11 @@ function FieldDetails() {
                     </div>
                   </div>
 
-                  {/* Show the submit button if Cash is selected or if Stripe flow hasn't started */}
                   {selectedPaymentMethod === "Cash" && (
                     <button className="reserve-btn" type="submit" disabled={isSubmitting || !user}>
                       {isSubmitting ? 'جاري الحجز...' : (user ? `احجز الآن (${currentBookingAmount} د.أ)` : 'يرجى تسجيل الدخول للحجز')}
                     </button>
                   )}
-                  {/* Show a "Continue to Payment" button for Stripe if not yet processing */}
                   {selectedPaymentMethod === "Stripe" && !clientSecret && !isSubmitting && (
                     <button className="reserve-btn" type="submit" disabled={!user}>
                       {user ? `المتابعة للدفع (${currentBookingAmount} د.أ)` : 'يرجى تسجيل الدخول للحجز'}
@@ -573,14 +548,13 @@ function FieldDetails() {
                   {!user && <p style={{ color: 'red', marginTop: '10px' }}>يجب تسجيل الدخول لتتمكن من الحجز.</p>}
                 </form>
 
-                {/* Stripe Payment Form */}
                 {selectedPaymentMethod === "Stripe" && clientSecret && (
                   <div style={{ marginTop: '2rem' }}>
                     <StripeCheckoutForm
                       clientSecret={clientSecret}
-                      bookingId={bookingData.bookingId} // Ensure bookingId is available from state
-                      amountInSmallestUnit={Math.round(currentBookingAmount * 100)} // Pass calculated amount to Stripe form
-                      currency="jod" // Ensure this matches your backend's currency
+                      bookingId={bookingData.bookingId}
+                      amountInSmallestUnit={Math.round(currentBookingAmount * 100)}
+                      currency="jod"
                       authToken={user.token}
                       onSuccessfulPayment={handleStripePaymentSuccess}
                       onPaymentError={handleStripePaymentError}
@@ -630,7 +604,7 @@ function FieldDetails() {
               onReply={handleSubmitReply}
               onViewReplies={handleViewReplies}
               viewingReplies={viewingReplies}
-              currentUserId={user?.id} // Ensure user object might be null initially
+              currentUserId={user?.id}
               replyingTo={replyingTo}
               setReplyingTo={setReplyingTo}
             />
@@ -638,7 +612,7 @@ function FieldDetails() {
         </section>
       
       </div>
-    </Elements> // Close Elements provider
+    </Elements>
   );
 }
 

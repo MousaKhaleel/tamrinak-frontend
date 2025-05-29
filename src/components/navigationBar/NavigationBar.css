@@ -70,16 +70,16 @@
 # Buttons
 --------------------------------------------------------------*/
 .btn-outline-light {
-  border: 2px solid var(--secondary-color);
-  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color) !important;
+  color: var(--secondary-color) !important;
   background-color: rgba(213, 181, 101, 0.1);
   font-weight: 500;
   transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
 .btn-outline-light:hover {
-  background-color: #19416e;
-  color: #fff;
+  background-color: #19416e !important;
+  color: #fff !important;
 }
 
 .btn-primary {

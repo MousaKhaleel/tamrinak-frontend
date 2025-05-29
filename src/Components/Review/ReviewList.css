@@ -1,0 +1,76 @@
+/* Base style for the like button */
+.like-btn {
+  background-color: #f0f2f5; /* Light grey background */
+  color: #333; /* Darker text color */
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 20px; /* Pill shape */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Space between text and icon (if you add one) */
+  transition: all 0.3s ease; /* Smooth transitions for hover and active states */
+  font-weight: 600;
+  font-size: 0.9em;
+  margin-right: 10px; /* Space from other action buttons */
+}
+
+/* Hover state */
+.like-btn:hover {
+  background-color: #e0e2e5; /* Slightly darker grey on hover */
+  border-color: #bbb;
+}
+
+/* Active (clicked) state */
+.like-btn:active {
+  transform: translateY(1px); /* Slight press effect */
+}
+
+/* Styles for when the button is 'liked' */
+.like-btn.liked {
+  background-color: #007bff; /* Primary blue for liked state */
+  color: white; /* White text for contrast */
+  border-color: #007bff;
+}
+
+.like-btn.liked:hover {
+  background-color: #0056b3; /* Darker blue on hover when liked */
+  border-color: #0056b3;
+}
+
+/* Optional: Add an icon */
+/* You would need to import an icon library like Font Awesome or use an SVG */
+.like-btn::before {
+  content: '👍'; /* Thumbs up emoji as an example */
+  margin-right: 5px;
+}
+
+.like-btn.liked::before {
+  content: '❤️'; /* Heart emoji when liked */
+}
+
+/* Basic styling for review actions container */
+.review-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* General button styles for consistency (if not already defined) */
+.reply-btn,
+.view-replies-btn {
+  background-color: #f0f2f5;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+.reply-btn:hover,
+.view-replies-btn:hover {
+  background-color: #e0e2e5;
+}

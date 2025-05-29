@@ -22,7 +22,6 @@ const NavigationBar = ({ variant = 'default' }) => {
   const isAdmin = user?.profile?.roles?.includes('Admin') || user?.profile?.roles?.includes('SuperAdmin');
   const isManager = user?.profile?.roles?.includes('VenueManager');
 
-  // Determine navbar theme classes
 const getNavbarThemeClasses = () => {
   if (variant === 'admin') return '';
 

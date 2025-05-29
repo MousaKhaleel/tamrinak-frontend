@@ -1,5 +1,5 @@
 .star-rating {
-  direction: ltr; /* Force LTR for star display */
+  direction: ltr;
   display: inline-flex;
   unicode-bidi: bidi-override;
 }
@@ -13,7 +13,7 @@
 }
 
 .star.full {
-  color: #ffc107; /* Gold color for filled stars */
+  color: #ffc107;
 }
 
 .star.half::before {
@@ -26,13 +26,13 @@
 }
 
 .star.empty {
-  color: #ddd; /* Light gray for empty stars */
+  color: #ddd;
 }
 
-/* For the stars selector in ReviewForm */
+
 .stars-selector {
   display: inline-flex;
-  direction: ltr; /* Force LTR even in RTL contexts */
+  direction: ltr;
 }
 
 .stars-selector .star {

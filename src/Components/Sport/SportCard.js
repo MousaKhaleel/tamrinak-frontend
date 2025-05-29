@@ -17,7 +17,6 @@ const SportCard = ({ sports }) => {
   return (
     <div className="container py-4" dir="rtl">
       <h1 className="text-center mb-5">اختر النشاط الرياضي</h1>
-      {/* Toggle switch for fields/facilities */}
       <div className="text-center mb-4">
       <h5 className="text-center">نوع الخدمة:</h5>
         <div className="btn-group gap-3" role="group">
