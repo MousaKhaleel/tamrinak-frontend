@@ -160,7 +160,7 @@ const handleVenueManagerRequest = async () => {
 
 
   return (
-    <div className="container mt-1" dir="rtl">
+    <div className="container mt-4" dir="rtl">
       <div className="card shadow p-4 pt-5 mx-auto" style={{ maxWidth: "600px", borderRadius: "16px" }}>
         <div className="d-flex align-items-center gap-3 mb-4 flex-wrap">
 {profile.profileImageBase64 ? (
