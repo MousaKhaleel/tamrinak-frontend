@@ -18,7 +18,7 @@ const defaultFieldData = {
   isIndoor: false,
 };
 
-const FieldForm = ({ initialData = {}, onSubmit, submitLabel }) => {
+const FieldForm = ({ initialData = {}, onSubmit, mode, submitLabel }) => {
   const [formData, setFormData] = useState({ ...defaultFieldData, ...initialData });
   const [images, setImages] = useState([]);
   const [sports, setSports] = useState([]);
@@ -84,89 +84,89 @@ const FieldForm = ({ initialData = {}, onSubmit, submitLabel }) => {
     });
   };
 
-const validatePhoneNumber = (phone) => {
-  const phoneRegex = /^(\+962|00962|0)?(78|77|79)\d{7}$/;
-  return phoneRegex.test(phone);
-};
+  const validatePhoneNumber = (phone) => {
+    const phoneRegex = /^(\+962|00962|0)?(78|77|79)\d{7}$/;
+    return phoneRegex.test(phone);
+  };
 
-const validateLocationDesc = (desc) => {
-  // Check if the input is only numbers
-  return !/^\d+$/.test(desc);
-};
+  const validateLocationDesc = (desc) => {
+    // Check if the input is only numbers
+    return !/^\d+$/.test(desc);
+  };
 
-const handleChange = (e) => {
-  const { name, value, type, checked } = e.target;
-  setFormData((prev) => ({
-    ...prev,
-    [name]: type === "checkbox" ? checked : value,
-  }));
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
 
-  if (name === "phoneNumber") {
-    if (!validatePhoneNumber(value)) {
+    if (name === "phoneNumber") {
+      if (!validatePhoneNumber(value)) {
+        setError("رقم الهاتف غير صالح. الرجاء إدخال رقم صحيح.");
+      } else {
+        setError("");
+      }
+    }
+
+    // Add validation for locationDesc
+    if (name === "locationDesc") {
+      if (!validateLocationDesc(value)) {
+        setError("عنوان الملعب لا يمكن أن يكون أرقامًا فقط.");
+      } else {
+        setError("");
+      }
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (!validatePhoneNumber(formData.phoneNumber)) {
       setError("رقم الهاتف غير صالح. الرجاء إدخال رقم صحيح.");
-    } else {
-      setError("");
+      return;
     }
-  }
-  
-  // Add validation for locationDesc
-  if (name === "locationDesc") {
-    if (!validateLocationDesc(value)) {
+
+    if (!validateLocationDesc(formData.locationDesc)) {
       setError("عنوان الملعب لا يمكن أن يكون أرقامًا فقط.");
-    } else {
-      setError("");
-    }
-  }
-};
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
-  setSuccess("");
-
-  if (!validatePhoneNumber(formData.phoneNumber)) {
-    setError("رقم الهاتف غير صالح. الرجاء إدخال رقم صحيح.");
-    return;
-  }
-
-  if (!validateLocationDesc(formData.locationDesc)) {
-    setError("عنوان الملعب لا يمكن أن يكون أرقامًا فقط.");
-    return;
-  }
-
-  try {
-    const payload = {
-      ...formData,
-      sportId: parseInt(formData.sportId),
-      pricePerHour: parseFloat(formData.pricePerHour || 0),
-      capacity: formData.capacity ? parseInt(formData.capacity) : null,
-    };
-
-    const field = await onSubmit(payload); // passed from Add/Edit page
-
-    if (images.length > 0 && field?.id) {
-      const formDataObj = new FormData();
-      formDataObj.append("fieldId", field.id);
-      images.forEach((img) => formDataObj.append("formFiles", img));
-
-      const response = await fetch(`${API_URL}/api/Field/field-images`, {
-        method: "POST",
-        body: formDataObj,
-      });
-
-      if (!response.ok) throw new Error("Image upload failed");
+      return;
     }
 
-    setSuccess("تمت العملية بنجاح!");
-    if (!initialData?.id) {
-      setFormData(defaultFieldData);
-      setImages([]);
+    try {
+      const payload = {
+        ...formData,
+        sportId: parseInt(formData.sportId),
+        pricePerHour: parseFloat(formData.pricePerHour || 0),
+        capacity: formData.capacity ? parseInt(formData.capacity) : null,
+      };
+
+      const field = await onSubmit(payload); // passed from Add/Edit page
+
+      if (images.length > 0 && field?.id) {
+        const formDataObj = new FormData();
+        formDataObj.append("fieldId", field.id);
+        images.forEach((img) => formDataObj.append("formFiles", img));
+
+        const response = await fetch(`${API_URL}/api/Field/field-images`, {
+          method: "POST",
+          body: formDataObj,
+        });
+
+        if (!response.ok) throw new Error("Image upload failed");
+      }
+
+      setSuccess("تمت العملية بنجاح!");
+      if (!initialData?.id) {
+        setFormData(defaultFieldData);
+        setImages([]);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("حدث خطأ أثناء حفظ البيانات.");
     }
-  } catch (err) {
-    console.error(err);
-    setError("حدث خطأ أثناء حفظ البيانات.");
-  }
-};
+  };
 
   return (
     <div className="container mt-5" dir="rtl">
@@ -219,15 +219,17 @@ const handleSubmit = async (e) => {
               {loadingSports && <div className="text-muted text-end mt-1">جاري تحميل الرياضات...</div>}
             </div>
 
-            <div className="col-12">
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                className="form-control"
-                onChange={handleImageChange}
-              />
-            </div>
+            {mode === "add" && (
+              <div className="col-12">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  className="form-control"
+                  onChange={handleImageChange}
+                />
+              </div>
+            )}
 
             <div className="col-12 d-flex justify-content-end gap-3">
               <div className="form-check form-switch">

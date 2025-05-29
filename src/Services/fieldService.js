@@ -59,13 +59,20 @@ export const addField = async (fieldData) => {
 };
 
 // Update an existing field
-export const updateField = async (fieldData) => {
-  const response = await fetch(`${API_URL}/api/Field/field`, {
+export const updateField = async (id, fieldData) => {
+  const response = await fetch(`${API_URL}/api/Field/field?id=${id}`, {
     method: "PUT",
-    headers: getHeaders(),
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
     body: JSON.stringify(fieldData),
   });
-  return await parseResponse(response);
+  const data = await parseResponse(response);
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to update field");
+  }
+  return data;
 };
 
 // Remove a field
