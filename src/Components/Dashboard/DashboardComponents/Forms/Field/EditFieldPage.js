@@ -20,7 +20,7 @@ const EditFieldPage = () => {
   };
 
   return fieldData ? (
-    <FieldForm initialData={fieldData} onSubmit={handleUpdate} submitLabel="تحديث بيانات الملعب" />
+    <FieldForm initialData={fieldData} onSubmit={handleUpdate} mode="edit" submitLabel="تحديث بيانات الملعب" />
   ) : (
     <div>جاري التحميل...</div>
   );

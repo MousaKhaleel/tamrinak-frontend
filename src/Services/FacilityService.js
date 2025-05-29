@@ -57,17 +57,19 @@ export const addFacility = async (facilityData) => {
 };
 
 // Update an existing facility
-export const updateFacility = async (facilityData) => {
-  const response = await fetch(`${API_URL}/api/Facility/facility`, {
+export const updateFacility = async (id, facilityData) => {
+  const response = await fetch(`${API_URL}/api/Facility/facility?id=${id}`, {
     method: "PUT",
-    headers: { 
+    headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${localStorage.getItem("token")}`
     },
     body: JSON.stringify(facilityData),
   });
   const data = await parseResponse(response);
-  if (!response.ok) throw new Error(data.message || "Failed to update facility");
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to update facility");
+  }
   return data;
 };
 

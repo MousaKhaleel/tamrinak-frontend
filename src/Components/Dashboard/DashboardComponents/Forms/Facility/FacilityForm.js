@@ -258,6 +258,7 @@ const FacilityForm = ({ initialData, onSubmit, mode = "add" }) => {
             </div>
 
             {/* تحميل الصور */}
+            { mode === "add" && (
             <div className="mb-3">
               <label className="form-label fw-semibold">تحميل الصور</label>
               <input type="file" multiple accept="image/*" onChange={handleImageChange} className="form-control" />
@@ -267,6 +268,7 @@ const FacilityForm = ({ initialData, onSubmit, mode = "add" }) => {
                 </div>
               )}
             </div>
+            )}
 
             {/* زر الإرسال */}
             <div className="d-grid">

@@ -6,6 +6,6 @@ const AddFieldPage = () => {
     return await addField(data); // returns field with id
   };
 
-  return <FieldForm onSubmit={handleAdd} submitLabel="إضافة ملعب جديد" />;
+  return <FieldForm onSubmit={handleAdd} mode="add" submitLabel="إضافة ملعب جديد" />;
 };
 export default AddFieldPage;
