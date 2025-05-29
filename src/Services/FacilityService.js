@@ -73,7 +73,7 @@ export const updateFacility = async (facilityData) => {
 
 // Remove a facility
 export const removeFacility = async (facilityId) => {
-  const response = await fetch(`${API_URL}/api/Facility/facility?id=${facilityId}`, {
+  const response = await fetch(`${API_URL}/api/Facility/facility?facilityId=${facilityId}`, { // Changed 'id' to 'facilityId'
     method: "DELETE",
     headers: { 
       "Content-Type": "application/json",

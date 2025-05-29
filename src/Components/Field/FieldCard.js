@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFieldPhotoList } from "../../Services/fieldService";
 import DefaultImage from "../../Assets/Defaults/default-featured-image.png";
+import { FaMoneyBillWave, FaMapMarkerAlt } from 'react-icons/fa';
 
 const FieldCard = ({ field }) => {
   const navigate = useNavigate();
@@ -36,8 +37,8 @@ const FieldCard = ({ field }) => {
         />
         <div className="card-body">
           <h5 className="card-title">{field.name}</h5>
-          <p className="card-text text-muted">{field.locationDesc}</p>
-          <p className="card-text">{field.pricePerHour ? `${field.pricePerHour} د.أ` : "call for price."}</p>
+          <p className="card-text text-muted"><FaMapMarkerAlt/> {field.locationDesc}</p>
+          <p className="card-text"><FaMoneyBillWave /> {field.pricePerHour ? `${field.pricePerHour} د.أ` : "call for price."}</p>
         </div>
       </div>
     </div>

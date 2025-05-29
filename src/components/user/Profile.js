@@ -244,13 +244,13 @@ const handleVenueManagerRequest = async () => {
   طلب أن تصبح مالك منشأة
 </button>
 
-          <button
+          {/* <button
             className="btn btn-primary text-white"
             onClick={() => setShowModal(true)}
           >
             <FaKey className="ms-2" />
             تغيير كلمة المرور
-          </button>
+          </button> */}
 
           <button className="btn btn-danger" onClick={handleDeleteUser}>
             حذف الحساب
