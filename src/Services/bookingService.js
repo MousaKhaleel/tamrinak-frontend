@@ -137,6 +137,13 @@ export const changeBooking = async (bookingId, updatedData) => {
   return responseData;
 };
 
+export async function getFieldAvailability(fieldId, bookingDate) {
+  const res = await fetch(`${API_URL}/api/Booking/availability?fieldId=${fieldId}&date=${bookingDate}`);
+  if (!res.ok) throw new Error("فشل في جلب الأوقات المتاحة");
+  return res.json();
+}
+
+
 // Check availability
 export const getAvailability = async (queryParams = "") => {
   const response = await fetch(`${API_URL}/api/Booking/availability${queryParams}`, {
@@ -145,6 +152,8 @@ export const getAvailability = async (queryParams = "") => {
       "Authorization": `Bearer ${localStorage.getItem("token")}`
     }
   });
+
+  
 
   const responseData = await parseResponse(response);
 
