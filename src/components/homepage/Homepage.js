@@ -55,7 +55,6 @@ function Homepage() {
 
             <section className="we-info">
                 <div className="we-info-content">
-                    <h5>/من نحن؟/</h5>
                     <h1>إختر مرفقك الرياضي المناسب</h1>
                     <h3>!مرحبًا بكم في موقع "تمرينك" في الأردن</h3>
                     <p>

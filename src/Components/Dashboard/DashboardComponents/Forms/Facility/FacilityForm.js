@@ -159,7 +159,7 @@ const FacilityForm = ({ initialData, onSubmit, mode = "add" }) => {
   };
 
   return (
-    <div className="container py-4" dir="rtl"> {/* Added dir="rtl" for right-to-left layout */}
+    <div className="container mt-5 py-4" dir="rtl"> {/* Added dir="rtl" for right-to-left layout */}
       <div className="card shadow-lg">
         <div className="card-header bg-primary text-white">
           <h5 className="mb-0">

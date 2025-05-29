@@ -69,8 +69,6 @@ html, body, h1, h2, p, ul, ol {
 /* home-cards Container TODO fix responsiveness */
 .home-cards-container {
   position: relative;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   flex-wrap: wrap;
   gap: 50px;
