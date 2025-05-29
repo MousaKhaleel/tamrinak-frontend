@@ -1,28 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getFacilityPhotoList } from "../../Services/facilityService";
+// import { getFacilityPhotoList } from "../../Services/facilityService"; // No longer directly needed here for the main image
 import DefaultImage from "../../Assets/Defaults/default-featured-image.png";
-import { FaMapMarkerAlt } from 'react-icons/fa';
+import { FaMoneyBillWave } from 'react-icons/fa';
 
 const FacilityCard = ({ facility }) => {
   const navigate = useNavigate();
   const [thumbUrl, setThumbUrl] = useState(null);
 
   useEffect(() => {
-    let isMounted = true;
-    const fetchThumb = async () => {
-      try {
-        const photos = await getFacilityPhotoList(facility.id);
-        if (photos.length > 0 && isMounted) {
-          setThumbUrl(photos[0].imageData);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchThumb();
-    return () => { isMounted = false; };
-  }, [facility.id]);
+    if (facility.images && facility.images.length > 0) {
+      setThumbUrl(`data:image/jpeg;base64,${facility.images[0]}`);
+    } else {
+      setThumbUrl(DefaultImage);
+    }
+  }, [facility.images]);
 
   const handleCardClick = () => navigate(`/facility-details/${facility.id}`);
 
@@ -30,7 +22,7 @@ const FacilityCard = ({ facility }) => {
     <div className="col-12 col-sm-6 col-md-4" onClick={handleCardClick}>
       <div className="card h-100 shadow-sm">
         <img
-          src={thumbUrl || DefaultImage}
+          src={thumbUrl}
           className="card-img-top"
           alt={facility.name}
           style={{ height: "200px", objectFit: "cover" }}
@@ -38,12 +30,8 @@ const FacilityCard = ({ facility }) => {
         <div className="card-body">
           <h5 className="card-title">{facility.name}</h5>
           <p className="card-text text-muted">{facility.description}</p>
-          <p className="card-text">
-            {/* <FaMapMarkerAlt className="icon" /> TODO */}
-            {facility.pricePerMonth ? `${facility.pricePerMonth} د.أ/شهر` : "call for price."}
-          </p>
-          <p className="card-text small">
-            {facility.openTime} - {facility.closeTime}
+          <p className="card-text"><FaMoneyBillWave />
+            {facility.pricePerMonth ? ` ${facility.pricePerMonth} د.أ/شهر` : " اتصل للسعر"}
           </p>
         </div>
       </div>

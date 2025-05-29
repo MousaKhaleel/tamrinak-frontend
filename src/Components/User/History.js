@@ -4,9 +4,9 @@ import { useAuth } from '../../Context/AuthContext';
 
 // Map the backend status to frontend display
 const BOOKING_STATUS = {
-  Pending: { text: 'Pending', class: 'bg-warning text-dark' },
-  Cancelled: { text: 'Cancelled', class: 'bg-danger' },
-  Completed: { text: 'Completed', class: 'bg-success' }
+  0: { text: 'Pending', class: 'bg-warning text-dark' },
+  1: { text: 'Cancelled', class: 'bg-danger' },
+  2: { text: 'Completed', class: 'bg-success' }
 };
 
 function History() {
@@ -44,6 +44,7 @@ function History() {
             : booking
         )
       );
+      window.location.reload();
     } catch (err) {
       setError(err.message || 'Failed to cancel booking');
     }
@@ -114,7 +115,7 @@ function History() {
                   <span className={`badge ${BOOKING_STATUS[booking.status]?.class || 'bg-secondary'}`}>
                     {BOOKING_STATUS[booking.status]?.text || booking.status}
                   </span>
-                  {booking.isPaid && booking.status !== 'Cancelled' && (
+                  {booking.isPaid && booking.status !== 1 && (
                     <span className="badge bg-success ms-2">Paid</span>
                   )}
                 </p>
@@ -124,8 +125,8 @@ function History() {
               </div>
               <div className="card-footer bg-transparent d-flex justify-content-end">
                 {isFutureBooking(booking.bookingDate) && 
-                booking.status !== 'Cancelled' && 
-                booking.status !== 'Completed' && (
+                booking.status !== 1 && 
+                booking.status !== 2 && (
                   <button
                     onClick={() => handleCancelBooking(booking.bookingId)}
                     className="btn btn-outline-danger btn-sm"
