@@ -3,9 +3,9 @@ import { getUserBookings, cancelBooking } from '../../Services/bookingService';
 import { useAuth } from '../../Context/AuthContext';
 
 const BOOKING_STATUS = {
-  0: { text: 'Pending', class: 'bg-warning text-dark' },
-  1: { text: 'Cancelled', class: 'bg-danger' },
-  2: { text: 'Completed', class: 'bg-success' }
+  0: { text: 'قيد الانتظار', class: 'bg-warning text-dark' },
+  1: { text: 'أُلغيت', class: 'bg-danger' },
+  2: { text: 'مكتملة', class: 'bg-success' }
 };
 
 function History() {
@@ -22,7 +22,7 @@ function History() {
         const userBookings = await getUserBookings(userId);
         setBookings(userBookings);
       } catch (err) {
-        setError(err.message || 'Failed to load booking history');
+        setError(err.message || 'فشل في تحميل سجل الحجز');
       } finally {
         setLoading(false);
       }
@@ -45,7 +45,7 @@ function History() {
       );
       window.location.reload();
     } catch (err) {
-      setError(err.message || 'Failed to cancel booking');
+      setError(err.message || 'فشل في إلغاء الحجز');
     }
   };
 
@@ -59,9 +59,9 @@ function History() {
     return (
       <div className="d-flex justify-content-center my-5">
         <div className="spinner-border text-primary" role="status" aria-label="Loading spinner">
-          <span className="visually-hidden">Loading...</span>
+          <span className="visually-hidden">جارٍ التحميل...</span>
         </div>
-        <span className="ms-3 fs-5">Loading your booking history...</span>
+        <span className="ms-3 fs-5">جارٍ تحميل سجل الحجوزات...</span>
       </div>
     );
   }
@@ -69,7 +69,7 @@ function History() {
   if (error) {
     return (
       <div className="alert alert-danger text-center my-5" role="alert">
-        Error: {error}
+        خطأ: {error}
       </div>
     );
   }
@@ -77,49 +77,49 @@ function History() {
   if (bookings.length === 0) {
     return (
       <div className="alert alert-info text-center my-5" role="alert">
-        No booking history found.
+        لا يوجد سجل حجوزات.
       </div>
     );
   }
 
   return (
     <div className="container my-5">
-      <h2 className="mb-4 text-center">Your Booking History</h2>
+      <h2 className="mb-4 text-center">سجل حجوزاتك</h2>
       <div className="row g-4">
         {bookings.map((booking) => (
           <div key={booking.bookingId} className="col-md-6 col-lg-4">
             <div className="card shadow-sm h-100">
               <div className={`card-header ${BOOKING_STATUS[booking.status]?.class || 'bg-secondary text-white'}`}>
-                <h5 className="card-title mb-0">Booking #{booking.bookingId}</h5>
+                <h5 className="card-title mb-0">الحجز رقم #{booking.bookingId}</h5>
               </div>
               <div className="card-body">
                 <p>
-                  <strong>Date:</strong>{' '}
+                  <strong>التاريخ:</strong>{' '}
                   {new Date(booking.bookingDate).toLocaleDateString()}
                 </p>
                 <p>
-                  <strong>Time:</strong> {booking.startTime} - {booking.endTime}
+                  <strong>الوقت:</strong> {booking.startTime} - {booking.endTime}
                 </p>
                 <p>
-                  <strong>Duration:</strong> {booking.duration}
+                  <strong>المدة:</strong> {booking.duration}
                 </p>
                 <p>
-                  <strong>Field ID:</strong> {booking.fieldId}
+                  <strong>رقم الملعب:</strong> {booking.fieldId}
                 </p>
                 <p>
-                  <strong>Total Cost:</strong> ${booking.totalCost}
+                  <strong>التكلفة الإجمالية:</strong> ${booking.totalCost}
                 </p>
                 <p>
-                  <strong>Status:</strong>{' '}
+                  <strong>الحالة:</strong>{' '}
                   <span className={`badge ${BOOKING_STATUS[booking.status]?.class || 'bg-secondary'}`}>
                     {BOOKING_STATUS[booking.status]?.text || booking.status}
                   </span>
                   {booking.isPaid && booking.status !== 1 && (
-                    <span className="badge bg-success ms-2">Paid</span>
+                    <span className="badge bg-success ms-2">مدفوع</span>
                   )}
                 </p>
                 <p>
-                  <strong>Participants:</strong> {booking.numberOfPeople}
+                  <strong>عدد المشاركين:</strong> {booking.numberOfPeople}
                 </p>
               </div>
               <div className="card-footer bg-transparent d-flex justify-content-end">
@@ -130,7 +130,7 @@ function History() {
                       onClick={() => handleCancelBooking(booking.bookingId)}
                       className="btn btn-outline-danger btn-sm"
                     >
-                      Cancel Booking
+                      إلغاء الحجز
                     </button>
                   )}
               </div>
