@@ -232,7 +232,7 @@ export const getBasicInfoUserList = async () => {
 };
 
 export const contactUs = async (name, email, message) => {
-  return await fetch(`${API_URL}/api/User/contact`, {
+  return await fetch(`${API_URL}/api/admin/contact`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ name, email, message })
