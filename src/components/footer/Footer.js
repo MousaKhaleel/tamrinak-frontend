@@ -4,27 +4,24 @@ import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import { contactUs } from '../../Services/adminService';
 
 function Footer() {
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
-    const name = formData.get('name');
-    const email = formData.get('email');
-    const message = formData.get('message');
 
-    try {
-      const response = await contactUs(name, email, message);
-      if (response.success) {
-        alert('تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
-        form.reset();
-      } else {
-        alert('حدث خطأ أثناء إرسال الرسالة: ' + (response.message || 'يرجى المحاولة لاحقاً'));
-      }
-    } catch (error) {
-      console.error('Error contacting us:', error);
-      alert('حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة لاحقاً.');
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const formData = new FormData(form);
+  const name = formData.get('name');
+  const email = formData.get('email');
+  const message = formData.get('message');
+
+  try {
+    const response = await contactUs(name, email, message);
+    alert('تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
+    form.reset();
+  } catch (error) {
+    console.error('Error contacting us:', error);
+    alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
+  }
+};
 
   return (
     <footer id='contact' className="footer">

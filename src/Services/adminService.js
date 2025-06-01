@@ -234,7 +234,9 @@ export const getBasicInfoUserList = async () => {
 export const contactUs = async (name, email, message) => {
   return await fetch(`${API_URL}/api/admin/contact`, {
     method: 'POST',
-    headers: getAuthHeaders(),
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({ name, email, message })
   }).then(handleResponse);
 };
