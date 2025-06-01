@@ -35,7 +35,7 @@ const FieldCard = ({ field }) => {
           alt={field.name}
           style={{ height: "200px", objectFit: "cover" }}
         />
-        <div className="card-body">
+        <div className="card-body" style={{ cursor: "pointer" }}>
           <h5 className="card-title">{field.name}</h5>
           <p className="card-text text-muted"><FaMapMarkerAlt/> {field.locationDesc}</p>
           <p className="card-text"><FaMoneyBillWave /> {field.pricePerHour ? `${field.pricePerHour} د.أ` : "call for price."}</p>

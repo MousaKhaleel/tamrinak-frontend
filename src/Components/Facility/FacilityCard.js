@@ -26,7 +26,7 @@ const FacilityCard = ({ facility }) => {
           alt={facility.name}
           style={{ height: "200px", objectFit: "cover" }}
         />
-        <div className="card-body">
+        <div className="card-body" style={{ cursor: "pointer" }}>
           <h5 className="card-title">{facility.name}</h5>
           <p className="card-text text-muted">{facility.description}</p>
           <p className="card-text"><FaMoneyBillWave />
