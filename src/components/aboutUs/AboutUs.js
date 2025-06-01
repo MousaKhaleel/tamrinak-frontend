@@ -153,6 +153,10 @@ const AboutUs = () => {
             ))}
           </div>
         </div>
+        <div>
+          <h4 className='text-center mt-5'>انظر أيضًا</h4>
+          <Link to="/faq" className='text-center d-block mb-5'>الأسئلة الشائعة</Link>
+        </div>
       </div>
     </div>
   );
